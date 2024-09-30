@@ -36,20 +36,20 @@ if ( ! class_exists( 'WpssoSubmenuTools' ) && class_exists( 'WpssoAdmin' ) ) {
 			/*
 			 * Row #0.
 			 */
-			$count_cache_files   = number_format_i18n( $this->p->util->cache->count_cache_files() );
-			$count_ignored_urls  = number_format_i18n( $this->p->util->cache->count_ignored_urls() );
-			$count_cron_jobs     = number_format_i18n( $this->p->util->count_cron_jobs() );
+			$count_cache_files  = $this->p->util->cache->count_cache_files();
+			$count_ignored_urls = $this->p->util->cache->count_ignored_urls();
+			$count_cron_jobs    = $this->p->util->count_cron_jobs();
 
 			$refresh_cache_transl = _x( 'Refresh Cache', 'submit button', 'wpsso' ) . ' *';
 
 			$clear_cache_files_transl = sprintf( _nx( 'Clear %s Cached File', 'Clear %s Cached Files',
-				$count_cache_files, 'submit button', 'wpsso' ), $count_cache_files );
+				$count_cache_files, 'submit button', 'wpsso' ), number_format_i18n( $count_cache_files ) );
 
 			$clear_ignored_urls_transl = sprintf( _nx( 'Clear %s Failed URL Connection', 'Clear %s Failed URL Connections',
-				$count_ignored_urls, 'submit button', 'wpsso' ), $count_ignored_urls );
+				$count_ignored_urls, 'submit button', 'wpsso' ), number_format_i18n( $count_ignored_urls ) );
 
 			$clear_cron_jobs_transl = sprintf( _nx( 'Clear %s WordPress Cron Job', 'Clear %s WordPress Cron Jobs',
-				$count_cron_jobs, 'submit button', 'wpsso' ), $count_cron_jobs );
+				$count_cron_jobs, 'submit button', 'wpsso' ), number_format_i18n( $count_cron_jobs ) );
 
 			$flush_rewrite_rules_transl = _x( 'Flush WordPress Rewrite Rules', 'submit button', 'wpsso' );
 
@@ -124,17 +124,15 @@ if ( ! class_exists( 'WpssoSubmenuTools' ) && class_exists( 'WpssoAdmin' ) ) {
 				),
 			);
 
-			$using_db_cache = wp_using_ext_object_cache() ? false : true;
-
-			if ( $using_db_cache ) {
+			if ( ! wp_using_ext_object_cache() ) {
 
 				/*
 				 * Clear All Database Transients.
 				 */
-				$count_db_transients = number_format_i18n( $this->p->util->cache->count_db_transients( $key_prefix = '', $incl_short = true ) );
+				$count_db_transients = $this->p->util->cache->count_db_transients( $key_prefix = '', $incl_short = true );
 
 				$clear_db_transients_transl = sprintf( _nx( 'Clear %s Database Transient', 'Clear %s Database Transients',
-					$count_db_transients, 'submit button', 'wpsso' ), $count_db_transients );
+					$count_db_transients, 'submit button', 'wpsso' ), number_format_i18n( $count_db_transients ) );
 
 				$form_button_rows[ 0 ][ 'clear_db_transients' ] = $clear_db_transients_transl;
 			}
@@ -165,9 +163,11 @@ if ( ! class_exists( 'WpssoSubmenuTools' ) && class_exists( 'WpssoAdmin' ) ) {
 			if ( $this->p->util->cache->count_ignored_urls() > 0 ) {
 
 				$ignored_urls       = $this->p->util->cache->get_ignored_urls();
-				$count_ignored_urls = number_format_i18n( count( $ignored_urls ) );
+				$count_ignored_urls = count( $ignored_urls );
 
-				echo '<h4>' . sprintf( __( '%s Failed URL Connections:', 'wpsso' ), $count_ignored_urls ) . '</h4>';
+				echo '<h4>' . sprintf( __( '%s Failed URL Connections:', 'wpsso' ),
+					number_format_i18n( $count_ignored_urls ) ) . '</h4>';
+
 				echo '<p class="status-msg smaller left">';
 
 				foreach ( $ignored_urls as $url => $ts ) { echo '<a href="' . $url . '">' . $url . '</a></br>'; }
