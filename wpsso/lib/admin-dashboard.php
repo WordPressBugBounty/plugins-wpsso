@@ -33,29 +33,31 @@ if ( ! class_exists( 'WpssoAdminDashboard' ) ) {
 
 		public function wp_dashboard_setup() {
 
-			if ( ! wp_using_ext_object_cache() ) {
-
-				wp_add_dashboard_widget( $widget_id = 'wpsso-cache-status', $widget_name = __( 'WPSSO Cache Status', 'wpsso' ),
-					$callback = array( $this, 'show_metabox_cache_status' ), $control_callback = null, $callback_args = array(
-						'metabox_id' => $widget_id, 'metabox_title' => $widget_name ) );
-			}
-
 			wp_add_dashboard_widget( $widget_id = 'wpsso-help-support', $widget_name = __( 'WPSSO Help and Support', 'wpsso' ),
 				$callback = array( $this, 'show_metabox_help_support' ), $control_callback = null, $callback_args = array(
-					'metabox_id' => $widget_id, 'metabox_title' => $widget_name ) );
+					'metabox_id' => $widget_id, 'metabox_title' => $widget_name ), $context = 'normal', $priority = 'high' );
 
 			wp_add_dashboard_widget( $widget_id = 'wpsso-version-info', $widget_name = __( 'WPSSO Version Information', 'wpsso' ),
 				$callback = array( $this, 'show_metabox_version_info' ), $control_callback = null, $callback_args = array(
-					'metabox_id' => $widget_id, 'metabox_title' => $widget_name ) );
+					'metabox_id' => $widget_id, 'metabox_title' => $widget_name ), $context = 'normal', $priority = 'high' );
+
+			wp_add_dashboard_widget( $widget_id = 'wpsso-cache-status', $widget_name = __( 'WPSSO Cache Status', 'wpsso' ),
+				$callback = array( $this, 'show_metabox_cache_status' ), $control_callback = null, $callback_args = array(
+					'metabox_id' => $widget_id, 'metabox_title' => $widget_name ), $context = 'normal', $priority = 'high' );
+
 		}
 
+		/*
+		 * WPSSO Cache Status.
+		 */
 		public function show_metabox_cache_status( $obj, $mb ) {
 
 			if ( WpssoUtilMetabox::show_is_hidden_content( $mb ) ) return;
 
-			$table_cols         = 4;
-			$db_transient_keys  = $this->p->util->cache->get_db_transients_keys();
-			$all_transients_pre = 'wpsso_';
+			$decimals          = 1;
+			$table_cols        = 4;
+			$all_keys_prefix   = 'wpsso_';
+			$db_transient_keys = $this->p->util->cache->get_db_transients_keys( $all_keys_prefix, $only_expired = false );
 
 			echo '<table class="wpsso-dashboard-widget">';
 
@@ -77,9 +79,9 @@ if ( ! class_exists( 'WpssoAdminDashboard' ) ) {
 
 			uasort( $transients_info, array( __CLASS__, 'sort_by_label_key' ) );
 
-			if ( isset( $transients_info[ $all_transients_pre ] ) ) {	// Just in case.
+			if ( isset( $transients_info[ $all_keys_prefix ] ) ) {	// Just in case.
 
-				SucomUtil::move_to_end( $transients_info, $all_transients_pre );
+				SucomUtil::move_to_end( $transients_info, $all_keys_prefix );
 			}
 
 			foreach ( $transients_info as $cache_key => $cache_info ) {
@@ -96,26 +98,73 @@ if ( ! class_exists( 'WpssoAdminDashboard' ) ) {
 				$cache_text_dom     = empty( $cache_info[ 'text_domain' ] ) ? $this->p->id : $cache_info[ 'text_domain' ];
 				$cache_label_transl = _x( $cache_info[ 'label' ], 'option label', $cache_text_dom );
 				$cache_count        = count( preg_grep( '/^' . $cache_key . '/', $db_transient_keys ) );
-				$cache_size         = $this->p->util->cache->get_db_transients_size_mb( $cache_key, $decimals = 1 );
+				$cache_size         = $this->p->util->cache->get_db_transients_size_mb( $cache_key, $decimals );
 				$cache_exp_secs     = $this->p->util->get_cache_exp_secs( $cache_key, $cache_type = 'transient' );
 				$human_cache_exp    = $cache_exp_secs > 0 ? human_time_diff( 0, $cache_exp_secs ) : __( 'disabled', 'wpsso' );
 
 				echo '<tr>';
-				echo '<th class="cache-label">' . $cache_label_transl . ':</th>';
+				echo '<th class="cache-label">' . $cache_label_transl . '</th>';
 				echo '<td class="cache-count">' . $cache_count . '</td>';
 				echo '<td class="cache-size">' . $cache_size . '</td>';
 
-				if ( $cache_key !== $all_transients_pre ) {
-
-					echo '<td class="cache-expiration">' . $human_cache_exp . '</td>';
-				}
+				if ( $cache_key !== $all_keys_prefix ) echo '<td class="cache-expiration">' . $human_cache_exp . '</td>';
 
 				echo '</tr>' . "\n";
+			}
+
+			if ( wp_using_ext_object_cache() ) {
+			
+				echo '<tr><td colspan="' . $table_cols . '">';
+				echo '<p class="status-msg">';
+				echo sprintf( __( '<a href="%1$s">Using an external object cache</a> for WordPress transients is <code>%2$s</code>.', 'wpsso' ), 
+					__( 'https://developer.wordpress.org/reference/functions/wp_using_ext_object_cache/', 'wpsso' ),
+						wp_using_ext_object_cache() ? 'true' : 'false' ) . ' ';
+				echo '</p><p class="status-msg">';
+				echo __( 'All database transient counts should be 0.', 'wpsso' ) . ' ';
+				echo '</p>' . "\n";
+				echo '</td></tr>';
+			}
+
+			if ( $cache_files = $this->p->cache->get_cache_files_size_mb( $decimals ) ) {
+
+				echo '<tr><td colspan="' . $table_cols . '"><h4>';
+				echo __( 'Cache Folder', 'wpsso' );
+				echo '</h4></td></tr>';
+
+				echo '<tr>';
+				echo '<th class="cache-label"></th>';
+				echo '<th class="cache-count">' . __( 'Count', 'wpsso' ) . '</th>';
+				echo '<th class="cache-size">' . __( 'MB', 'wpsso' ) . '</th>';
+				echo '</tr>';
+
+				$all_count = 0;
+				$all_size = 0;
+
+				foreach ( $cache_files as $ext => $info ) {
+
+					$all_count += $info[ 'count' ];
+					$all_size += $info[ 'size' ];
+
+					echo '<tr>';
+					echo '<th class="cache-label">' . sprintf( __( 'Cached %s Files', 'wpsso' ), $ext ) . '</th>';
+					echo '<td class="cache-count">' . $info[ 'count' ] . '</td>';
+					echo '<td class="cache-size">' . $info[ 'size' ]  . '</td>';
+					echo '</tr>';
+				}
+
+				echo '<tr>';
+				echo '<th class="cache-label">' . __( 'All Cached Files', 'wpsso' ) . '</th>';
+				echo '<td class="cache-count">' . $all_count . '</td>';
+				echo '<td class="cache-size">' . number_format_i18n( $all_size, $decimals ) . '</td>';
+				echo '</tr>';
 			}
 
 			echo '</table>';
 		}
 
+		/*
+		 * WPSSO Help and Support.
+		 */
 		public function show_metabox_help_support( $obj, $mb ) {
 
 			if ( WpssoUtilMetabox::show_is_hidden_content( $mb ) ) return;
@@ -166,6 +215,9 @@ if ( ! class_exists( 'WpssoAdminDashboard' ) ) {
 			echo '</table>';
 		}
 
+		/*
+		 * WPSSO Version Information.
+		 */
 		public function show_metabox_version_info( $obj, $mb ) {
 
 			if ( WpssoUtilMetabox::show_is_hidden_content( $mb ) ) return;
@@ -217,6 +269,7 @@ if ( ! class_exists( 'WpssoAdminDashboard' ) ) {
 							reset( $upgrade_notice );
 
 							$latest_version = key( $upgrade_notice );
+
 							$latest_notice  = $upgrade_notice[ $latest_version ];
 						}
 					}
@@ -239,27 +292,28 @@ if ( ! class_exists( 'WpssoAdminDashboard' ) ) {
 				}
 
 				echo '<tr><td colspan="' . $table_cols . '"><h4>' . $info[ 'name' ] . '</h4></td></tr>';
-				echo '<tr><th class="version-label">' . _x( 'Installed', 'version label', 'wpsso' ) . ':</th>';
-				echo '<td class="version-number' . $td_addl_class . '">' . $plugin_version . '</td></tr>';
 
 				/*
-				 * Only show the stable version if the latest version is different (ie. latest is a non-stable version).
+				 * Show the stable version if the latest version is different (ie. latest is a non-stable version).
 				 */
-				if ( $stable_version !== $latest_version ) {
+				if ( $latest_version !== $stable_version ) {
 
-					echo '<tr><th class="version-label">' . _x( 'Stable', 'version label', 'wpsso' ) . ':</th>';
+					echo '<tr><th class="version-label">' . _x( 'Stable Version', 'version label', 'wpsso' ) . '</th>';
 					echo '<td class="version-number">' . $stable_version . '</td></tr>';
 				}
 
-				echo '<tr><th class="version-label">' . _x( 'Latest', 'version label', 'wpsso' ) . ':</th>';
+				echo '<tr><th class="version-label">' . _x( 'Installed Version', 'version label', 'wpsso' ) . '</th>';
+				echo '<td class="version-number' . $td_addl_class . '">' . $plugin_version . '</td></tr>';
+
+				echo '<tr><th class="version-label">' . _x( 'Latest Version', 'version label', 'wpsso' ) . '</th>';
 				echo '<td class="version-number">' . $latest_version . '</td></tr>';
 
 				/*
-				 * Only show the latest version notice message if there's a newer / non-matching version.
+				 * Show the latest version notice message if there's a newer / non-matching version.
 				 */
 				if ( $plugin_version !== $stable_version || $plugin_version !== $latest_version ) {
 
-					echo '<tr><th class="version-label">' . _x( 'Update Notice', 'version label', 'wpsso' ) . ':</th>';
+					echo '<tr><th class="version-label">' . _x( 'Update Notice', 'version label', 'wpsso' ) . '</th>';
 					echo '<td class="latest-notice">';
 
 					if ( ! empty( $latest_notice ) ) {

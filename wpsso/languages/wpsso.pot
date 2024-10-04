@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the WPSSO Core package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WPSSO Core 18.11.0\n"
+"Project-Id-Version: WPSSO Core 18.12.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpsso\n"
 "POT-Creation-Date: 2024-MO-DA HO:MI+ZONE\n"
 "MIME-Version: 1.0\n"
@@ -3003,37 +3003,37 @@ msgid ""
 msgstr ""
 
 #: gettext/gettext-lib-com.php:19 gettext/gettext-lib-com.php:21
-#: lib/com/cache.php:473 lib/com/cache.php:632 lib/util-cache.php:168
+#: lib/com/cache.php:473 lib/com/cache.php:670 lib/util-cache.php:169
 msgid "Error removing cache file %s."
 msgstr ""
 
-#: gettext/gettext-lib-com.php:20 lib/com/cache.php:529
+#: gettext/gettext-lib-com.php:20 lib/com/cache.php:567
 msgid ""
 "PHP cURL library missing - contact your hosting provider to have the cURL "
 "library installed."
 msgstr ""
 
-#: gettext/gettext-lib-com.php:22 lib/com/cache.php:890
+#: gettext/gettext-lib-com.php:22 lib/com/cache.php:928
 msgid "Cache file %s is not readable."
 msgstr ""
 
-#: gettext/gettext-lib-com.php:23 lib/com/cache.php:922
+#: gettext/gettext-lib-com.php:23 lib/com/cache.php:960
 msgid "Failed to open the cache file %s for reading."
 msgstr ""
 
-#: gettext/gettext-lib-com.php:24 lib/com/cache.php:1030
+#: gettext/gettext-lib-com.php:24 lib/com/cache.php:1068
 msgid "Failed to create the %s cache folder."
 msgstr ""
 
-#: gettext/gettext-lib-com.php:25 lib/com/cache.php:1044
+#: gettext/gettext-lib-com.php:25 lib/com/cache.php:1082
 msgid "Cache folder %s is not writable."
 msgstr ""
 
-#: gettext/gettext-lib-com.php:26 lib/com/cache.php:1058
+#: gettext/gettext-lib-com.php:26 lib/com/cache.php:1096
 msgid "Failed to open the cache file %s for writing."
 msgstr ""
 
-#: gettext/gettext-lib-com.php:27 lib/com/cache.php:1087
+#: gettext/gettext-lib-com.php:27 lib/com/cache.php:1125
 msgid "Failed writing data to cache file %s."
 msgstr ""
 
@@ -6738,7 +6738,7 @@ msgstr ""
 #: gettext/gettext-lib-pro.php:213 gettext/gettext-lib-pro.php:224
 #: lib/conflict.php:232 lib/integ/review/yotpowc.php:181 lib/loader.php:177
 #: lib/loader.php:191 lib/post.php:1749 lib/pro/util/shorten.php:336
-#: lib/pro/util/shorten.php:531 lib/util-cache.php:821
+#: lib/pro/util/shorten.php:531 lib/util-cache.php:825
 msgid "%s error:"
 msgstr ""
 
@@ -6851,83 +6851,111 @@ msgstr ""
 msgid "Another claim review cannot be the subject of a claim review."
 msgstr ""
 
-#: lib/admin-dashboard.php:38
-msgid "WPSSO Cache Status"
-msgstr ""
-
-#: lib/admin-dashboard.php:43
+#: lib/admin-dashboard.php:36
 msgid "WPSSO Help and Support"
 msgstr ""
 
-#: lib/admin-dashboard.php:47
+#: lib/admin-dashboard.php:40
 msgid "WPSSO Version Information"
 msgstr ""
 
-#: lib/admin-dashboard.php:63
+#: lib/admin-dashboard.php:44
+msgid "WPSSO Cache Status"
+msgstr ""
+
+#: lib/admin-dashboard.php:65
 msgid "Database Transients"
 msgstr ""
 
-#: lib/admin-dashboard.php:68
+#: lib/admin-dashboard.php:70 lib/admin-dashboard.php:136
 msgid "Count"
 msgstr ""
 
-#: lib/admin-dashboard.php:69
+#: lib/admin-dashboard.php:71 lib/admin-dashboard.php:137
 msgid "MB"
 msgstr ""
 
-#: lib/admin-dashboard.php:70
+#: lib/admin-dashboard.php:72
 msgid "Expiration"
 msgstr ""
 
-#: lib/admin-dashboard.php:101
+#: lib/admin-dashboard.php:103
 msgid "disabled"
 msgstr ""
 
-#: lib/admin-dashboard.php:139
-msgid "<a href=\"%s\">Frequently Asked Questions</a>"
+#: lib/admin-dashboard.php:119 lib/submenu/tools.php:159
+msgid ""
+"<a href=\"%1$s\">Using an external object cache</a> for WordPress transients "
+"is <code>%2$s</code>."
 msgstr ""
 
-#: lib/admin-dashboard.php:144
-msgid "<a href=\"%s\">Notes and Documentation</a>"
+#: lib/admin-dashboard.php:120 lib/submenu/tools.php:160
+msgid ""
+"https://developer.wordpress.org/reference/functions/"
+"wp_using_ext_object_cache/"
+msgstr ""
+
+#: lib/admin-dashboard.php:123 lib/submenu/tools.php:162
+msgid "All database transient counts should be 0."
+msgstr ""
+
+#: lib/admin-dashboard.php:131
+msgid "Cache Folder"
 msgstr ""
 
 #: lib/admin-dashboard.php:149
+msgid "Cached %s Files"
+msgstr ""
+
+#: lib/admin-dashboard.php:156
+msgid "All Cached Files"
+msgstr ""
+
+#: lib/admin-dashboard.php:188
+msgid "<a href=\"%s\">Frequently Asked Questions</a>"
+msgstr ""
+
+#: lib/admin-dashboard.php:193
+msgid "<a href=\"%s\">Notes and Documentation</a>"
+msgstr ""
+
+#: lib/admin-dashboard.php:198
 msgid "<a href=\"%s\">Priority Support Ticket</a>"
 msgstr ""
 
-#: lib/admin-dashboard.php:150
+#: lib/admin-dashboard.php:199
 msgid "Premium edition"
 msgstr ""
 
-#: lib/admin-dashboard.php:154
+#: lib/admin-dashboard.php:203
 msgid "<a href=\"%s\">Community Support Forum</a>"
 msgstr ""
 
-#: lib/admin-dashboard.php:194 lib/admin-dashboard.php:195
+#: lib/admin-dashboard.php:246 lib/admin-dashboard.php:247
 msgid "Not Available"
 msgstr ""
 
-#: lib/admin-dashboard.php:242
+#: lib/admin-dashboard.php:301
 msgctxt "version label"
-msgid "Installed"
+msgid "Stable Version"
 msgstr ""
 
-#: lib/admin-dashboard.php:250
+#: lib/admin-dashboard.php:305
 msgctxt "version label"
-msgid "Stable"
+msgid "Installed Version"
 msgstr ""
 
-#: lib/admin-dashboard.php:254
+#: lib/admin-dashboard.php:308
 msgctxt "version label"
-msgid "Latest"
+msgid "Latest Version"
 msgstr ""
 
-#: lib/admin-dashboard.php:262
+#: lib/admin-dashboard.php:316
 msgctxt "version label"
 msgid "Update Notice"
 msgstr ""
 
-#: lib/admin-dashboard.php:270
+#: lib/admin-dashboard.php:324
 msgid "View %s changelog..."
 msgstr ""
 
@@ -7352,52 +7380,52 @@ msgstr ""
 msgid "Import of plugin and add-on settings is complete."
 msgstr ""
 
-#: lib/admin.php:2530
+#: lib/admin.php:2532
 msgctxt "plugin action link"
 msgid "Plugin Details and Update"
 msgstr ""
 
-#: lib/admin.php:2531
+#: lib/admin.php:2533
 msgctxt "plugin action link"
 msgid "Add-on Details and Update"
 msgstr ""
 
-#: lib/admin.php:2536
+#: lib/admin.php:2538
 msgctxt "plugin action link"
 msgid "Plugin Details"
 msgstr ""
 
-#: lib/admin.php:2537
+#: lib/admin.php:2539
 msgctxt "plugin action link"
 msgid "Add-on Details"
 msgstr ""
 
-#: lib/admin.php:2548
+#: lib/admin.php:2550
 msgctxt "plugin action link"
 msgid "Plugin Details and Install"
 msgstr ""
 
-#: lib/admin.php:2549
+#: lib/admin.php:2551
 msgctxt "plugin action link"
 msgid "Add-on Details and Install"
 msgstr ""
 
-#: lib/admin.php:2555
+#: lib/admin.php:2557
 msgctxt "plugin action link"
 msgid "About Page"
 msgstr ""
 
-#: lib/admin.php:2562
+#: lib/admin.php:2564
 msgctxt "plugin action link"
 msgid "Documentation"
 msgstr ""
 
-#: lib/admin.php:2569
+#: lib/admin.php:2571
 msgctxt "plugin action link"
 msgid "%s Support"
 msgstr ""
 
-#: lib/admin.php:2576
+#: lib/admin.php:2578
 msgctxt "plugin action link"
 msgid "Community Forum"
 msgstr ""
@@ -15285,31 +15313,21 @@ msgid ""
 msgstr ""
 
 #: lib/submenu/tools.php:155
-msgid "Shortened URL transients are preserved."
-msgstr ""
-
-#: lib/submenu/tools.php:156
 msgid ""
-"<a href=\"%1$s\">Using an external object cache</a> for WordPress transients "
-"is <code>%2$s</code>."
+"All database transients are cleared, except for the shortened URL database "
+"transients."
 msgstr ""
 
-#: lib/submenu/tools.php:157
-msgid ""
-"https://developer.wordpress.org/reference/functions/"
-"wp_using_ext_object_cache/"
-msgstr ""
-
-#: lib/submenu/tools.php:163
+#: lib/submenu/tools.php:169
 msgid "Members of the role are used for some Schema property selections."
 msgstr ""
 
-#: lib/submenu/tools.php:164
+#: lib/submenu/tools.php:170
 msgid ""
 "Content Creators are administrators, editors, authors, and contributors."
 msgstr ""
 
-#: lib/submenu/tools.php:172
+#: lib/submenu/tools.php:178
 msgid "%s Failed URL Connections:"
 msgstr ""
 
@@ -15394,7 +15412,7 @@ msgctxt "toolbar menu title"
 msgid "View Profile"
 msgstr ""
 
-#: lib/user.php:1880 lib/user.php:1971 lib/util-cache.php:628
+#: lib/user.php:1880 lib/user.php:1971 lib/util-cache.php:632
 msgctxt "time on date"
 msgid "%2$s on %1$s"
 msgstr ""
@@ -15407,7 +15425,7 @@ msgstr ""
 msgid "The %1$s role has been added to %2$d content creators."
 msgstr ""
 
-#: lib/user.php:1916 lib/user.php:2010 lib/util-cache.php:733
+#: lib/user.php:1916 lib/user.php:2010 lib/util-cache.php:737
 msgid "The total execution time for this task was %s."
 msgstr ""
 
@@ -15525,69 +15543,69 @@ msgid ""
 "another one."
 msgstr ""
 
-#: lib/util-cache.php:217
+#: lib/util-cache.php:218
 msgid "Failed to open the cache folder %s for reading."
 msgstr ""
 
-#: lib/util-cache.php:453
+#: lib/util-cache.php:457
 msgid "A task to %s is currently running."
 msgstr ""
 
-#: lib/util-cache.php:522 lib/util-cache.php:590 lib/util-cache.php:618
+#: lib/util-cache.php:526 lib/util-cache.php:594 lib/util-cache.php:622
 msgctxt "task name"
 msgid "refresh the cache"
 msgstr ""
 
-#: lib/util-cache.php:538 lib/util-cache.php:598
+#: lib/util-cache.php:542 lib/util-cache.php:602
 msgid ""
 "A background task will begin in %1$s to %2$s for posts, terms and users."
 msgstr ""
 
-#: lib/util-cache.php:555
+#: lib/util-cache.php:559
 msgid ""
 "A background task was scheduled to begin %1$s ago to %2$s for posts, terms "
 "and users."
 msgstr ""
 
-#: lib/util-cache.php:558
+#: lib/util-cache.php:562
 msgid "WordPress should have run the %s event hook at that time."
 msgstr ""
 
-#: lib/util-cache.php:561
+#: lib/util-cache.php:565
 msgid ""
 "If the task does not run, this could indicate a problem with your hosting "
 "provider's event scheduler and/or a lack of support for the WordPress %s "
 "function."
 msgstr ""
 
-#: lib/util-cache.php:563
+#: lib/util-cache.php:567
 msgid "You can activate a plugin like %s to manage scheduled events."
 msgstr ""
 
-#: lib/util-cache.php:565
+#: lib/util-cache.php:569
 msgid "WP Crontrol"
 msgstr ""
 
-#: lib/util-cache.php:629
+#: lib/util-cache.php:633
 msgid "A task to %1$s was started at %2$s."
 msgstr ""
 
-#: lib/util-cache.php:712
+#: lib/util-cache.php:716
 msgid ""
 "The transient cache for %1$d posts, %2$d terms, and %3$d users has been "
 "refreshed."
 msgstr ""
 
-#: lib/util-cache.php:768
+#: lib/util-cache.php:772
 msgid "Ignoring request to %s - this task is already running."
 msgstr ""
 
-#: lib/util-cache.php:823
+#: lib/util-cache.php:827
 msgid ""
 "The PHP %1$s function failed to set a maximum execution time of %2$s to %3$s."
 msgstr ""
 
-#: lib/util-cache.php:889
+#: lib/util-cache.php:893
 msgid "The cache for <strong>%s</strong> has also been cleared."
 msgstr ""
 

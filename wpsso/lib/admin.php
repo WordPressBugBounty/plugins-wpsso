@@ -956,7 +956,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 
 						case 'clear_db_transients':
 
-							$cleared_count = $this->p->util->cache->clear_db_transients( $key_prefix = '', $clear_short = true );
+							$cleared_count = $this->p->util->cache->clear_db_transients( $key_prefix = '', $incl_shortened = true );
 
 							$notice_msg = sprintf( __( '%s database transients have been cleared.', 'wpsso' ), $cleared_count );
 
@@ -966,7 +966,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 
 						case 'clear_db_transients_no_short':
 
-							$cleared_count = $this->p->util->cache->clear_db_transients( $key_prefix = '', $clear_short = false );
+							$cleared_count = $this->p->util->cache->clear_db_transients( $key_prefix = '', $incl_shortened = false );
 
 							$notice_msg = sprintf( __( '%s database transients have been cleared (shortened URLs preserved).', 'wpsso' ),
 								$cleared_count );
@@ -977,7 +977,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 
 						case 'clear_db_transients_shortened':
 
-							$cleared_count = $this->p->util->cache->clear_db_transients( $key_prefix = 'wpsso_s_', $clear_short = true );
+							$cleared_count = $this->p->util->cache->clear_db_transients( $key_prefix = 'wpsso_s_', $incl_shortened = true );
 
 							$notice_msg = sprintf( __( '%s shortened URL database transients have been cleared.', 'wpsso' ),
 								$cleared_count );
@@ -2403,7 +2403,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 
 			} else delete_transient( $cache_id );	// Just in case.
 
-			$file_content = $this->get_ext_file_content( $ext, $rel_file );
+			$file_content = $this->get_ext_file_content( $ext, $rel_file, $read_cache );
 
 			if ( ! empty( $file_content ) ) {
 
@@ -2436,7 +2436,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 		/*
 		 * See WpssoSubmenuSetup->show_metabox_setup_guide().
 		 */
-		public function get_ext_file_content( $ext, $rel_file ) {
+		public function get_ext_file_content( $ext, $rel_file, $read_cache = true ) {
 
 			if ( $this->p->debug->enabled ) {
 
@@ -2456,6 +2456,8 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 			if ( $file_url ) {	// Sanitized URL or false.
 
 				if ( $cache_exp_secs > 0 ) {
+
+					if ( ! $read_cache ) $this->p->cache->clear( $file_url );
 
 					$file_content = $this->p->cache->get( $file_url, $format = 'raw', $cache_type = 'file', $cache_exp_secs );
 
