@@ -12,7 +12,7 @@ Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.6.2
 WC Tested Up To: 9.3.3
-Stable Tag: 18.12.1
+Stable Tag: 18.13.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -280,7 +280,7 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
-**Version 18.13.0-dev.1 (2024/10/08)**
+**Version 18.13.0 (2024/10/12)**
 
 * **New Features**
 	* None.
@@ -398,9 +398,9 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 == Upgrade Notice ==
 
-= 18.13.0-dev.1 =
+= 18.13.0 =
 
-(2024/10/08) Added numeric formatting to the WordPress Dashboard &gt; WPSSO Cache Status metabox "Count" column.
+(2024/10/12) Added numeric formatting to the WordPress Dashboard &gt; WPSSO Cache Status metabox "Count" column.
 
 = 18.12.1 =
 
