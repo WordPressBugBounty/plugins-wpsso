@@ -280,19 +280,20 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
-**Version 18.14.0-dev.2 (2024/10/14)**
+**Version 18.14.0-dev.3 (2024/10/14)**
 
 * **New Features**
 	* None.
 * **Improvements**
-	* None.
+	* Improved sanitation of Schema gtin property values.
 * **Bugfixes**
 	* None.
 * **Developer Notes**
 	* Added a '_wpsso_head_info_schema_review_rating' metadata value when a Schema Review rating is available:
 		* Added a 'schema_review_rating' column settings array in `WpssoConfig::$cf`. 
 		* Added a 'schema:review:rating' internal meta tag in `SucomUtil::get_mt_og_seed()`.
-		* Added a 'schema:review:rating' internal meta tag for the Schema Review type in `WpssoSchema->get_array()`.
+		* Added a new `WpssoSchema->add_schema_mt_og()` private method.
+	* Refactored the `WpssoSchema::check_prop_value_gtin()` method.
 * **Requires At Least**
 	* PHP v7.4.33.
 	* WordPress v5.9.
@@ -416,9 +417,9 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 == Upgrade Notice ==
 
-= 18.14.0-dev.2 =
+= 18.14.0-dev.3 =
 
-(2024/10/14) Added a '_wpsso_head_info_schema_review_rating' metadata value when a Schema Review rating is available.
+(2024/10/14) Improved sanitation of Schema gtin property values. Added a '_wpsso_head_info_schema_review_rating' metadata value when a Schema Review rating is available.
 
 = 18.13.0 =
 
