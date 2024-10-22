@@ -12,7 +12,7 @@ Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.6.2
 WC Tested Up To: 9.3.3
-Stable Tag: 18.14.0
+Stable Tag: 18.15.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -280,6 +280,21 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 18.15.0 (2024/10/22)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Added a post cache clearing hook when WooCommerce changes the product metadata.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Added a new `WpssoIntegEcomWooCommerce->clear_product_cache()` method hooked to the 'woocommerce_product_object_updated_props' action.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v6.0.1 (Premium edition).
+
 **Version 18.14.0 (2024/10/15)**
 
 * **New Features**
@@ -416,6 +431,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v6.0.1 (Premium edition).
 
 == Upgrade Notice ==
+
+= 18.15.0 =
+
+(2024/10/22) Added a post cache clearing hook when WooCommerce changes the product metadata.
 
 = 18.14.0 =
 
