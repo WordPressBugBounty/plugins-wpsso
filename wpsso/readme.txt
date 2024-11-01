@@ -10,9 +10,9 @@ Tags: schema, woocommerce, google search console, seo, meta tags
 Contributors: jsmoriss
 Requires PHP: 7.4.33
 Requires At Least: 5.9
-Tested Up To: 6.6.2
+Tested Up To: 6.7.0
 WC Tested Up To: 9.3.3
-Stable Tag: 18.15.0
+Stable Tag: 18.16.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -280,6 +280,28 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 18.16.0 (2024/11/01)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Added WooCommerce store base location to Schema shippingDestination markup for postal codes.
+	* Added a "Clear Expired Transients" action in the SSO &gt; Tools and Actions page.
+	* Added progress information to the notification message when refreshing the cache.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Added a `$cache_exp_secs` argument to the `WpssoUtilCache->get_running_task()` method (to double-check the transient expiration time).
+	* Added `is_string()` checks after each content filter to make sure the returned value is a string (and not null).
+	* Updated `WpssoIntegEcomWooCommerce->add_mt_shipping_offers()` to add the WooCommerce store base location country for postal codes.
+	* Updated `WpssoUtilCache->show_refresh_running()` to include progress information in the notification message.
+	* Updated `WpssoUtilCache->refresh()` to save progress information for each object processed.
+	* Refactored `WpssoUtilCache->task_update()` to write progress information to the task transient.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v6.0.1 (Premium edition).
+
 **Version 18.15.0 (2024/10/22)**
 
 * **New Features**
@@ -431,6 +453,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v6.0.1 (Premium edition).
 
 == Upgrade Notice ==
+
+= 18.16.0 =
+
+(2024/11/01) Added WooCommerce store base location to Schema shippingDestination markup for postal codes. Added a "Clear Expired Transients" action in the SSO &gt; Tools and Actions page.
 
 = 18.15.0 =
 

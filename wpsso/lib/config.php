@@ -21,7 +21,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			),
 			'plugin' => array(
 				'wpsso' => array(			// Plugin acronym.
-					'version'     => '18.15.0',	// Plugin version.
+					'version'     => '18.16.0',	// Plugin version.
 					'opt_version' => '1021',	// Increment when changing default option values.
 					'short'       => 'WPSSO Core',	// Short plugin name.
 					'name'        => 'WPSSO Core',
@@ -2528,7 +2528,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			 */
 			'um' => array(
 				'min_version' => '6.0.1',	// Released on 2024/08/27.
-				'rec_version' => '7.2.1',	// Released on 2024/10/05.
+				'rec_version' => '7.2.2',	// Released on 2024/11/01.
 				'version_filter' => array(
 					'dev'    => 'Development and Up',
 					'alpha'  => 'Alpha and Up',
@@ -5212,7 +5212,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			$var_const[ 'WPSSO_CACHE_ARRAY_FIFO_MAX' ]        = 5;
 			$var_const[ 'WPSSO_CACHE_DIR' ]                   = self::get_cache_dir();
 			$var_const[ 'WPSSO_CACHE_FILES_EXP_SECS' ]        = MONTH_IN_SECONDS;	// See WpssoUtilCache->clear_expired_cache_files().
-			$var_const[ 'WPSSO_CACHE_REFRESH_MAX_TIME' ]      = 1800;		// 30 minutes.
+			$var_const[ 'WPSSO_CACHE_REFRESH_MAX_TIME' ]      = 3600;		// 1 hour.
 			$var_const[ 'WPSSO_CACHE_SELECT_JSON_EXP_SECS' ]  = WEEK_IN_SECONDS;	// Javascript URLs for Schema types, article sections, and product categories.
 			$var_const[ 'WPSSO_CACHE_URL' ]                   = self::get_cache_url();
 			$var_const[ 'WPSSO_CONTENT_BLOCK_FILTER_OUTPUT' ] = true;		// Monitor and fix incorrectly coded filter hooks.

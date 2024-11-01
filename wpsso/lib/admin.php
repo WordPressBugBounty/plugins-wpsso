@@ -192,7 +192,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 
 			foreach ( array( 'p', 'p_ext' ) as $key ) {	// Remove plugin and add-on information.
 
-				unset( $old_avail[ $key], $new_avail[ $key ] );
+				unset( $old_avail[ $key ], $new_avail[ $key ] );
 			}
 
 			if ( $old_avail !== $new_avail ) {
@@ -959,6 +959,16 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 							$cleared_count = $this->p->util->cache->clear_db_transients( $key_prefix = '', $incl_shortened = true );
 
 							$notice_msg = sprintf( __( '%s database transients have been cleared.', 'wpsso' ), $cleared_count );
+
+							$this->p->notice->upd( $notice_msg, $user_id );
+
+							break;
+
+						case 'clear_db_transients_expired':
+
+							$cleared_count = $this->p->util->cache->clear_db_transients_expired();
+
+							$notice_msg = sprintf( __( '%s expired transients have been cleared.', 'wpsso' ), $cleared_count );
 
 							$this->p->notice->upd( $notice_msg, $user_id );
 

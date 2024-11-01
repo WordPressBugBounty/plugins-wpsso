@@ -404,7 +404,7 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 			}
 
 			if ( $product instanceof WC_Product ) {   // WC_Product, WC_Product_Variable, or WC_Product_Grouped.
-			
+
 				$product_id = $this->p->util->wc->get_product_id( $product );	// Returns product id from product object.
 
 				if ( $product_id ) $this->p->post->clear_cache( $product_id );	// Refresh the cache for a single post ID.
@@ -666,6 +666,9 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 			return $tax_slug;
 		}
 
+		/*
+		 * Return false to prevent the comment or post content from being used.
+		 */
 		public function filter_the_content_seed( $content, $mod ) {
 
 			if ( $this->p->debug->enabled ) {
@@ -1596,21 +1599,13 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 				$this->p->debug->mark();
 			}
 
-			static $shipping_zones      = null;
-			static $shipping_continents = null;
-			static $shipping_countries  = null;
-			static $shipping_states     = null;
-			static $shipping_enabled    = null;
-
-			if ( null === $shipping_enabled ) {	// Load values only once - true or false when values have been defined.
-
-				$shipping_zones      = WC_Shipping_Zones::get_zones( $context = 'admin' );
-				$shipping_zones      = apply_filters( 'wpsso_wc_shipping_zones', $shipping_zones );
-				$shipping_states     = WC()->countries->get_states();
-				$shipping_continents = WC()->countries->get_shipping_continents();	// Since WC v3.6.0.
-				$shipping_countries  = WC()->countries->get_shipping_countries();
-				$shipping_enabled    = $shipping_continents || $shipping_countries ? true : false;
-			}
+			$shipping_zones      = WC_Shipping_Zones::get_zones( $context = 'admin' );
+			$shipping_zones      = apply_filters( 'wpsso_wc_shipping_zones', $shipping_zones );
+			$shipping_states     = WC()->countries->get_states();
+			$shipping_continents = WC()->countries->get_shipping_continents();	// Since WC v3.6.0.
+			$shipping_countries  = WC()->countries->get_shipping_countries();
+			$shipping_enabled    = $shipping_continents || $shipping_countries ? true : false;
+			$shipping_base_loc   = wc_get_base_location();	// Example: array( [country] => US [state] => CA ).
 
 			$product_id         = $this->p->util->wc->get_product_id( $product );
 			$product_url        = $this->get_product_url( $product );
@@ -1706,7 +1701,10 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 
 						} elseif ( 'postcode' === $location_obj->type ) {
 
-							$destination_opts[ 'postal_code' ] = $location_obj->code;
+							$destination_opts[ 'country_code' ] = apply_filters( 'wpsso_wc_shipping_zone_location_postal_code_country',
+								$shipping_base_loc[ 'country' ], $zone_obj, $location_key, $location_obj );
+
+							$destination_opts[ 'postal_code' ]  = $location_obj->code;
 						}
 
 
@@ -1772,6 +1770,8 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 					}	// End of $zone_methods loop.
 
 				}	// End of $shipping_zones loop.
+
+				unset( $shipping_zones, $shipping_states, $shipping_continents, $shipping_countries );
 
 				$world_zone_id      = 0;
 				$world_zone_obj     = WC_Shipping_Zones::get_zone( $world_zone_id );	// Locations not covered by your other zones.
