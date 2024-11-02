@@ -604,6 +604,11 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 		 */
 		public function schedule_refresh( $user_id = null ) {
 
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->mark();
+			}
+
 			$user_id          = $this->u->maybe_change_user_id( $user_id );	// Maybe change textdomain for user ID.
 			$task_name        = 'refresh the cache';
 			$task_name_transl = _x( 'refresh the cache', 'task name', 'wpsso' );
@@ -631,6 +636,11 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 		 * See WpssoRarActions->action_refresh_cache().
 		 */
 		public function refresh( $user_id = null ) {
+
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->mark();
+			}
 
 			$user_id          = $this->u->maybe_change_user_id( $user_id );	// Maybe change textdomain for user ID.
 			$task_name        = 'refresh the cache';
@@ -694,7 +704,6 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 			$notice_msg  = '';
 			$og_type_key = WpssoAbstractWpMeta::get_column_meta_keys( 'og_type' );	// Example: '_wpsso_head_info_og_type'.
 			$abort_time  = time() + WPSSO_CACHE_REFRESH_MAX_TIME - 120;		// Leave time for 'wpsso_cache_refreshed_notice' filters.
-$abort_time  = time() + 2;
 
 			foreach ( $total_count as $obj_name => &$count ) {
 

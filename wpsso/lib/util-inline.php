@@ -46,12 +46,15 @@ if ( ! class_exists( 'WpssoUtilInline' ) ) {
 		 */
 		public function replace_variables( $value, $mod = false, array $atts = array() ) {
 
-			if ( $this->p->debug->enabled ) {
-
-				$this->p->debug->mark();
-			}
-
 			static $local_recursion = 0;
+
+			if ( 0 === $local_recursion ) {	// Do not log recursions.
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->mark();
+				}
+			}
 
 			if ( $local_recursion > 32 ) {	// Just in case.
 
@@ -123,6 +126,11 @@ if ( ! class_exists( 'WpssoUtilInline' ) ) {
 			static $local_depth = 0;
 
 			while ( ++$local_depth <= 5 && false !== strpos( $value, '%%' ) ) {
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'preg_replace_callback() for value = ' . $value );
+				}
 
 				$value = preg_replace_callback( '/%%([^%]+)%%/', $callback, $value );
 			}

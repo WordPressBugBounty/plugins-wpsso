@@ -12,7 +12,7 @@ Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.7.0
 WC Tested Up To: 9.3.3
-Stable Tag: 18.16.0
+Stable Tag: 18.16.1
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -280,6 +280,25 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 18.16.1 (2024/11/02)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* Fixed incorrect abort time limit for background cache refresh.
+* **Developer Notes**
+	* Added new optional debug constants:
+		* WPSSO_AJAX_DEBUG_HTML
+		* WPSSO_AJAX_DEBUG_LOG
+		* WPSSO_CRON_DEBUG_HTML
+		* WPSSO_CRON_DEBUG_LOG
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v6.0.1 (Premium edition).
+
 **Version 18.16.0 (2024/11/01)**
 
 * **New Features**
@@ -453,6 +472,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v6.0.1 (Premium edition).
 
 == Upgrade Notice ==
+
+= 18.16.1 =
+
+(2024/11/02) Fixed incorrect abort time limit for background cache refresh.
 
 = 18.16.0 =
 
