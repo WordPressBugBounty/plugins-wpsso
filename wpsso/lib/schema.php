@@ -428,7 +428,7 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 				/*
 				 * Add the json data to the @graph array.
 				 */
-				foreach ( $json_data as $single_graph ) {
+				foreach ( $json_data as $num => $single_graph ) {
 
 					if ( empty( $single_graph ) || ! is_array( $single_graph ) ) {	// Just in case.
 
@@ -465,13 +465,15 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 
 					$this->p->debug->mark( 'schema type id ' . $type_id );	// End timer.
 				}
+
+				unset( $json_data );
 			}
 
 			/*
 			 * Get the @graph json array and start a new @graph array.
 			 */
 			$graph_type_url = WpssoSchemaGraph::get_type_url();
-			$graph_json     = WpssoSchemaGraph::get_json_reset_data();
+			$graph_json     = WpssoSchemaGraph::get_json_reset_data();	// Get and reset the static data.
 			$filter_name    = SucomUtil::sanitize_hookname( 'wpsso_json_prop_' . $graph_type_url );
 			$graph_json     = apply_filters( $filter_name, $graph_json, $mod, $mt_og );
 
@@ -479,7 +481,7 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 
 			if ( ! empty( $graph_json[ '@graph' ] ) ) {	// Just in case.
 
-				$graph_json = WpssoSchemaGraph::optimize_json( $graph_json );
+				WpssoSchemaGraph::optimize_json( $graph_json );
 
 				$schema_scripts[][] = '<script type="application/ld+json" id="wpsso-schema-graph">' .
 					$this->p->util->json_format( $graph_json ) . '</script>' . "\n";
@@ -789,7 +791,6 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 				if ( isset( $local_cache[ $cache_salt ] ) ) {
 
 					return $local_cache[ $cache_salt ];
-
 				}
 			}
 
@@ -835,10 +836,7 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 
 						$type_id = $this->get_schema_type_id_for( 'home_page' );
 
-					} else {
-
-						$type_id = $this->get_schema_type_id_for( 'home_posts' );
-					}
+					} else $type_id = $this->get_schema_type_id_for( 'home_posts' );
 
 				} elseif ( $mod[ 'is_comment' ] ) {
 
@@ -850,10 +848,7 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 
 						$type_id = $this->get_schema_type_id_for( 'comment_reply' );
 
-					} else {
-
-						$type_id = $this->get_schema_type_id_for( 'comment' );
-					}
+					} else $type_id = $this->get_schema_type_id_for( 'comment' );
 
 				} elseif ( $mod[ 'is_post' ] ) {
 
@@ -1481,15 +1476,19 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 		 */
 		public static function get_schema_type_row_class( $name = 'schema_type', $read_cache = true ) {
 
-			static $local_cache = null;
+			if ( is_admin() ) {
 
-			if ( $read_cache ) {
+				static $local_cache = array();
 
-				if ( isset( $local_cache[ $name ] ) ) {
+				if ( $read_cache ) {
 
-					return $local_cache[ $name ];
+					if ( isset( $local_cache[ $name ] ) ) {
+
+						return $local_cache[ $name ];
+					}
 				}
-			}
+
+			} else $local_cache = array();
 
 			$wpsso =& Wpsso::get_instance();
 
@@ -1506,15 +1505,18 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 
 					$local_cache = get_transient( $cache_id );	// Returns false when not found.
 
-					if ( isset( $local_cache[ $name ] ) ) {
+					if ( is_array( $local_cache ) ) {
 
-						return $local_cache[ $name ];
-					}
+						if ( isset( $local_cache[ $name ] ) ) {
+
+							return $local_cache[ $name ];
+						}
+
+					} else $local_cache = array();
 				}
 			}
 
-			$local_cache = array();
-			$type_ids    = array();
+			$type_ids = array();
 
 			switch ( $name ) {
 
@@ -3102,10 +3104,7 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 
 				return $added_count;
 
-			} else {
-
-				$added_page_type_ids[ $page_type_id ] = true;
-			}
+			} else $added_page_type_ids[ $page_type_id ] = true;
 
 			if ( $wpsso->debug->enabled ) {
 
@@ -4349,14 +4348,8 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 				) );
 			}
 
-			static $id_anchor = null;
-			static $id_delim  = null;
-
-			if ( null === $id_anchor || null === $id_delim ) {	// Optimize and call just once.
-
-				$id_anchor = self::get_id_anchor();
-				$id_delim  = self::get_id_delim();
-			}
+			$id_anchor = self::get_id_anchor();
+			$id_delim  = self::get_id_delim();
 
 			if ( is_array( $id_suffix ) ) {
 

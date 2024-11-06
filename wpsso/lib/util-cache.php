@@ -663,7 +663,13 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 			if ( 0 === get_current_user_id() ) {	// User is the scheduler.
 
-				$this->set_task_limit( $user_id, $task_name, WPSSO_CACHE_REFRESH_MAX_TIME );	// 1 hour by default.
+				/*
+				 * Leave a few minutes for 'wpsso_cache_refreshed_notice' filters.
+				 */
+				$other_refresh = SucomUtilWP::get_filter_hook_ids( 'wpsso_cache_refreshed_notice' );
+				$max_time_secs = WPSSO_CACHE_REFRESH_MAX_TIME + ( 300 * count( $other_refresh ) );
+
+				$this->set_task_limit( $user_id, $task_name, $max_time_secs );
 			}
 
 			if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
@@ -703,7 +709,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 			$notice_msg  = '';
 			$og_type_key = WpssoAbstractWpMeta::get_column_meta_keys( 'og_type' );	// Example: '_wpsso_head_info_og_type'.
-			$abort_time  = time() + WPSSO_CACHE_REFRESH_MAX_TIME - 120;		// Leave time for 'wpsso_cache_refreshed_notice' filters.
+			$abort_time  = time() + WPSSO_CACHE_REFRESH_MAX_TIME;	// 30 mins by default.
 
 			foreach ( $total_count as $obj_name => &$count ) {
 
@@ -746,7 +752,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 					if ( time() > $abort_time ) {
 
 						$notice_msg .= sprintf( __( 'The cache refresh time limit of %s has been reached.', 'wpsso' ),
-							human_time_diff( 0, WPSSO_CACHE_REFRESH_MAX_TIME ) ) . ' ';	// 1 hour by default.
+							human_time_diff( 0, WPSSO_CACHE_REFRESH_MAX_TIME ) ) . ' ';	// 30 mins by default.
 
 						$notice_msg .= sprintf( __( 'The cache refresh task aborted after %1$s ID #%2$d (%1$s %3$d of %4$d).', 'wpsso' ),
 							$mod[ 'name_transl' ], $obj_id, $obj_num + 1, $obj_count ) . ' ';
@@ -788,7 +794,8 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 				$mtime_total = microtime( $get_float = true ) - $mtime_start;
 				$human_time  = human_time_diff( 0, $mtime_total );
-				$notice_msg  .= sprintf( __( 'The total execution time for this task was %s.', 'wpsso' ), $human_time ) . ' ';
+				$human_mem   = SucomUtil::format_mem_use( memory_get_peak_usage(), $dec = 2 );
+				$notice_msg  .= sprintf( __( 'The total execution time for this task was %s (%s peak memory use).', 'wpsso' ), $human_time, $human_mem ) . ' ';
 				$notice_key  = $task_name . '-task-info';
 
 				$this->p->notice->inf( $notice_msg, $user_id, $notice_key );
@@ -936,16 +943,12 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 			if ( ! $ret ) {
 
-				$human_time = human_time_diff( 0, $cache_exp_secs );
-
+				$human_time       = human_time_diff( 0, $cache_exp_secs );
 				$task_name_transl = _x( $task_name, 'task name', 'wpsso' );
-
-				$error_pre = sprintf( __( '%s error:', 'wpsso' ), __METHOD__ );
-
-				$notice_msg = sprintf( __( 'The PHP %1$s function failed to set a maximum execution time of %2$s to %3$s.', 'wpsso' ),
+				$error_pre        = sprintf( __( '%s error:', 'wpsso' ), __METHOD__ );
+				$notice_key       = $task_name . '-task-set-time-limit-error';
+				$notice_msg       = sprintf( __( 'The PHP %1$s function failed to set a maximum execution time of %2$s to %3$s.', 'wpsso' ),
 					'<code>set_time_limit()</code>', $human_time, $task_name_transl );
-
-				$notice_key = $task_name . '-task-set-time-limit-error';
 
 				$this->p->notice->err( $notice_msg, $user_id, $notice_key );
 
@@ -983,11 +986,16 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 				$this->p->debug->mark();
 			}
 
-			wp_cache_flush();
-
 			$cleared_msg = __( 'The cache for <strong>%s</strong> has also been cleared.', 'wpsso' ) . ' ';
 
 			$notice_msg = '';
+
+			/*
+			 * WordPress object cache.
+			 */
+			wp_cache_flush();
+
+			$notice_msg .= sprintf( $cleared_msg, __( 'WordPress object cache', 'wpsso' ) );
 
 			/*
 			 * Autoptimize.
@@ -1002,7 +1010,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 					autoptimizeCache::clearall();
 
-					$notice_msg .= sprintf( $cleared_msg, 'Autoptimize' );
+					$notice_msg .= sprintf( $cleared_msg, __( 'Autoptimize', 'wpsso' ) );
 				}
 			}
 
@@ -1017,7 +1025,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 					Cache_Enabler::clear_total_cache();
 
-					$notice_msg .= sprintf( $cleared_msg, 'Cache Enabler' );
+					$notice_msg .= sprintf( $cleared_msg, __( 'Cache Enabler', 'wpsso' ) );
 				}
 			}
 
@@ -1030,7 +1038,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 				$GLOBALS[ 'comet_cache' ]->wipe_cache();
 
-				$notice_msg .= sprintf( $cleared_msg, 'Comet Cache' );
+				$notice_msg .= sprintf( $cleared_msg, __( 'Comet Cache', 'wpsso' ) );
 			}
 
 			/*
@@ -1044,7 +1052,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 					\Hummingbird\WP_Hummingbird::flush_cache();
 
-					$notice_msg .= sprintf( $cleared_msg, 'Hummingbird Cache' );
+					$notice_msg .= sprintf( $cleared_msg, __( 'Hummingbird Cache', 'wpsso' ) );
 				}
 			}
 
@@ -1059,7 +1067,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 					LiteSpeed_Cache_API::purge_all();
 
-					$notice_msg .= sprintf( $cleared_msg, 'LiteSpeed Cache' );
+					$notice_msg .= sprintf( $cleared_msg, __( 'LiteSpeed Cache', 'wpsso' ) );
 				}
 			}
 
@@ -1072,7 +1080,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 					PagelyCachePurge::purgeAll();
 
-					$notice_msg .= sprintf( $cleared_msg, 'Pagely' );
+					$notice_msg .= sprintf( $cleared_msg, __( 'Pagely', 'wpsso' ) );
 				}
 			}
 
@@ -1083,7 +1091,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 				sg_cachepress_purge_cache();
 
-				$notice_msg .= sprintf( $cleared_msg, 'Siteground Cache' );
+				$notice_msg .= sprintf( $cleared_msg, __( 'Siteground Cache', 'wpsso' ) );
 			}
 
 			/*
@@ -1098,7 +1106,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 					w3tc_objectcache_flush();
 				}
 
-				$notice_msg .= sprintf( $cleared_msg, 'W3 Total Cache' );
+				$notice_msg .= sprintf( $cleared_msg, __( 'W3 Total Cache', 'wpsso' ) );
 			}
 
 			/*
@@ -1116,7 +1124,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 					WpeCommon::purge_varnish_cache();
 				}
 
-				$notice_msg .= sprintf( $cleared_msg, 'WP Engine Cache' );
+				$notice_msg .= sprintf( $cleared_msg, __( 'WP Engine Cache', 'wpsso' ) );
 			}
 
 			/*
@@ -1128,7 +1136,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 				wpfc_clear_all_cache( true );
 
-				$notice_msg .= sprintf( $cleared_msg, 'WP Fastest Cache' );
+				$notice_msg .= sprintf( $cleared_msg, __( 'WP Fastest Cache', 'wpsso' ) );
 			}
 
 			/*
@@ -1138,7 +1146,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 				rocket_clean_domain();
 
-				$notice_msg .= sprintf( $cleared_msg, 'WP Rocket Cache' );
+				$notice_msg .= sprintf( $cleared_msg, __( 'WP Rocket Cache', 'wpsso' ) );
 			}
 
 			/*
@@ -1150,7 +1158,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 				wp_cache_clear_cache();
 
-				$notice_msg .= sprintf( $cleared_msg, 'WP Super Cache' );
+				$notice_msg .= sprintf( $cleared_msg, __( 'WP Super Cache', 'wpsso' ) );
 			}
 
 			return $notice_msg;

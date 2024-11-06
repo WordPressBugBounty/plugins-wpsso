@@ -15,7 +15,7 @@
  * Requires At Least: 5.9
  * Tested Up To: 6.7.0
  * WC Tested Up To: 9.3.3
- * Version: 18.16.1
+ * Version: 18.17.0
  *
  * Version Numbering: {major}.{minor}.{bugfix}[-{stage}.{level}]
  *
@@ -381,6 +381,9 @@ if ( ! class_exists( 'Wpsso' ) ) {
 			$this->script = new WpssoScript( $this );
 			$this->style  = new WpssoStyle( $this );
 
+			/*
+			 * Note that when running a cron task, admin is false.
+			 */
 			if ( $is_doing[ 'admin' ] ) {
 
 				require_once WPSSO_PLUGINDIR . 'lib/admin.php';		// Only load class when needed.

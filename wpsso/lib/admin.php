@@ -1435,16 +1435,9 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 
 		protected function get_side_col_boxes() {
 
-			static $local_cache = null;
-
-			if ( null !== $local_cache ) {
-
-				return $local_cache;
-			}
-
-			$local_cache = array();
-			$pkg_info    = $this->p->util->get_pkg_info();	// Uses a local cache.
-			$icon_px     = 128;
+			$col_boxes = array();
+			$pkg_info  = $this->p->util->get_pkg_info();	// Uses a local cache.
+			$icon_px   = 128;
 
 			foreach ( $this->p->cf[ 'plugin' ] as $ext => $info ) {
 
@@ -1479,10 +1472,10 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 					'button-secondary', 'column-purchase', $info[ 'url' ][ 'purchase' ], true ) . "\n";
 				$box .= '</div><!-- .side-box-buttons -->' . "\n";
 
-				$local_cache[] = $box;
+				$col_boxes[] = $box;
 			}
 
-			return $local_cache;
+			return $col_boxes;
 		}
 
 		/*
@@ -2182,12 +2175,16 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 				$this->p->debug->mark();
 			}
 
-			static $local_cache = array();
+			if ( is_admin() ) {
 
-			if ( isset( $local_cache[ $menu_lib ] ) ) {
+				static $local_cache = array();
 
-				return $local_cache[ $menu_lib ];
-			}
+				if ( isset( $local_cache[ $menu_lib ] ) ) {
+
+					return $local_cache[ $menu_lib ];
+				}
+
+			} else $local_cache = array();
 
 			$local_cache[ $menu_lib ] = array();
 
@@ -2207,10 +2204,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 
 				$parent_slug = 'wpsso-' . $this->menu_id;
 
-			} else {
-
-				$parent_slug = $this->p->cf[ 'wp' ][ 'admin' ][ $menu_lib ][ 'page' ];
-			}
+			} else $parent_slug = $this->p->cf[ 'wp' ][ 'admin' ][ $menu_lib ][ 'page' ];
 
 			foreach ( $this->p->cf[ 'plugin' ] as $ext => $info ) {
 

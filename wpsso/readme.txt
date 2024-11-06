@@ -12,7 +12,7 @@ Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.7.0
 WC Tested Up To: 9.3.3
-Stable Tag: 18.16.1
+Stable Tag: 18.17.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -280,6 +280,28 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 18.17.0 (2024/11/06)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Improved memory usage for comment/post/term/user metadata defaults.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Refactored caching in `WpssoAbstractWpMeta->get_defaults()`.
+	* Refactored caching in `WpssoAbstractWpMeta->get_head_info()`.
+	* Refactored caching in `WpssoAdmin->get_side_col_boxes()`.
+	* Refactored caching in `WpssoSchema->add_person_data()`.
+	* Refactored caching in `WpssoUtil->get_image_url_info()`.
+	* Refactored caching in `SucomUtil->is_term_tax_slug()`.
+	* Updated default `WPSSO_CACHE_ARRAY_FIFO_MAX` value to 8.
+	* Updated default `WPSSO_CACHE_REFRESH_MAX_TIME` value to 1800.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v6.0.1 (Premium edition).
+
 **Version 18.16.1 (2024/11/02)**
 
 * **New Features**
@@ -472,6 +494,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v6.0.1 (Premium edition).
 
 == Upgrade Notice ==
+
+= 18.17.0 =
+
+(2024/11/06) Improved memory usage for comment/post/term/user metadata defaults.
 
 = 18.16.1 =
 

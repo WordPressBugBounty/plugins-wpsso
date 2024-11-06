@@ -155,15 +155,10 @@ if ( ! class_exists( 'WpssoHead' ) ) {
 			if ( $this->p->debug->enabled ) {
 
 				$this->p->debug->log_arr( 'mod', $mod );
-			}
-
-			if ( $this->p->debug->enabled ) {
-
 				$this->p->debug->log( 'home url = ' . get_option( 'home' ) );
 				$this->p->debug->log( 'locale current = ' . SucomUtilWP::get_locale() );
 				$this->p->debug->log( 'locale default = ' . SucomUtilWP::get_locale( 'default' ) );
 				$this->p->debug->log( 'locale mod = ' . SucomUtilWP::get_locale( $mod ) );
-
 				$this->p->util->log_is_functions();
 			}
 
@@ -226,6 +221,8 @@ if ( ! class_exists( 'WpssoHead' ) ) {
 					}
 				}
 			}
+
+			unset( $head_tags, $mt, $indent_num, $use_post, $mod, $read_cache );
 
 			$mtime_total = microtime( $get_float = true ) - $mtime_start;
 
@@ -341,7 +338,7 @@ if ( ! class_exists( 'WpssoHead' ) ) {
 			/*
 			 * Disable head and content cache if the request URL contains one or more unknown query arguments.
 			 */
-			if ( ! is_admin() ) {
+			if ( SucomUtilWP::doing_frontend() ) {
 
 				$request_url = SucomUtil::get_url( $remove_ignored_args = true );	// Uses a local cache.
 
@@ -846,8 +843,10 @@ if ( ! class_exists( 'WpssoHead' ) ) {
 				case 'added':
 
 					$total_secs = sprintf( '%f secs', $args );
+					$human_mem  = SucomUtil::format_mem_use( memory_get_peak_usage(), $dec = 2 );
 
-					return '<meta name="wpsso-' . $type . '" content="' . gmdate( 'c' ) . ' in ' . $total_secs .  '"/>' . "\n";
+					return '<meta name="wpsso-' . $type . '" content="' . gmdate( 'c' ) .
+						' in ' . $total_secs .  ' (' . $human_mem . ' peak)"/>' . "\n";
 
 				case 'begin':
 				case 'disabled':
@@ -1203,10 +1202,7 @@ if ( ! class_exists( 'WpssoHead' ) ) {
 
 					$match_name = preg_replace( '/^.*\./', '', $parts[ 3 ] );
 
-				} else {
-
-					$match_name = $parts[ 3 ];
-				}
+				} else $match_name = $parts[ 3 ];
 
 				/*
 				 * Boolean values are converted to their string equivalent.
@@ -1313,6 +1309,8 @@ if ( ! class_exists( 'WpssoHead' ) ) {
 
 				$mt_array[] = $parts;	// Save the HTML and encoded value.
 			}
+
+			unset( $singles, $num, $parts );
 
 			return $mt_array;
 		}

@@ -1062,10 +1062,7 @@ if ( ! class_exists( 'WpssoCheck' ) ) {
 
 			foreach ( $ext_sorted as $ext => $info ) {
 
-				if ( empty( $info[ 'version' ] ) ) {	// Include only active add-ons.
-
-					continue;
-				}
+				if ( empty( $info[ 'version' ] ) ) continue;	// Include only active add-ons.
 
 				$local_cache[] = $info[ 'short' ] . ' ' . $info[ 'version' ] . '/' . $this->get_ext_status( $ext );
 			}
@@ -1096,11 +1093,14 @@ if ( ! class_exists( 'WpssoCheck' ) ) {
 			return empty( $this->p->options[ $ext_auth_key ] ) ? '' : $this->p->options[ $ext_auth_key ];
 		}
 
-		public function is_um_gt_min() {
+		public function is_umver_gt_min() {
 
 			static $local_cache = null;
 
-			if ( null !== $local_cache ) return $local_cache;
+			if ( null !== $local_cache ) {
+
+				return $local_cache;
+			}
 
 			if ( isset( $this->p->cf[ 'plugin' ][ 'wpssoum' ][ 'base' ] ) ) {
 
