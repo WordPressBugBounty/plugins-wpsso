@@ -243,6 +243,11 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			if ( ! $this->md_cache_disabled ) {
 
 				$local_fifo[ $user_id ] = $mod;
+			
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log_size( 'local_fifo', $local_fifo );
+				}
 			}
 
 			return $mod;
@@ -378,7 +383,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 					if ( $this->p->debug->enabled ) {
 
-						$this->p->debug->log( 'required call to WpssoUser->get_mod() for user ID ' . $term_id );
+						$this->p->debug->log( 'required call to WpssoUser->get_mod() for user ID ' . $user_id );
 					}
 
 					$mod = $this->get_mod( $user_id );

@@ -21,7 +21,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			),
 			'plugin' => array(
 				'wpsso' => array(			// Plugin acronym.
-					'version'     => '18.17.0',	// Plugin version.
+					'version'     => '18.18.0',	// Plugin version.
 					'opt_version' => '1021',	// Increment when changing default option values.
 					'short'       => 'WPSSO Core',	// Short plugin name.
 					'name'        => 'WPSSO Core',
@@ -2527,7 +2527,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			 * Update manager.
 			 */
 			'um' => array(
-				'min_version' => '6.0.1',	// Released on 2024/08/27.
+				'min_version' => '7.1.0',	// Released on 2024/09/15.
 				'rec_version' => '7.2.2',	// Released on 2024/11/01.
 				'version_filter' => array(
 					'dev'    => 'Development and Up',

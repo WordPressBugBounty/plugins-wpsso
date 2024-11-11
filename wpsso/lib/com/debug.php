@@ -14,8 +14,7 @@ if ( ! class_exists( 'SucomDebug' ) ) {
 
 	class SucomDebug {
 
-		private $p;	// Plugin class object.
-
+		private $p;				// Plugin class object.
 		private $display_name = '';
 		private $log_prefix   = '';
 		private $log_buffer   = array();	// Accumulate text strings going to html output.
@@ -23,10 +22,7 @@ if ( ! class_exists( 'SucomDebug' ) ) {
 		private $const_stats  = array();
 		private $begin_stats  = array();
 		private $last_stats   = array();
-		private $log_msg_cols = array(
-			'%-40s:: ',
-			'%-55s: ',
-		);
+		private $log_fmt_cols = array( '%s ::', '%s :' );
 
 		public $enabled = false;	// True if at least one $outputs array element is true.
 
@@ -44,11 +40,7 @@ if ( ! class_exists( 'SucomDebug' ) ) {
 
 			$this->p =& $plugin;
 
-			$this->const_stats = $this->last_stats = array(
-				'mtime' => microtime( $get_float = true ),
-				'mem'   => memory_get_usage(),
-			);
-
+			$this->const_stats  = $this->last_stats = array( 'mtime' => microtime( $get_float = true ), 'mem' => memory_get_usage() );
 			$this->display_name = isset( $this->p->id ) ? $this->p->id : 'sucom';
 			$this->log_prefix   = strtoupper( $this->display_name );
 			$this->outputs      = $outputs;
@@ -66,6 +58,22 @@ if ( ! class_exists( 'SucomDebug' ) ) {
 			if ( $this->enabled ) {
 
 				$this->mark();
+			}
+
+			add_action( 'shutdown', array( $this, 'shutdown_stats' ), -1000, 0 );
+		}
+
+		public function shutdown_stats() {
+			
+			if ( $this->enabled ) {
+
+				$cur_stats  = array( 'mtime' => microtime( $get_float = true ), 'mem' => memory_get_usage() );
+				$mtime_diff = $cur_stats[ 'mtime' ] - $this->const_stats[ 'mtime' ];
+				$mem_diff   = $cur_stats[ 'mem' ] - $this->const_stats[ 'mem' ];
+				
+				$this->log( 'time diff = ' . $this->get_time_text( $mtime_diff ) );
+				$this->log( 'mem diff = ' . $this->get_bytes_text( $mem_diff ) );
+				$this->log( 'mem peak = ' . $this->get_bytes_text( memory_get_peak_usage() ) );
 			}
 		}
 
@@ -172,10 +180,36 @@ if ( ! class_exists( 'SucomDebug' ) ) {
 
 				$this->log( $prefix . ' = ' . trim( print_r( SucomUtil::get_array_pretty( $mixed, false ), true ) ), $class_seq, $func_seq );
 
-			} else {
+			} else $this->log( $prefix . ' = ' . $mixed, $class_seq, $func_seq );
+		}
 
-				$this->log( $prefix . ' = ' . $mixed, $class_seq, $func_seq );
+		public function log_size( $prefix, $mixed, $class_seq = 1, $func_seq = false ) {
+
+			if ( ! $this->enabled ) {
+
+				return;
 			}
+
+			if ( is_int( $class_seq ) ) {
+
+				if ( false === $func_seq ) {
+
+					$func_seq = $class_seq;
+				}
+
+				$class_seq++;
+			}
+
+			if ( is_int( $func_seq ) ) {
+
+				$func_seq++;
+
+			} elseif ( false === $func_seq ) {
+
+				$func_seq = 2;
+			}
+
+			$this->log( 'serialized size of ' . $prefix . ' is ' . $this->get_bytes_text( mb_strlen( serialize( $mixed ), '8bit' ) ), $class_seq, $func_seq );
 		}
 
 		public function log( $input = '', $class_seq = 1, $func_seq = false ) {
@@ -191,31 +225,31 @@ if ( ! class_exists( 'SucomDebug' ) ) {
 			if ( is_int( $class_seq ) ) {
 
 				if ( false === $func_seq ) {
-
+				
 					$func_seq = $class_seq;
 				}
 
 				$class_name = empty( $stack[ $class_seq ][ 'class' ] ) ? '' : $stack[ $class_seq ][ 'class' ];
 
-				$log_msg .= sprintf( $this->log_msg_cols[ 0 ], $class_name );
+				$log_msg .= sprintf( $this->log_fmt_cols[ 0 ], $class_name ) . ' ';
 
 			} else {
 
 				if ( false === $func_seq ) {
-
+				
 					$func_seq = 1;
 				}
 
-				$log_msg .= sprintf( $this->log_msg_cols[ 0 ], $class_seq );
+				$log_msg .= sprintf( $this->log_fmt_cols[ 0 ], $class_seq ) . ' ';
 			}
 
 			if ( is_int( $func_seq ) ) {
 
 				$func_name = empty( $stack[ $func_seq ][ 'function' ] ) ? '' : $stack[ $func_seq ][ 'function' ];
 
-				$log_msg .= sprintf( $this->log_msg_cols[ 1 ], $func_name );
+				$log_msg .= sprintf( $this->log_fmt_cols[ 1 ], $func_name ) . ' ';
 
-			} else $log_msg .= sprintf( $this->log_msg_cols[ 1 ], $func_seq );
+			} else $log_msg .= sprintf( $this->log_fmt_cols[ 1 ], $func_seq ) . ' ';
 
 			if ( is_multisite() ) {
 
@@ -258,12 +292,9 @@ if ( ! class_exists( 'SucomDebug' ) ) {
 				return;
 			}
 
+			$cur_stats = array( 'mtime' => microtime( $get_float = true ), 'mem' => memory_get_usage() );
 			$comment   = $comment ? ' ' . $comment : '';
 			$sep_text  = '';
-			$cur_stats = array(
-				'mtime' => microtime( $get_float = true ),
-				'mem'   => memory_get_usage(),
-			);
 
 			if ( false !== $id ) {
 
@@ -273,7 +304,7 @@ if ( ! class_exists( 'SucomDebug' ) ) {
 
 					$mtime_diff = $cur_stats[ 'mtime' ] - $this->begin_stats[ $id ][ 'mtime' ];
 					$mem_diff   = $cur_stats[ 'mem' ] - $this->begin_stats[ $id ][ 'mem' ];
-					$stats_text = '+' . $this->get_time_text( $mtime_diff ) . ' / +' . $this->get_mem_text( $mem_diff );
+					$stats_text = '+' . $this->get_time_text( $mtime_diff ) . ' / +' . $this->get_bytes_text( $mem_diff );
 
 					$sep_text .= ' end diff (' . $stats_text . ')';
 
@@ -281,12 +312,9 @@ if ( ! class_exists( 'SucomDebug' ) ) {
 
 				} else {
 
-					$sep_text .= ' begin';
+					$this->begin_stats[ $id ] = array( 'mtime' => $cur_stats[ 'mtime' ], 'mem'   => $cur_stats[ 'mem' ] );
 
-					$this->begin_stats[ $id ] = array(
-						'mtime' => $cur_stats[ 'mtime' ],
-						'mem'   => $cur_stats[ 'mem' ],
-					);
+					$sep_text .= ' begin';
 				}
 			}
 
@@ -295,7 +323,7 @@ if ( ! class_exists( 'SucomDebug' ) ) {
 			 */
 			$mtime_diff = $cur_stats[ 'mtime' ] - $this->const_stats[ 'mtime' ];
 			$mem_diff   = $cur_stats[ 'mem' ] - $this->const_stats[ 'mem' ];
-			$stats_text = $this->get_time_text( $mtime_diff ) . ' / ' . $this->get_mem_text( $mem_diff );
+			$stats_text = $this->get_time_text( $mtime_diff ) . ' / ' . $this->get_bytes_text( $mem_diff );
 
 			$this->log( 'mark (' . $stats_text . ')' . $comment . $sep_text, $class_seq );
 		}
@@ -322,15 +350,11 @@ if ( ! class_exists( 'SucomDebug' ) ) {
 				return;
 			}
 
-			$comment   = $comment ? ' ' . $comment : '';
-			$cur_stats = array(
-				'mtime' => microtime( $get_float = true ),
-				'mem'   => memory_get_usage(),
-			);
-
+			$comment    = $comment ? ' ' . $comment : '';
+			$cur_stats  = array( 'mtime' => microtime( $get_float = true ), 'mem' => memory_get_usage() );
 			$mtime_diff = $cur_stats[ 'mtime' ] - $this->last_stats[ 'mtime' ];
 			$mem_diff   = $cur_stats[ 'mem' ] - $this->last_stats[ 'mem' ];
-			$stats_text = '+' . $this->get_time_text( $mtime_diff ) . ' / +' . $this->get_mem_text( $mem_diff );
+			$stats_text = '+' . $this->get_time_text( $mtime_diff ) . ' / +' . $this->get_bytes_text( $mem_diff );
 
 			$this->last_stats = $cur_stats;
 
@@ -342,11 +366,14 @@ if ( ! class_exists( 'SucomDebug' ) ) {
 			return sprintf( '%f secs', $time );
 		}
 
-		private function get_mem_text( $mem ) {
+		private function get_bytes_text( $mem ) {
 
-			return SucomUtil::format_mem_use( $mem, $dec = 2 );
+			return SucomUtil::format_human_bytes( $mem, $dec = 2 );
 		}
 
+		/*
+		 * See Wpsso->debug_hooks().
+		 */
 		public function show_html( $data = null, $title = null ) {
 
 			if ( ! $this->is_enabled( 'html' ) ) return;
@@ -423,7 +450,11 @@ if ( ! class_exists( 'SucomDebug' ) ) {
 						/*
 						 * Firefox does not allow double-dashes inside comment blocks.
 						 */
-						$val = str_replace( '--', '&hyphen;&hyphen;', $val );
+						$val = str_replace( array(
+							'--',
+						), array(
+							'&hyphen;&hyphen;',
+						), $val );
 
 						$html .= $is_assoc ? "\t$key = $val\n" : "\t$val\n";
 

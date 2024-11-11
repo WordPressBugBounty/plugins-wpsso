@@ -160,6 +160,11 @@ if ( ! class_exists( 'WpssoComment' ) ) {
 			if ( ! $this->md_cache_disabled ) {
 
 				$local_fifo[ $comment_id ] = $mod;
+			
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log_size( 'local_fifo', $local_fifo );
+				}
 			}
 
 			return $mod;
@@ -263,6 +268,11 @@ if ( ! class_exists( 'WpssoComment' ) ) {
 					}
 
 					$md_opts[ 'opt_filtered' ] = 1;	// Set before calling filters to prevent recursion.
+
+					if ( $this->p->debug->enabled ) {
+
+						$this->p->debug->log( 'required call to WpssoComment->get_mod() for comment ID ' . $comment_id );
+					}
 
 					$mod = $this->get_mod( $comment_id );
 

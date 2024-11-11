@@ -1,4 +1,4 @@
-=== WPSSO Core - The Complete Structured Data SEO Plugin ===
+=== WPSSO Core - Complete and Optimized Structured Data SEO ===
 Plugin Name: WPSSO Core
 Plugin Slug: wpsso
 Text Domain: wpsso
@@ -6,21 +6,21 @@ Domain Path: /languages
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.txt
 Assets URI: https://surniaulula.github.io/wpsso/assets/
-Tags: schema, woocommerce, google search console, seo, meta tags
+Tags: schema, woocommerce, search results, optimize, meta tags
 Contributors: jsmoriss
 Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.7.0
 WC Tested Up To: 9.3.3
-Stable Tag: 18.17.0
+Stable Tag: 18.18.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
 == Description ==
 
-<h3 class="top">The Complete Structured Data SEO Plugin for WordPress</h3>
+<h3 class="top">Complete and Optimized Structured Data SEO for WordPress</h3>
 
-<p><strong>Creates extensive and complete structured data to present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.</strong></p>
+<p><strong>Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.</strong></p>
 
 <!-- about -->
 
@@ -46,14 +46,6 @@ Present your content at its best for social sites and search results, no matter 
 </ul>
 
 <!-- /about -->
-
-<p><strong>Users love the WPSSO Core plugin:</strong></p>
-
-&#x2605;&#x2605;&#x2605;&#x2605;&#x2605; - "Unlike competitors, you can literally customize just about every aspect of SEO and Social SEO if you desire to. &#91;...&#93; This plugin has the most complete JSON-LD markup out of any of them, so you won’t have any errors and warnings in search console for WordPress or WooCommerce sites. You can go crazy customizing everything, or you can just set and forget. There aren’t many plugins that allow the best of both worlds." - [kw11](https://wordpress.org/support/topic/most-responsive-developer-ive-ever-seen/)
-
-&#x2605;&#x2605;&#x2605;&#x2605;&#x2605; - "This plugin makes getting sites structured data ready extremely easy, and it works flawlessly without any issues. It shows messages on the top bar every step of the way to alert you of any issues until everything is set up correctly. It made all my ecommerce products pass Google's validation tests. Great work." - [marguy1](https://wordpress.org/support/topic/excellent-plugin-6825/)
-
-&#x2605;&#x2605;&#x2605;&#x2605;&#x2605; - "This plugin saves me so much time, and it has really lifted my SERP rankings. Most of my keywords I now rank 1-3 position. I also noticed after about a week that my impressions have gone up at least 75%." - [playnstocks](https://wordpress.org/support/topic/excellent-plugin-and-support-200/)
 
 <p><strong>Supports over 500 different Schema types and sub-types (including Schema Event for WooCommerce products).</strong></p>
 
@@ -98,7 +90,7 @@ Present your content at its best for social sites and search results, no matter 
 * *Not a known valid target type for the itemReviewed property*
 * *Price Mismatched value (page crawl): (price [price])*
 
-<p><strong>Supports additional data from active plugins, including:</strong></p>
+<p><strong>Retrieves additional content information from active plugins, including:</strong></p>
 
 * <a href="https://wordpress.org/plugins/co-authors-plus/">Co-Authors Plus</a>
 * <a href="https://wordpress.org/plugins/elementor/">Elementor Website Builder</a>
@@ -166,7 +158,7 @@ Present your content at its best for social sites and search results, no matter 
 * Product Net Weight
 * Product Net Width
 
-<p><strong>Optionally improves the structured data markup of other SEO plugins:</strong></p>
+<p><strong>Optionally improve the structured data markup of other SEO plugins:</strong></p>
 
 WPSSO Core and its add-ons can also run in combination with other SEO plugins to **improve the SEO plugin's performance and structured data markup**.
 
@@ -177,7 +169,7 @@ WPSSO Core and its add-ons can also run in combination with other SEO plugins to
 * WP Meta SEO
 * Yoast SEO
 
-<p><strong>Premium edition also reads data from service APIs, including:</strong></p>
+<p><strong>The Premium edition can also retrieve data from service APIs automatically, including:</strong></p>
 
 * Bitly Short URL
 * DLMY.App Short URL
@@ -280,6 +272,26 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 18.18.0 (2024/11/11)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Improved performance when creating markup for WooCommerce shipping offers.
+	* Updated the format of debug messages for more compact logging.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Added a new `SucomCache->shutdown_stats()` method.
+	* Added a new `WpssoIntegEcomWooCommerce->get_zone_shipping_destinations()` method.
+	* Refactored caching in `WpssoIntegEcomWooCommerce->add_mt_shipping_offers()`.
+	* Refactored caching in `WpssoIntegEcomWooCommerce->is_variation_selectable_attribute()`.
+	* Refactored caching in `WpssoUtilWooCommerce->is_mod_variable()`.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.1.0 (Premium edition).
+
 **Version 18.17.0 (2024/11/06)**
 
 * **New Features**
@@ -300,7 +312,7 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 * **Requires At Least**
 	* PHP v7.4.33.
 	* WordPress v5.9.
-	* WPSSO Update Manager v6.0.1 (Premium edition).
+	* WPSSO Update Manager v7.1.0 (Premium edition).
 
 **Version 18.16.1 (2024/11/02)**
 
@@ -494,6 +506,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v6.0.1 (Premium edition).
 
 == Upgrade Notice ==
+
+= 18.18.0 =
+
+(2024/11/11) Improved performance when creating markup for WooCommerce shipping offers.
 
 = 18.17.0 =
 
