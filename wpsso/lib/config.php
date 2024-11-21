@@ -21,7 +21,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			),
 			'plugin' => array(
 				'wpsso' => array(			// Plugin acronym.
-					'version'     => '18.18.0',	// Plugin version.
+					'version'     => '18.18.1',	// Plugin version.
 					'opt_version' => '1021',	// Increment when changing default option values.
 					'short'       => 'WPSSO Core',	// Short plugin name.
 					'name'        => 'WPSSO Core',
@@ -5211,7 +5211,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			$var_const[ 'WPSSO_REMOVE_ROLE_MAX_TIME' ]        = 300;		// 5 minutes.
 			$var_const[ 'WPSSO_CACHE_ARRAY_FIFO_MAX' ]        = 8;
 			$var_const[ 'WPSSO_CACHE_DIR' ]                   = self::get_cache_dir();
-			$var_const[ 'WPSSO_CACHE_FILES_EXP_SECS' ]        = MONTH_IN_SECONDS;	// See WpssoUtilCache->clear_expired_cache_files().
+			$var_const[ 'WPSSO_CACHE_FILES_EXP_SECS' ]        = WEEK_IN_SECONDS;	// See WpssoUtilCache->clear_cache_files_expired().
 			$var_const[ 'WPSSO_CACHE_REFRESH_MAX_TIME' ]      = 1800;		// 30 mins by default.
 			$var_const[ 'WPSSO_CACHE_SELECT_JSON_EXP_SECS' ]  = WEEK_IN_SECONDS;	// Javascript URLs for Schema types, article sections, and product categories.
 			$var_const[ 'WPSSO_CACHE_URL' ]                   = self::get_cache_url();
