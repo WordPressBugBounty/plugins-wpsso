@@ -345,13 +345,26 @@ if ( ! class_exists( 'WpssoComment' ) ) {
 				}
 
 				return;
-			}
 
-			if ( ! $this->user_can_save( $comment_id ) ) {
+			} elseif ( ! $this->verify_submit_nonce() ) {
 
 				if ( $this->p->debug->enabled ) {
 
-					$this->p->debug->log( 'exiting early: user cannot save comment id ' . $comment_id );
+					$this->p->debug->log( 'exiting early: verify_submit_nonce failed' );
+				}
+
+				return;
+
+			/*
+			 * Check user capability for the comment id.
+			 */
+			} elseif ( ! $this->user_can_edit( $comment_id ) ) {
+
+				if ( $this->p->debug->enabled ) {
+
+					$user_id = get_current_user_id();
+
+					$this->p->debug->log( 'exiting early: user id ' . $user_id . ' cannot edit comment id ' . $comment_id );
 				}
 
 				return;
@@ -421,19 +434,11 @@ if ( ! class_exists( 'WpssoComment' ) ) {
 		}
 
 		/*
-		 * Use $rel = false to extend WpssoAbstractWpMeta->user_can_save().
+		 * Check user capability for the comment id.
+		 *
+		 * Use $rel = false to extend WpssoAbstractWpMeta->user_can_edit().
 		 */
-		public function user_can_save( $comment_id, $rel = false ) {
-
-			if ( ! $this->verify_submit_nonce() ) {
-
-				if ( $this->p->debug->enabled ) {
-
-					$this->p->debug->log( 'exiting early: verify_submit_nonce failed' );
-				}
-
-				return false;
-			}
+		public function user_can_edit( $comment_id, $rel = false ) {
 
 			$capability = 'edit_comment';
 
@@ -449,7 +454,7 @@ if ( ! class_exists( 'WpssoComment' ) ) {
 				 */
 				if ( $this->p->notice->is_admin_pre_notices() ) {
 
-					$this->p->notice->err( sprintf( __( 'Insufficient privileges to save settings for comment ID %1$s.', 'wpsso' ), $comment_id ) );
+					$this->p->notice->err( sprintf( __( 'Insufficient privileges to edit comment ID %1$s.', 'wpsso' ), $comment_id ) );
 				}
 
 				return false;

@@ -479,18 +479,26 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				}
 
 				return;
-			}
 
-			/*
-			 * Make sure the current user can submit and same metabox options.
-			 *
-			 * WpssoUser->user_can_save() returns false when saving a profile page without a metabox.
-			 */
-			if ( ! $this->user_can_save( $user_id ) ) {
+			} elseif ( ! $this->verify_submit_nonce() ) {
 
 				if ( $this->p->debug->enabled ) {
 
-					$this->p->debug->log( 'exiting early: user cannot save user id ' . $user_id );
+					$this->p->debug->log( 'exiting early: verify_submit_nonce failed' );
+				}
+
+				return;
+
+			/*
+			 * Check user capability for the user id.
+			 */
+			} elseif ( ! $this->user_can_edit( $user_id ) ) {
+
+				if ( $this->p->debug->enabled ) {
+
+					$user_id = get_current_user_id();
+
+					$this->p->debug->log( 'exiting early: user id ' . $user_id . ' cannot edit use id ' . $user_id );
 				}
 
 				return;
@@ -1725,19 +1733,11 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 		}
 
 		/*
-		 * Use $rel = false to extend WpssoAbstractWpMeta->user_can_save().
+		 * Check user capability for the user id.
+		 *
+		 * Use $rel = false to extend WpssoAbstractWpMeta->user_can_edit().
 		 */
-		public function user_can_save( $user_id, $rel = false ) {
-
-			if ( ! $this->verify_submit_nonce() ) {
-
-				if ( $this->p->debug->enabled ) {
-
-					$this->p->debug->log( 'exiting early: verify_submit_nonce failed' );
-				}
-
-				return false;
-			}
+		public function user_can_edit( $user_id, $rel = false ) {
 
 			$capability = 'edit_user';
 
@@ -1753,7 +1753,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				 */
 				if ( $this->p->notice->is_admin_pre_notices() ) {
 
-					$this->p->notice->err( sprintf( __( 'Insufficient privileges to save settings for user ID %1$s.', 'wpsso' ), $user_id ) );
+					$this->p->notice->err( sprintf( __( 'Insufficient privileges to edit user ID %1$s.', 'wpsso' ), $user_id ) );
 				}
 
 				return false;

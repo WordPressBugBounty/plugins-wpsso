@@ -11,8 +11,8 @@ Contributors: jsmoriss
 Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.7.1
-WC Tested Up To: 9.4.1
-Stable Tag: 18.18.1
+WC Tested Up To: 9.4.2
+Stable Tag: 18.18.2
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -272,6 +272,22 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 18.18.2 (2024/11/25)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* Fixed missing user capability check in `WpssoPost->ajax_get_metabox_sso()`.
+* **Developer Notes**
+	* Renamed the `user_can_save()` method to `user_can_edit()` in `WpssoAbstractWpMeta`, `WpssoComment`, `WpssoPost`, `WpssoTerm`, and `WpssoUser`.
+	* Added a call to `WpssoPost->user_can_edit()` in `WpssoPost->die_or_get_ajax_post_obj()`.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.1.0 (for Premium edition).
+
 **Version 18.18.1 (2024/11/21)**
 
 * **New Features**
@@ -281,7 +297,7 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 * **Bugfixes**
 	* None.
 * **Developer Notes**
-	* Updated default `WPSSO_CACHE_FILES_EXP_SECS` constant to `WEEK_IN_SECONDS`.
+	* Updated the default `WPSSO_CACHE_FILES_EXP_SECS` constant value to `WEEK_IN_SECONDS`.
 * **Requires At Least**
 	* PHP v7.4.33.
 	* WordPress v5.9.
@@ -521,6 +537,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v6.0.1 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 18.18.2 =
+
+(2024/11/25) Fixed missing user capability check in `WpssoPost->ajax_get_metabox_sso()`.
 
 = 18.18.1 =
 
