@@ -3,11 +3,11 @@
 <table>
 <tr><th align="right" valign="top" nowrap>Plugin Name</th><td>WPSSO Core</td></tr>
 <tr><th align="right" valign="top" nowrap>Summary</th><td>Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.</td></tr>
-<tr><th align="right" valign="top" nowrap>Stable Version</th><td>18.18.2</td></tr>
+<tr><th align="right" valign="top" nowrap>Stable Version</th><td>18.18.3</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires PHP</th><td>7.4.33 or newer</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires WordPress</th><td>5.9 or newer</td></tr>
 <tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>6.7.1</td></tr>
-<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>9.4.2</td></tr>
+<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>9.5.1</td></tr>
 <tr><th align="right" valign="top" nowrap>Contributors</th><td>jsmoriss</td></tr>
 <tr><th align="right" valign="top" nowrap>License</th><td><a href="https://www.gnu.org/licenses/gpl.txt">GPLv3</a></td></tr>
 <tr><th align="right" valign="top" nowrap>Tags / Keywords</th><td>schema, woocommerce, search results, optimize, meta tags</td></tr>
@@ -44,11 +44,10 @@
 
 <!-- /about -->
 
-<p><strong>Supports over 500 different Schema types and sub-types (including Schema Event for WooCommerce products).</strong></p>
-
-<p><strong>Optimized image sizes for social sites and search engines:</strong></p>
+<p><strong>Optimized image sizes (5 different sizes by default) for social sites and search engines:</strong></p>
 
 <ul>
+<li>Commerce Manager Catalog Feed XML (Facebook and Instagram)</li>
 <li>Google Merchant Feed XML</li>
 <li>Open Graph (Facebook and oEmbed)</li>
 <li>Pinterest Pin It</li>
@@ -56,10 +55,12 @@
 <li>Schema 4:3 (Google Rich Results)</li>
 <li>Schema 16:9 (Google Rich Results)</li>
 <li>Schema Thumbnail</li>
-<li>Video Preview Images</li>
+<li>Video Preview Image</li>
 <li>X (Twitter) Summary Card</li>
 <li>X (Twitter) Summary Card Large Image</li>
 </ul>
+
+<p><strong>Supports over 500 different Schema types and sub-types (including Schema Event for WooCommerce products).</strong></p>
 
 <p><strong>Fixes all Google Rich Results and Google Merchant errors, including:</strong></p>
 
@@ -91,7 +92,7 @@
 <li><em>Price Mismatched value (page crawl): (price [price])</em></li>
 </ul>
 
-<p><strong>Retrieves additional content information from active plugins, including:</strong></p>
+<p><strong>Reads additional information from active plugins, including:</strong></p>
 
 <ul>
 <li><a href="https://wordpress.org/plugins/co-authors-plus/">Co-Authors Plus</a></li>
@@ -163,7 +164,7 @@
 <li>Product Net Width</li>
 </ul>
 
-<p><strong>Optionally improve the structured data markup of other SEO plugins:</strong></p>
+<p><strong>Optionally improves the structured data markup of other SEO plugins:</strong></p>
 
 <p>WPSSO Core and its add-ons can also run in combination with other SEO plugins to <strong>improve the SEO plugin's performance and structured data markup</strong>.</p>
 
@@ -176,7 +177,7 @@
 <li>Yoast SEO</li>
 </ul>
 
-<p><strong>The Premium edition can also retrieve data from service APIs automatically, including:</strong></p>
+<p><strong>Premium edition can retrieve data from service APIs automatically, including:</strong></p>
 
 <ul>
 <li>Bitly Short URL</li>

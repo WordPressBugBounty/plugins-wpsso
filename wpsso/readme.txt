@@ -11,8 +11,8 @@ Contributors: jsmoriss
 Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.7.1
-WC Tested Up To: 9.4.2
-Stable Tag: 18.18.2
+WC Tested Up To: 9.5.1
+Stable Tag: 18.18.3
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -47,10 +47,9 @@ Present your content at its best for social sites and search results, no matter 
 
 <!-- /about -->
 
-<p><strong>Supports over 500 different Schema types and sub-types (including Schema Event for WooCommerce products).</strong></p>
+<p><strong>Optimized image sizes (5 different sizes by default) for social sites and search engines:</strong></p>
 
-<p><strong>Optimized image sizes for social sites and search engines:</strong></p>
-
+* Commerce Manager Catalog Feed XML (Facebook and Instagram)
 * Google Merchant Feed XML
 * Open Graph (Facebook and oEmbed)
 * Pinterest Pin It
@@ -58,9 +57,11 @@ Present your content at its best for social sites and search results, no matter 
 * Schema 4:3 (Google Rich Results)
 * Schema 16:9 (Google Rich Results)
 * Schema Thumbnail
-* Video Preview Images
+* Video Preview Image
 * X (Twitter) Summary Card
 * X (Twitter) Summary Card Large Image
+
+<p><strong>Supports over 500 different Schema types and sub-types (including Schema Event for WooCommerce products).</strong></p>
 
 <p><strong>Fixes all Google Rich Results and Google Merchant errors, including:</strong></p>
 
@@ -90,7 +91,7 @@ Present your content at its best for social sites and search results, no matter 
 * *Not a known valid target type for the itemReviewed property*
 * *Price Mismatched value (page crawl): (price [price])*
 
-<p><strong>Retrieves additional content information from active plugins, including:</strong></p>
+<p><strong>Reads additional information from active plugins, including:</strong></p>
 
 * <a href="https://wordpress.org/plugins/co-authors-plus/">Co-Authors Plus</a>
 * <a href="https://wordpress.org/plugins/elementor/">Elementor Website Builder</a>
@@ -158,7 +159,7 @@ Present your content at its best for social sites and search results, no matter 
 * Product Net Weight
 * Product Net Width
 
-<p><strong>Optionally improve the structured data markup of other SEO plugins:</strong></p>
+<p><strong>Optionally improves the structured data markup of other SEO plugins:</strong></p>
 
 WPSSO Core and its add-ons can also run in combination with other SEO plugins to **improve the SEO plugin's performance and structured data markup**.
 
@@ -169,7 +170,7 @@ WPSSO Core and its add-ons can also run in combination with other SEO plugins to
 * WP Meta SEO
 * Yoast SEO
 
-<p><strong>The Premium edition can also retrieve data from service APIs automatically, including:</strong></p>
+<p><strong>Premium edition can retrieve data from service APIs automatically, including:</strong></p>
 
 * Bitly Short URL
 * DLMY.App Short URL
@@ -272,6 +273,21 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 18.18.3 (2024/12/18)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Added debug messages to `WpssoSchemaSingle::get_shipping_offer_data()`.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
 **Version 18.18.2 (2024/11/25)**
 
 * **New Features**
@@ -279,7 +295,7 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 * **Improvements**
 	* None.
 * **Bugfixes**
-	* Fixed missing user capability check in `WpssoPost->ajax_get_metabox_sso()`.
+	* Fixed missing user capability check in `WpssoPost->ajax_get_metabox_sso()` (props Ngô Thái An).
 * **Developer Notes**
 	* Renamed the `user_can_save()` method to `user_can_edit()` in `WpssoAbstractWpMeta`, `WpssoComment`, `WpssoPost`, `WpssoTerm`, and `WpssoUser`.
 	* Added a call to `WpssoPost->user_can_edit()` in `WpssoPost->die_or_get_ajax_post_obj()`.
@@ -538,9 +554,13 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 == Upgrade Notice ==
 
+= 18.18.3 =
+
+(2024/12/18) Added debug messages to `WpssoSchemaSingle::get_shipping_offer_data()`.
+
 = 18.18.2 =
 
-(2024/11/25) Fixed missing user capability check in `WpssoPost->ajax_get_metabox_sso()`.
+(2024/11/25) Fixed missing user capability check in `WpssoPost->ajax_get_metabox_sso()` (props Ngô Thái An).
 
 = 18.18.1 =
 
