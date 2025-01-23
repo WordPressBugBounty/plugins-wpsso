@@ -984,12 +984,19 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 
 				$mt_images = $mt_single[ 'og:image' ];
 
-			} elseif ( $mod = $this->p->og->get_product_retailer_item_mod( $mt_single ) ) {
+			} elseif ( ! $mod = $this->get_product_retailer_item_mod( $mt_single ) ) {
 
-				$max_nums = $this->p->util->get_max_nums( $mod, 'og' );
+				if ( $wpsso->debug->enabled ) {
 
-				$mt_images = $this->p->media->get_all_images( $max_nums[ 'og_img_max' ], $size_names, $mod, $md_pre );
+					$wpsso->debug->log( 'returning early: no post id for retailer item id' );
+				}
+
+				return $mt_images;
 			}
+
+			$max_nums = $this->p->util->get_max_nums( $mod, 'og' );
+
+			$mt_images = $this->p->media->get_all_images( $max_nums[ 'og_img_max' ], $size_names, $mod, $md_pre );
 
 			return $mt_images;
 		}
@@ -1514,7 +1521,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 
 						if ( $min_adv_price && $mt_og[ $amount_key ] < $min_adv_price ) {
 
-							$mt_og[ $mt_pre . ':price_type' ] = 'https://schema.org/MinimumAdvertisedPrice';
+							$mt_og[ $mt_pre . ':price:type' ] = 'https://schema.org/MinimumAdvertisedPrice';
 
 							$mt_og[ $amount_key ] = $min_adv_price;
 						}

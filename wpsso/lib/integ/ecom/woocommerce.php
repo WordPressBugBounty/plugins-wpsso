@@ -190,6 +190,8 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 		}
 
 		/*
+		 * Define and disable some plugin options.
+		 *
 		 * Since WPSSO Core v14.0.0.
 		 */
 		public function disable_options_keys() {
@@ -832,6 +834,12 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 				$this->p->debug->log( 'product_avail = ' . $product_avail );
 			}
 
+			if ( $product->is_on_sale() ) {
+				
+				$md_defs[ 'product_price_type' ]= 'https://schema.org/SalePrice';
+
+			} else $md_defs[ 'product_price_type' ] = $this->p->get_options( 'schema_def_product_price_type', 'https://schema.org/ListPrice' );
+
 			$md_defs[ 'product_price' ]            = $product_price_fmtd;
 			$md_defs[ 'product_currency' ]         = $product_currency;
 			$md_defs[ 'product_avail' ]            = $product_avail;
@@ -1438,14 +1446,6 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 				}
 			}
 
-			/*
-			 * Add an extra meta tag to signal that VAT is included (used for the Schema valueAddedTaxIncluded property).
-			 */
-			if ( $product_incl_vat ) {
-
-				$mt_ecom[ 'product:price:vat_included' ] = true;
-			}
-
 			if ( $this->p->debug->enabled ) {
 
 				$this->p->debug->log( 'getting price and pretax price formatted' );
@@ -1453,9 +1453,9 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 
 			$mt_ecom[ 'product:pretax_price:amount' ]   = $this->get_product_price_formatted( $product, $product_price, false );	// Exclude VAT.
 			$mt_ecom[ 'product:pretax_price:currency' ] = $product_currency;
-			$mt_ecom[ 'product:price_type' ]            = 'https://schema.org/ListPrice';
 			$mt_ecom[ 'product:price:amount' ]          = $product_price_fmtd;
 			$mt_ecom[ 'product:price:currency' ]        = $product_currency;
+			$mt_ecom[ 'product:price:vat_included' ]    = $product_incl_vat;
 
 			if ( method_exists( $product, 'get_regular_price' ) ) {
 
@@ -1472,6 +1472,7 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 					$this->p->debug->log( 'get_regular_price() returned ' . $regular_price );
 				}
 
+				$mt_ecom[ 'product:original_price:type' ]     = $this->p->get_options( 'schema_def_product_price_type', 'https://schema.org/ListPrice' );
 				$mt_ecom[ 'product:original_price:amount' ]   = $regular_price_fmtd;
 				$mt_ecom[ 'product:original_price:currency' ] = $product_currency;
 
@@ -1487,7 +1488,7 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 					$this->p->debug->log( 'product is on sale' );
 				}
 
-				$mt_ecom[ 'product:price_type' ] = 'https://schema.org/SalePrice';
+				$mt_ecom[ 'product:price:type' ] = $mt_ecom[ 'product:sale_price:type' ] = 'https://schema.org/SalePrice';
 
 				if ( method_exists( $product, 'get_sale_price' ) ) {
 
@@ -1609,7 +1610,7 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 			static $world_zone_methods  = null;
 
 			if ( null === $shipping_zones ) {
-			
+
 				$shipping_zones      = WC_Shipping_Zones::get_zones( $context = 'admin' );
 				$shipping_zones      = apply_filters( 'wpsso_wc_shipping_zones', $shipping_zones );
 				$shipping_continents = WC()->countries->get_shipping_continents();

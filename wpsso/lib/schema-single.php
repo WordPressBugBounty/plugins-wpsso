@@ -1871,6 +1871,8 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 				'availability'          => 'product:availability',	// Only valid for offers.
 				'itemCondition'         => 'product:condition',		// Valid for both products and offers.
 				'hasAdultConsideration' => 'product:adult_type',	// Valid for both products and offers.
+				'price'                 => 'product:price:amount',
+				'priceCurrency'         => 'product:price:currency',
 				'priceValidUntil'       => 'product:sale_price_dates:end',
 			) );
 
@@ -1920,9 +1922,11 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 			/*
 			 * Schema priceSpecification property.
+			 *
+			 * Create the priceSpecification for the current pricing - this could be a list price or a sale price.
 			 */
 			$price_spec = WpssoSchema::get_data_itemprop_from_assoc( $mt_single, array(
-				'priceType'             => 'product:price_type',
+				'priceType'             => 'product:price:type',
 				'price'                 => 'product:price:amount',
 				'priceCurrency'         => 'product:price:currency',
 				'validFrom'             => 'product:sale_price_dates:start',
@@ -1932,12 +1936,14 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 			if ( false !== $price_spec ) {
 
-				/*
-				 * Make sure we have a price currency.
-				 */
-				if ( empty( $price_spec[ 'priceCurrency' ] ) ) {
+				if ( empty( $price_spec[ 'priceCurrency' ] ) ) {	// Make sure we have a price currency.
 
 					$price_spec[ 'priceCurrency' ] = $wpsso->options[ 'og_def_currency' ];
+				}
+
+				if ( empty( $price_spec[ 'validThrough' ] ) ) {	// Avoid Google validator warnings.
+
+					$price_spec[ 'validThrough' ] = gmdate( 'c', time() + MONTH_IN_SECONDS );
 				}
 
 				/*
@@ -1972,7 +1978,35 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 					$price_spec[ 'eligibleQuantity' ] = WpssoSchema::get_schema_type_context( 'https://schema.org/QuantitativeValue', $quantity );
 				}
 
-				$json_ret[ 'priceSpecification' ] = WpssoSchema::get_schema_type_context( 'https://schema.org/UnitPriceSpecification', $price_spec );
+				$json_ret[ 'priceSpecification' ][] = WpssoSchema::get_schema_type_context( 'https://schema.org/UnitPriceSpecification', $price_spec );
+
+				/*
+				 * If we have an original price (ie. regular or list price), and the original price type is
+				 * different to the current price type, then add the original price as well. Do not add the
+				 * eligible quantity, as the eligible quantity for the current sale (for example) may be different
+				 * than the original eligible quantity.
+				 */
+				if ( ! empty( $mt_single[ 'product:original_price:type' ] ) &&
+					$mt_single[ 'product:original_price:type' ] != $mt_single[ 'product:price:type' ] ) {
+			
+					$price_spec = WpssoSchema::get_data_itemprop_from_assoc( $mt_single, array(
+						'priceType'             => 'product:original_price:type',
+						'price'                 => 'product:original_price:amount',
+						'priceCurrency'         => 'product:original_price:currency',
+						'valueAddedTaxIncluded' => 'product:price:vat_included',
+					) );
+			
+					if ( false !== $price_spec ) {
+
+						if ( empty( $price_spec[ 'priceCurrency' ] ) ) {	// Make sure we have a price currency.
+
+							$price_spec[ 'priceCurrency' ] = $wpsso->options[ 'og_def_currency' ];
+						}
+					
+						$json_ret[ 'priceSpecification' ][] = WpssoSchema::get_schema_type_context( 'https://schema.org/UnitPriceSpecification',
+							$price_spec );
+					}
+				}
 			}
 
 			/*
@@ -2460,10 +2494,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 						WpssoSchema::add_offers_data_mt( $json_ret, $mt_single[ 'product:offers' ] );
 
-					} else {
-
-						WpssoSchema::add_offers_aggregate_data_mt( $json_ret, $mt_single[ 'product:offers' ] );
-					}
+					} else WpssoSchema::add_offers_aggregate_data_mt( $json_ret, $mt_single[ 'product:offers' ] );
 				}
 
 				$local_recursion = false;

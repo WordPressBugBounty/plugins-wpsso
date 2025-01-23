@@ -3,11 +3,11 @@
 <table>
 <tr><th align="right" valign="top" nowrap>Plugin Name</th><td>WPSSO Core</td></tr>
 <tr><th align="right" valign="top" nowrap>Summary</th><td>Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.</td></tr>
-<tr><th align="right" valign="top" nowrap>Stable Version</th><td>18.18.4</td></tr>
+<tr><th align="right" valign="top" nowrap>Stable Version</th><td>18.19.0</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires PHP</th><td>7.4.33 or newer</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires WordPress</th><td>5.9 or newer</td></tr>
 <tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>6.7.1</td></tr>
-<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>9.5.1</td></tr>
+<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>9.5.2</td></tr>
 <tr><th align="right" valign="top" nowrap>Contributors</th><td>jsmoriss</td></tr>
 <tr><th align="right" valign="top" nowrap>License</th><td><a href="https://www.gnu.org/licenses/gpl.txt">GPLv3</a></td></tr>
 <tr><th align="right" valign="top" nowrap>Tags / Keywords</th><td>schema, woocommerce, search results, optimize, meta tags</td></tr>
@@ -69,6 +69,7 @@
 <li><em>A value for the image field is required</em></li>
 <li><em>A value for the logo field is required</em></li>
 <li><em>A value for the publisher field is required</em></li>
+<li><em>Either "price" or "priceSpecification" should be specified (in "offers")</em></li>
 <li><em>Invalid value in field "priceSpecification"</em></li>
 <li><em>The aggregateRating field is recommended</em></li>
 <li><em>The brand field is recommended</em></li>

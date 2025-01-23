@@ -11,8 +11,8 @@ Contributors: jsmoriss
 Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.7.1
-WC Tested Up To: 9.5.1
-Stable Tag: 18.18.4
+WC Tested Up To: 9.5.2
+Stable Tag: 18.19.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -69,6 +69,7 @@ Present your content at its best for social sites and search results, no matter 
 * *A value for the image field is required*
 * *A value for the logo field is required*
 * *A value for the publisher field is required*
+* *Either "price" or "priceSpecification" should be specified (in "offers")*
 * *Invalid value in field "priceSpecification"*
 * *The aggregateRating field is recommended*
 * *The brand field is recommended*
@@ -272,6 +273,22 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 <p><strong>WPSSO Core Standard edition users (ie. the plugin hosted on WordPress.org) have access to <a href="https://wordpress.org/plugins/wpsso/advanced/">the latest development version under the Advanced Options section</a>.</strong></p>
 
 <h3>Changelog / Release Notes</h3>
+
+**Version 18.19.0 (2025/01/23)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Added "price" and "priceCurrency" properties to the offers markup for a new Google Merchant requirement.
+	* Added the original (ie. regular or list) product price to the offers markup when a product is on sale.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* None.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 **Version 18.18.4 (2024/12/26)**
 
@@ -568,6 +585,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v6.0.1 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 18.19.0 =
+
+(2024/01/23) Added "price" and "priceCurrency" properties to the offers markup for a new Google Merchant requirement.
 
 = 18.18.4 =
 
