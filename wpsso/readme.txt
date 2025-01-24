@@ -12,7 +12,7 @@ Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.7.1
 WC Tested Up To: 9.5.2
-Stable Tag: 18.19.0
+Stable Tag: 18.19.1
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -273,6 +273,21 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 <p><strong>WPSSO Core Standard edition users (ie. the plugin hosted on WordPress.org) have access to <a href="https://wordpress.org/plugins/wpsso/advanced/">the latest development version under the Advanced Options section</a>.</strong></p>
 
 <h3>Changelog / Release Notes</h3>
+
+**Version 18.19.1 (2025/01/24)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* Fixed `WpssoUtil::get_max_nums()` null argument error.
+* **Developer Notes**
+	* Refactored the `WpssoOpenGraph->get_product_retailer_item_images()` method.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 **Version 18.19.0 (2025/01/23)**
 
@@ -585,6 +600,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v6.0.1 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 18.19.1 =
+
+(2024/01/24) Fixed `WpssoUtil::get_max_nums()` null argument error.
 
 = 18.19.0 =
 
