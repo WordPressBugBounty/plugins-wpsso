@@ -3,11 +3,11 @@
 <table>
 <tr><th align="right" valign="top" nowrap>Plugin Name</th><td>WPSSO Core</td></tr>
 <tr><th align="right" valign="top" nowrap>Summary</th><td>Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.</td></tr>
-<tr><th align="right" valign="top" nowrap>Stable Version</th><td>18.19.1</td></tr>
+<tr><th align="right" valign="top" nowrap>Stable Version</th><td>18.19.2</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires PHP</th><td>7.4.33 or newer</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires WordPress</th><td>5.9 or newer</td></tr>
 <tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>6.7.1</td></tr>
-<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>9.5.2</td></tr>
+<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>9.6.0</td></tr>
 <tr><th align="right" valign="top" nowrap>Contributors</th><td>jsmoriss</td></tr>
 <tr><th align="right" valign="top" nowrap>License</th><td><a href="https://www.gnu.org/licenses/gpl.txt">GPLv3</a></td></tr>
 <tr><th align="right" valign="top" nowrap>Tags / Keywords</th><td>schema, woocommerce, search results, optimize, meta tags</td></tr>
@@ -17,11 +17,15 @@
 
 <h3 class="top">Complete and Optimized Structured Data SEO for WordPress</h3>
 
-<p><strong>Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.</strong></p>
+<p>Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.</p>
 
 <!-- about -->
 
-<p><strong>Provides structured data markup for:</strong></p>
+<p><strong>The most comprehensive and accurate Schema markup plugin for WooCommerce products.</strong></p>
+
+<p>Supports over 500 different Schema types and sub-types (including Schema Event for WooCommerce products).</p>
+
+<p><strong>Provides complete structured data markup for:</strong></p>
 
 <ul>
     <li>Facebook / Open Graph</li>
@@ -43,24 +47,6 @@
 </ul>
 
 <!-- /about -->
-
-<p><strong>Optimized image sizes (5 different sizes by default) for social sites and search engines:</strong></p>
-
-<ul>
-<li>Commerce Manager Catalog Feed XML (Facebook and Instagram)</li>
-<li>Google Merchant Feed XML</li>
-<li>Open Graph (Facebook and oEmbed)</li>
-<li>Pinterest Pin It</li>
-<li>Schema 1:1 (Google Rich Results)</li>
-<li>Schema 4:3 (Google Rich Results)</li>
-<li>Schema 16:9 (Google Rich Results)</li>
-<li>Schema Thumbnail</li>
-<li>Video Preview Image</li>
-<li>X (Twitter) Summary Card</li>
-<li>X (Twitter) Summary Card Large Image</li>
-</ul>
-
-<p><strong>Supports over 500 different Schema types and sub-types (including Schema Event for WooCommerce products).</strong></p>
 
 <p><strong>Fixes all Google Rich Results and Google Merchant errors, including:</strong></p>
 
@@ -91,6 +77,22 @@
 <li><em>No global identifier provided (e.g. gtin mpn isbn)</em></li>
 <li><em>Not a known valid target type for the itemReviewed property</em></li>
 <li><em>Price Mismatched value (page crawl): (price [price])</em></li>
+</ul>
+
+<p><strong>Optimized image sizes for social sites and search engines:</strong></p>
+
+<ul>
+<li>Commerce Manager Catalog Feed XML (Facebook and Instagram)</li>
+<li>Google Merchant Feed XML</li>
+<li>Open Graph (Facebook and oEmbed)</li>
+<li>Pinterest Pin It</li>
+<li>Schema 1:1 (Google Rich Results)</li>
+<li>Schema 4:3 (Google Rich Results)</li>
+<li>Schema 16:9 (Google Rich Results)</li>
+<li>Schema Thumbnail</li>
+<li>Video Preview Image</li>
+<li>X (Twitter) Summary Card</li>
+<li>X (Twitter) Summary Card Large Image</li>
 </ul>
 
 <p><strong>Reads additional information from active plugins, including:</strong></p>

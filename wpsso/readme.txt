@@ -11,8 +11,8 @@ Contributors: jsmoriss
 Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.7.1
-WC Tested Up To: 9.5.2
-Stable Tag: 18.19.1
+WC Tested Up To: 9.6.0
+Stable Tag: 18.19.2
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -20,11 +20,15 @@ Present your content at its best for social sites and search results, no matter 
 
 <h3 class="top">Complete and Optimized Structured Data SEO for WordPress</h3>
 
-<p><strong>Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.</strong></p>
+<p>Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.</p>
 
 <!-- about -->
 
-<p><strong>Provides structured data markup for:</strong></p>
+<p><strong>The most comprehensive and accurate Schema markup plugin for WooCommerce products.</strong></p>
+
+<p>Supports over 500 different Schema types and sub-types (including Schema Event for WooCommerce products).</p>
+
+<p><strong>Provides complete structured data markup for:</strong></p>
 
 <ul>
 	<li>Facebook / Open Graph</li>
@@ -46,22 +50,6 @@ Present your content at its best for social sites and search results, no matter 
 </ul>
 
 <!-- /about -->
-
-<p><strong>Optimized image sizes (5 different sizes by default) for social sites and search engines:</strong></p>
-
-* Commerce Manager Catalog Feed XML (Facebook and Instagram)
-* Google Merchant Feed XML
-* Open Graph (Facebook and oEmbed)
-* Pinterest Pin It
-* Schema 1:1 (Google Rich Results)
-* Schema 4:3 (Google Rich Results)
-* Schema 16:9 (Google Rich Results)
-* Schema Thumbnail
-* Video Preview Image
-* X (Twitter) Summary Card
-* X (Twitter) Summary Card Large Image
-
-<p><strong>Supports over 500 different Schema types and sub-types (including Schema Event for WooCommerce products).</strong></p>
 
 <p><strong>Fixes all Google Rich Results and Google Merchant errors, including:</strong></p>
 
@@ -91,6 +79,20 @@ Present your content at its best for social sites and search results, no matter 
 * *No global identifier provided (e.g. gtin mpn isbn)*
 * *Not a known valid target type for the itemReviewed property*
 * *Price Mismatched value (page crawl): (price [price])*
+
+<p><strong>Optimized image sizes for social sites and search engines:</strong></p>
+
+* Commerce Manager Catalog Feed XML (Facebook and Instagram)
+* Google Merchant Feed XML
+* Open Graph (Facebook and oEmbed)
+* Pinterest Pin It
+* Schema 1:1 (Google Rich Results)
+* Schema 4:3 (Google Rich Results)
+* Schema 16:9 (Google Rich Results)
+* Schema Thumbnail
+* Video Preview Image
+* X (Twitter) Summary Card
+* X (Twitter) Summary Card Large Image
 
 <p><strong>Reads additional information from active plugins, including:</strong></p>
 
@@ -273,6 +275,21 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 <p><strong>WPSSO Core Standard edition users (ie. the plugin hosted on WordPress.org) have access to <a href="https://wordpress.org/plugins/wpsso/advanced/">the latest development version under the Advanced Options section</a>.</strong></p>
 
 <h3>Changelog / Release Notes</h3>
+
+**Version 18.19.2 (2025/01/28)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* Fix for WooCommerce theme or plugin filters that return an empty string for a product price, to avoid triggering a PHP fatal error in woocommerce/includes/shipping/flat-rate/class-wc-shipping-flat-rate.php:141
+* **Developer Notes**
+	* Updated `WpssoIntegEcomWooCommerce->get_product_price()` to return 0 if the product price returned by WooCommerce is empty.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 **Version 18.19.1 (2025/01/24)**
 
@@ -563,43 +580,11 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WordPress v5.9.
 	* WPSSO Update Manager v6.0.1 (for Premium edition).
 
-**Version 18.9.0 (2024/09/19)**
-
-* **New Features**
-	* None.
-* **Improvements**
-	* Added French translations for the SSO &gt; Troubleshooting page.
-	* Improved speed of the database query to calculate the total transient sizes.
-	* Improved the WordPress Dashboard &gt; WPSSO Cache Status metabox transient labels.
-* **Bugfixes**
-	* Fixed missing error message when Bitly monthly usage limit has been exceeded.
-* **Developer Notes**
-	* Added a new 'wpsso_wc_shipping_zone_methods' filter.
-	* Added a new 'wpsso_wc_shipping_zone_offer' filter.
-	* Added a new 'wpsso_wc_shipping_zones' filter.
-	* Refactored the `WpssoUtilCache->get_db_transients_size_mb()` method.
-* **Requires At Least**
-	* PHP v7.4.33.
-	* WordPress v5.9.
-	* WPSSO Update Manager v6.0.1 (for Premium edition).
-
-**Version 18.8.0 (2024/09/15)**
-
-* **New Features**
-	* None.
-* **Improvements**
-	* Updated minimum PHP version from 7.2.34 to 7.4.33.
-	* Updated minimum WordPress version from 5.8 to 5.9.
-* **Bugfixes**
-	* None.
-* **Developer Notes**
-	* Added support for an update transaction status in the update option data.
-* **Requires At Least**
-	* PHP v7.4.33.
-	* WordPress v5.9.
-	* WPSSO Update Manager v6.0.1 (for Premium edition).
-
 == Upgrade Notice ==
+
+= 18.19.2 =
+
+(2024/01/28) Fix for WooCommerce theme or plugin filters that return an empty string for a product price.
 
 = 18.19.1 =
 
@@ -668,12 +653,4 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 = 18.10.0 =
 
 (2024/09/21) Updated WPSSO dashboard metaboxes to skip creating content when hidden.
-
-= 18.9.0 =
-
-(2024/09/19) Fixed missing error message when Bitly monthly usage limit has been exceeded. Improved speed of the database query to calculate the total transient sizes.
-
-= 18.8.0 =
-
-(2024/09/15) Updated minimum PHP version to 7.4.33 and WordPress version to 5.9. Added support for an update transaction status in the update option data.
 

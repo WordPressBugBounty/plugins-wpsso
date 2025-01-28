@@ -1469,7 +1469,7 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 
 				if ( $this->p->debug->enabled ) {
 
-					$this->p->debug->log( 'get_regular_price() returned ' . $regular_price );
+					$this->p->debug->log( 'get_regular_price() returned "' . $regular_price . '" (type is ' . gettype( $regular_price ) . ')' );
 				}
 
 				$mt_ecom[ 'product:original_price:type' ]     = $this->p->get_options( 'schema_def_product_price_type', 'https://schema.org/ListPrice' );
@@ -1497,7 +1497,7 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 
 					if ( $this->p->debug->enabled ) {
 
-						$this->p->debug->log( 'get_sale_price() returned ' . $sale_price );
+						$this->p->debug->log( 'get_sale_price() returned "' . $sale_price . '" (type is ' . gettype( $sale_price ) . ')' );
 					}
 
 					$mt_ecom[ 'product:sale_price:amount' ]   = $sale_price_fmtd;
@@ -2075,6 +2075,11 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 			$rate_type = reset( $rate_ids );
 			$rate_cost = null;
 
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->log( 'rate type = ' . $rate_type );
+			}
+
 			if ( 'local_pickup' === $rate_type ) {	// Pickup is not a shipping method.
 
 				return false;
@@ -2114,12 +2119,22 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 			 */
 			} else $rate_cost = 0;
 
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->log( 'rate cost = ' . $rate_cost );
+			}
+
 			/*
-			 * Maybe resolve the [cost], [qty], and [fee] shortcodes.
+			 * Maybe resolve the shipping [fee] shortcode.
 			 *
 			 * See woocommerce/includes/shipping/flat-rate/class-wc-shipping-flat-rate.php.
 			 */
 			if ( ! empty( $rate_cost ) && ! is_numeric( $rate_cost ) ) {
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'resolving [fee] shortcode for product qty 1 x price ' . $product_price );
+				}
 
 				/*
 				 * evaluate_cost() is protected, so make it accessible.
@@ -2130,7 +2145,17 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 
 				$reflect->setAccessible( true );
 
+				/*
+				 * Call the protected evaluate_cost method.
+				 *
+				 * See woocommerce/includes/shipping/flat-rate/class-wc-shipping-flat-rate.php line 75.
+				 */
 				$rate_cost = $reflect->invoke( $method_obj, $rate_cost, array( 'qty'  => 1, 'cost' => $product_price ) );
+				
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'resolved rate cost = ' . $rate_cost );
+				}
 			}
 
 			if ( ! empty( $method_data[ 'requires' ] ) ) {
@@ -2146,9 +2171,19 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 						 * https://schema.org/OfferShippingDetails does not provide a way to specify
 						 * conditions for shipping rates, like coupon or minimum amount.
 						 */
+						if ( $this->p->debug->enabled ) {
+
+							$this->p->debug->log( 'no markup for shipping requires = ' . $method_data[ 'requires' ] );
+						}
+
 						return false;
 
 					default:		// Unknown requirement.
+
+						if ( $this->p->debug->enabled ) {
+
+							$this->p->debug->log( 'unknown shipping requires = ' . $method_data[ 'requires' ] );
+						}
 
 						return false;
 				}
@@ -2212,10 +2247,19 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 					'shipping_rate' => $shipping_rate,
 					'delivery_time' => $delivery_time,
 				);
+		
+			} elseif ( $this->p->debug->enabled ) {
+
+				$this->p->debug->log( 'invalid rate cost = ' . $rate_cost );
 			}
 
 			$shipping_offer = apply_filters( 'wpsso_wc_shipping_zone_offer', $shipping_offer,
 				$zone_id, $zone_name, $method_inst_id, $method_obj, $shipping_class_id, $product, $product_parent );
+
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->log_arr( 'shipping_offer', $shipping_offer );
+			}
 
 			return $shipping_offer;
 		}
@@ -2422,10 +2466,26 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 
 			if ( $this->p->debug->enabled ) {
 
-				$this->p->debug->log( 'get_price() returned ' . $product_price );
+				$this->p->debug->log( 'get_price() returned "' . $product_price . '" (type is ' . gettype( $product_price ) . ')' );
 			}
 
 			$product_price = apply_filters( 'wpsso_product_price', $product_price, $product );
+
+			/*
+			 * Check that the product price returned by WooCommerce is not an empty string, to avoid an error in:
+			 *
+			 * PHP Fatal error: Uncaught TypeError: Unsupported operand types: string * float in
+			 *	woocommerce/includes/shipping/flat-rate/class-wc-shipping-flat-rate.php:141
+			 */
+			if ( empty( $product_price ) ) {
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'returning product price 0' );
+				}
+
+				$product_price = 0;
+			}
 
 			return $product_price;
 		}
