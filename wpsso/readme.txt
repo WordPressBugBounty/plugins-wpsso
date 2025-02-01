@@ -12,7 +12,7 @@ Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.7.1
 WC Tested Up To: 9.6.0
-Stable Tag: 18.19.2
+Stable Tag: 18.19.3
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -275,6 +275,21 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 <p><strong>WPSSO Core Standard edition users (ie. the plugin hosted on WordPress.org) have access to <a href="https://wordpress.org/plugins/wpsso/advanced/">the latest development version under the Advanced Options section</a>.</strong></p>
 
 <h3>Changelog / Release Notes</h3>
+
+**Version 18.19.3 (2025/02/01)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Updated Perfect Woocommerce Brands plugin detection (PWB changed their namespace and class name).
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* None.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 **Version 18.19.2 (2025/01/28)**
 
@@ -581,6 +596,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v6.0.1 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 18.19.3 =
+
+(2024/02/01) Updated Perfect Woocommerce Brands plugin detection (PWB changed their namespace and class name).
 
 = 18.19.2 =
 
