@@ -12,7 +12,7 @@ Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.7.1
 WC Tested Up To: 9.6.0
-Stable Tag: 18.19.3
+Stable Tag: 18.19.4
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -164,7 +164,7 @@ Present your content at its best for social sites and search results, no matter 
 
 <p><strong>Optionally improves the structured data markup of other SEO plugins:</strong></p>
 
-WPSSO Core and its add-ons can also run in combination with other SEO plugins to **improve the SEO plugin's performance and structured data markup**.
+WPSSO Core and its add-ons can also run in combination with other SEO plugins to improve their performance and structured data markup.
 
 * All in One SEO Pack
 * Rank Math SEO
@@ -275,6 +275,21 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 <p><strong>WPSSO Core Standard edition users (ie. the plugin hosted on WordPress.org) have access to <a href="https://wordpress.org/plugins/wpsso/advanced/">the latest development version under the Advanced Options section</a>.</strong></p>
 
 <h3>Changelog / Release Notes</h3>
+
+**Version 18.19.4 (2025/02/04)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* Fixed possible call to empty object in `WpssoOpenGraph->get_product_awards()`.
+* **Developer Notes**
+	* None.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 **Version 18.19.3 (2025/02/01)**
 
@@ -597,21 +612,25 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 == Upgrade Notice ==
 
+= 18.19.4 =
+
+(2024/02/04) Fixed possible call to empty object in `WpssoOpenGraph->get_product_awards()`.
+
 = 18.19.3 =
 
 (2024/02/01) Updated Perfect Woocommerce Brands plugin detection (PWB changed their namespace and class name).
 
 = 18.19.2 =
 
-(2024/01/28) Fix for WooCommerce theme or plugin filters that return an empty string for a product price.
+(2025/01/28) Fix for WooCommerce theme or plugin filters that return an empty string for a product price.
 
 = 18.19.1 =
 
-(2024/01/24) Fixed `WpssoUtil::get_max_nums()` null argument error.
+(2025/01/24) Fixed `WpssoUtil::get_max_nums()` null argument error.
 
 = 18.19.0 =
 
-(2024/01/23) Added "price" and "priceCurrency" properties to the offers markup for a new Google Merchant requirement.
+(2025/01/23) Added "price" and "priceCurrency" properties to the offers markup for a new Google Merchant requirement.
 
 = 18.18.4 =
 
