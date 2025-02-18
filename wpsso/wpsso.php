@@ -13,9 +13,9 @@
  * Description: Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
  * Requires PHP: 7.4.33
  * Requires At Least: 5.9
- * Tested Up To: 6.7.1
- * WC Tested Up To: 9.6.0
- * Version: 18.19.4
+ * Tested Up To: 6.7.2
+ * WC Tested Up To: 9.6.2
+ * Version: 18.19.5
  *
  * Version Numbering: {major}.{minor}.{bugfix}[-{stage}.{level}]
  *
@@ -24,7 +24,7 @@
  *      {bugfix}        Backwards-compatible bug fixes or small improvements.
  *      {stage}.{level} Pre-production release: dev < a (alpha) < b (beta) < rc (release candidate).
  *
- * Copyright 2012-2024 Jean-Sebastien Morisset (https://wpsso.com/)
+ * Copyright 2012-2025 Jean-Sebastien Morisset (https://wpsso.com/)
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
