@@ -11,8 +11,8 @@ Contributors: jsmoriss
 Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.7.2
-WC Tested Up To: 9.6.2
-Stable Tag: 18.19.5
+WC Tested Up To: 9.7.1
+Stable Tag: 18.19.6
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -275,6 +275,21 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 <p><strong>WPSSO Core Standard edition users (ie. the plugin hosted on WordPress.org) have access to <a href="https://wordpress.org/plugins/wpsso/advanced/">the latest development version under the Advanced Options section</a>.</strong></p>
 
 <h3>Changelog / Release Notes</h3>
+
+**Version 18.19.6 (2025/03/30)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* Fixed a PHP "Type of `Michelf\MarkdownExtra::$em_relist` must not be defined" error in the 'Michelf\Markdown' library.
+* **Developer Notes**
+	* Refactored the `WpssoRegister::uninstall_plugin()` method `delete_metadata()` calls.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 **Version 18.19.5 (2025/02/18)**
 
@@ -626,6 +641,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v6.0.1 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 18.19.6 =
+
+(2024/03/30) Fixed a PHP "Type of `Michelf\MarkdownExtra::$em_relist` must not be defined" error in the 'Michelf\Markdown' library.
 
 = 18.19.5 =
 
