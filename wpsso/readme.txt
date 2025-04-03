@@ -276,6 +276,24 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 18.20.0-dev.1 (2025/04/02)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Added new date options under the SSO &gt; Advanced Settings &gt; Schema Defaults &gt; Creative Work tab:
+		* Add Date Created Property
+		* Add Date Published Property
+		* Add Date Modified Property
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* None.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
 **Version 18.19.6 (2025/03/30)**
 
 * **New Features**
@@ -641,6 +659,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v6.0.1 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 18.20.0-dev.1 =
+
+(2024/04/02) Added new date options under the SSO &gt; Advanced Settings &gt; Schema Defaults &gt; Creative Work tab:
 
 = 18.19.6 =
 
