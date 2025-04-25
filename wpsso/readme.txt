@@ -11,8 +11,8 @@ Contributors: jsmoriss
 Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.8.0
-WC Tested Up To: 9.7.1
-Stable Tag: 18.20.0
+WC Tested Up To: 9.8.2
+Stable Tag: 18.20.1
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -276,6 +276,21 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 18.20.1 (2025/04/25)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Added an error notice in case the WordPress `get_post_type()` function returns an array.
+* **Bugfixes**
+	* Fixed deprecated calls to static methods in trait for `\RankMath\Helpers`.
+* **Developer Notes**
+	* None.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
 **Version 18.20.0 (2025/04/04)**
 
 * **New Features**
@@ -403,6 +418,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 18.20.1 =
+
+(2025/04/25) Added an error notice in case the WordPress `get_post_type()` function returns an array. Fixed deprecated calls to static methods in trait for `\RankMath\Helpers`.
 
 = 18.20.0 =
 

@@ -273,40 +273,37 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 					$mod[ 'post_modified_time' ]      = get_post_modified_time( 'c', $gmt = true, $mod[ 'wp_obj' ] );	// ISO 8601 date or false.
 					$mod[ 'post_modified_timestamp' ] = get_post_modified_time( 'U', $gmt = true, $mod[ 'wp_obj' ] );	// Unix timestamp or false.
 
-					/*
-					 * Find the post mime type group and subgroup values.
-					 *
-					 * See wp_post_mime_type_where() in wordpress/wp-includes/post.php.
-					 */
-					if ( ! empty( $mod[ 'post_mime_type' ] ) ) {
+					if ( is_array( $mod[ 'post_type' ] ) ) {	// Just in case.
 
-						if ( false !== $slashpos = strpos( $mod[ 'post_mime_type' ], '/' ) ) {
+						$notice_msg = sprintf( __( 'The <a href="%1$s">WordPress get_post_type() function</a> returned an array for WP_Post object ID %2$s.', 'wpsso' ), __( 'https://developer.wordpress.org/reference/functions/get_post_type/', 'wpsso' ), $mod[ 'id' ] ) . ' ';
 
-							$mod[ 'post_mime_group' ] = preg_replace( '/[^-*.a-zA-Z0-9]/', '',
-								substr( $mod[ 'post_mime_type' ], 0, $slashpos ) );
+						$notice_msg .= __( 'This function must not return an array, it must return false or a post type string.', 'wpsso' ) . ' ';
 
-							$mod[ 'post_mime_subgroup' ] = preg_replace( '/[^-*.+a-zA-Z0-9]/', '',
-								substr( $mod[ 'post_mime_type' ], $slashpos + 1 ) );
+						$notice_msg .= '<pre><code>' . print_r( $mod[ 'post_type' ], true ) . '</code></pre>';
 
-						} else {
+						if ( $this->p->notice->is_admin_pre_notices() ) {
 
-							$mod[ 'post_mime_group' ] = preg_replace( '/[^-*.a-zA-Z0-9]/', '', $mod[ 'post_mime_type' ] );
+							$this->p->notice->err( $notice_msg );
+						}
+				
+						$error_pre  = sprintf( '%s error:', __METHOD__ );
 
-							$mod[ 'post_mime_subgroup' ] = '*';
+						SucomUtil::safe_error_log( $error_pre . ' ' . $notice_msg, $strip_html = true );
+
+						if ( $this->p->debug->enabled ) {
+
+							$this->p->debug->log( 'get_post_type() returned an array for WP_Post object id ' . $mod[ 'id' ] );
+
+							$this->p->debug->log_arr( 'post_type', $mod[ 'post_type' ] );
 						}
 					}
 
-					if ( ! empty( $mod[ 'wp_obj' ]->post_parent ) ) {
-
-						$mod[ 'post_parent' ] = $mod[ 'wp_obj' ]->post_parent;	// Post parent id.
-					}
-
 					/*
-					 * See WpssoIntegUserCoAuthors->filter_get_post_type().
+					 * See WpssoIntegEcomWooCommerce->filter_get_post_type().
 					 */
 					$mod[ 'post_type' ] = apply_filters( 'wpsso_get_post_type', $mod[ 'post_type' ], $post_id );
 
-					if ( $mod[ 'post_type' ] ) {	// Just in case.
+					if ( ! empty( $mod[ 'post_type' ] ) && is_string( $mod[ 'post_type' ] ) ) {	// Not false or empty string.
 
 						$mod[ 'is_attachment' ] = 'attachment' === $mod[ 'post_type' ] ? true : false;		// Post type is 'attachment'.
 
@@ -346,6 +343,14 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 					}
 
 					/*
+					 * If the post has a parent, save the parent ID.
+					 */
+					if ( ! empty( $mod[ 'wp_obj' ]->post_parent ) ) {
+
+						$mod[ 'post_parent' ] = $mod[ 'wp_obj' ]->post_parent;	// Post parent id.
+					}
+
+					/*
 					 * The post type might be public, but if the post itself is private, then mark the post as not public.
 					 *
 					 * See https://wordpress.org/support/article/post-status/#default-statuses.
@@ -353,6 +358,29 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 					if ( 'private' === $mod[ 'post_status' ] ) {
 
 						$mod[ 'is_public' ] = false;
+					}
+
+					/*
+					 * Find the post mime type group and subgroup values.
+					 *
+					 * See wp_post_mime_type_where() in wordpress/wp-includes/post.php.
+					 */
+					if ( ! empty( $mod[ 'post_mime_type' ] ) ) {
+
+						if ( false !== $slashpos = strpos( $mod[ 'post_mime_type' ], '/' ) ) {
+
+							$mod[ 'post_mime_group' ] = preg_replace( '/[^-*.a-zA-Z0-9]/', '',
+								substr( $mod[ 'post_mime_type' ], 0, $slashpos ) );
+
+							$mod[ 'post_mime_subgroup' ] = preg_replace( '/[^-*.+a-zA-Z0-9]/', '',
+								substr( $mod[ 'post_mime_type' ], $slashpos + 1 ) );
+
+						} else {
+
+							$mod[ 'post_mime_group' ] = preg_replace( '/[^-*.a-zA-Z0-9]/', '', $mod[ 'post_mime_type' ] );
+
+							$mod[ 'post_mime_subgroup' ] = '*';
+						}
 					}
 
 				} else $mod[ 'wp_obj' ] = false;
@@ -405,7 +433,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 		 */
 		public function get_post_type_og_type( $mod ) {
 
-			if ( ! empty( $mod[ 'post_type' ] ) ) {
+			if ( ! empty( $mod[ 'post_type' ] ) && is_string( $mod[ 'post_type' ] ) ) {	// Not false or empty string.
 
 				if ( ! empty( $this->p->cf[ 'head' ][ 'og_type_by_post_type' ][ $mod[ 'post_type' ] ] ) ) {
 
@@ -2303,6 +2331,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			}
 
 			$inherit_featured = empty( $this->p->options[ 'plugin_inherit_featured' ] ) ? false : true;
+
 			$inherit_featured = (bool) apply_filters( 'wpsso_inherit_featured_image', $inherit_featured, $mod );
 
 			if ( $inherit_featured ) {
@@ -2332,6 +2361,19 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 				if ( $this->p->debug->enabled ) {
 
 					$this->p->debug->log( 'exiting early: featured image = ' . $metadata[ $meta_key ][ 0 ] );
+				}
+
+				return $check;	// Null by default.
+			}
+
+			/*
+			 * Make sure the post type is not false, empty string, or array.
+			 */
+			if ( empty( $mod[ 'post_type' ] ) || ! is_string( $mod[ 'post_type' ] ) ) {
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'exiting early: invalid post type' );
 				}
 
 				return $check;	// Null by default.
@@ -2422,6 +2464,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			}
 
 			$inherit_featured = empty( $this->p->options[ 'plugin_inherit_featured' ] ) ? false : true;
+
 			$inherit_featured = (bool) apply_filters( 'wpsso_inherit_featured_image', $inherit_featured, $mod );
 
 			if ( $inherit_featured ) {
@@ -2442,6 +2485,19 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			}
 
 			if ( '' === $prev_value ) {	// No existing previous value.
+
+				/*
+				 * Make sure the post type is not false, empty string, or array.
+				 */
+				if ( empty( $mod[ 'post_type' ] ) || ! is_string( $mod[ 'post_type' ] ) ) {
+	
+					if ( $this->p->debug->enabled ) {
+	
+						$this->p->debug->log( 'exiting early: invalid post type' );
+					}
+	
+					return $check;	// Null by default.
+				}
 
 				if ( $this->p->debug->enabled ) {
 
