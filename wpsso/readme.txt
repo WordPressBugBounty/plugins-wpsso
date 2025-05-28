@@ -1,4 +1,4 @@
-=== WPSSO Core - Complete and Optimized Structured Data SEO ===
+=== WPSSO Core - Complete Schema Markup and Meta Tags ===
 Plugin Name: WPSSO Core
 Plugin Slug: wpsso
 Text Domain: wpsso
@@ -10,15 +10,15 @@ Tags: schema, woocommerce, search results, optimize, meta tags
 Contributors: jsmoriss
 Requires PHP: 7.4.33
 Requires At Least: 5.9
-Tested Up To: 6.8.0
-WC Tested Up To: 9.8.2
-Stable Tag: 18.20.1
+Tested Up To: 6.8.1
+WC Tested Up To: 9.8.3
+Stable Tag: 18.21.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
 == Description ==
 
-<h3 class="top">Complete and Optimized Structured Data SEO for WordPress</h3>
+<h3 class="top">Complete Schema Markup and Meta Tags for WordPress</h3>
 
 <p>Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.</p>
 
@@ -26,9 +26,9 @@ Present your content at its best for social sites and search results, no matter 
 
 <p><strong>The most comprehensive and accurate Schema markup plugin for WooCommerce products.</strong></p>
 
-<p>Supports over 500 different Schema types and sub-types (including Schema Event for WooCommerce products).</p>
+<p>Supports over 500 different Schema types and sub-types (including Schema Event and ProductGroup types for WooCommerce products).</p>
 
-<p><strong>Provides complete structured data markup for:</strong></p>
+<p><strong>Provides complete Schema markup and meta tags for:</strong></p>
 
 <ul>
 	<li>Facebook / Open Graph</li>
@@ -276,6 +276,21 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 18.21.0 (2025/05/28)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Updated the canonical URL to exclude the page number.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* None.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
 **Version 18.20.1 (2025/04/25)**
 
 * **New Features**
@@ -418,6 +433,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 18.21.0 =
+
+(2025/05/28) Updated the canonical URL to exclude the page number.
 
 = 18.20.1 =
 
