@@ -12,7 +12,7 @@ Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.8.1
 WC Tested Up To: 9.8.3
-Stable Tag: 18.21.0
+Stable Tag: 18.22.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -276,6 +276,21 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 18.22.0 (2025/05/31)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Added a call to `clean_post_cache()` in `SucomUtilWP::raw_update_post()`.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
 **Version 18.21.0 (2025/05/28)**
 
 * **New Features**
@@ -433,6 +448,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 18.22.0 =
+
+(2025/05/31) Added a call to `clean_post_cache()` in `SucomUtilWP::raw_update_post()`.
 
 = 18.21.0 =
 
