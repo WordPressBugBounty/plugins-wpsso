@@ -65,6 +65,8 @@ if ( ! class_exists( 'WpssoSubmenuAdvanced' ) && class_exists( 'WpssoAdmin' ) ) 
 				'place_custom'     => $this->p->util->get_form_cache( 'place_names_custom', $add_none = true ),
 				'place_types'      => $this->p->util->get_form_cache( 'place_types_select' ),
 				'schema_types'     => $this->p->util->get_form_cache( 'schema_types_select' ),
+				'service'          => $this->p->util->get_form_cache( 'service_names', $add_none = true ),
+				'service_types'    => $this->p->util->get_form_cache( 'service_types_select' ),
 			);
 
 			parent::add_settings_page_metaboxes( $callback_args );
@@ -156,6 +158,7 @@ if ( ! class_exists( 'WpssoSubmenuAdvanced' ) && class_exists( 'WpssoAdmin' ) ) 
 				'product'       => _x( 'Product', 'metabox tab', 'wpsso' ),
 				'profile_page'  => _x( 'Profile Page', 'metabox tab', 'wpsso' ),
 				'review'        => _x( 'Review', 'metabox tab', 'wpsso' ),
+				'service'       => _x( 'Service', 'metabox tab', 'wpsso' ),
 			);
 
 			$this->show_metabox_tabbed( $obj, $mb, $tabs );

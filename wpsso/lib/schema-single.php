@@ -258,6 +258,8 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 			/*
 			 * Maybe get options from integration modules.
+			 *
+			 * Returned options can change depending on the locale, but the option key names should NOT be localized.
 			 */
 			$event_opts = apply_filters( 'wpsso_get_event_options', false, $mod, $event_id );
 
@@ -475,6 +477,9 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 				}
 			}
 
+			/*
+			 * Add event offers.
+			 */
 			if ( ! empty( $event_opts[ 'event_offers' ] ) && is_array( $event_opts[ 'event_offers' ] ) ) {
 
 				foreach ( $event_opts[ 'event_offers' ] as $event_offer ) {
@@ -873,7 +878,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 			if ( $wpsso->debug->enabled ) {
 
-				$wpsso->debug->log( 'adding return policy data for mrp ID "' . $mrp_id . '"' );
+				$wpsso->debug->log( 'adding return policy data for mrp id "' . $mrp_id . '"' );
 			}
 
 			/*
@@ -1029,7 +1034,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 			if ( $wpsso->debug->enabled ) {
 
-				$wpsso->debug->log( 'adding organization data for org ID "' . $org_id . '"' );
+				$wpsso->debug->log( 'adding organization data for org id "' . $org_id . '"' );
 			}
 
 			$org_opts = false;
@@ -1064,7 +1069,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 				if ( $wpsso->debug->enabled ) {
 
-					$wpsso->debug->log( 'exiting early: unknown org ID "' . $org_id . '"' );
+					$wpsso->debug->log( 'exiting early: unknown org id "' . $org_id . '"' );
 				}
 
 				return 0;	// Return count of organizations added.
@@ -1094,6 +1099,8 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 			/*
 			 * Add schema properties from the organization options.
+			 *
+			 * See WpssoOpmOrg->get_id().
 			 */
 			WpssoSchema::add_data_itemprop_from_assoc( $json_ret, $org_opts, array(
 				'url'                            => 'org_url',
@@ -1110,6 +1117,11 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 				'actionableFeedbackPolicy'       => 'org_feedback_policy_url',		// Feedback Policy URL.
 				'award'                          => 'org_awards',			// Organization Awards.
 			) );
+
+			/*
+			 * See https://schema.org/hasOfferCatalog.
+			 */
+			WpssoSchema::add_offer_catalogs_data( $json_ret, $mod, $org_opts, $opt_pre = 'org_offer_catalog', $prop_name = 'hasOfferCatalog' );
 
 			/*
 			 * Maybe add properties for Schema Organization sub-types.
@@ -1206,7 +1218,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 				$banner_missing_msg = __( 'An organization banner image is missing and required for the "%1$s" organization Schema %2$s markup.', 'wpsso' );
 
 				// translators: %1$s is the organization name, %2$s is 'site' (translated) or organization ID.
-				$org_settings_msg = __( 'Please enter the missing image URL in the "%1$s" %2$s organization settings.', 'wpsso' );
+				$org_settings_msg = __( 'Enter the missing image URL in the "%1$s" %2$s organization settings.', 'wpsso' );
 
 				if ( ! $mod[ 'is_post' ] || 'publish' === $mod[ 'post_status' ] ) {
 
@@ -1347,7 +1359,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 				if ( $wpsso->debug->enabled ) {
 
-					$wpsso->debug->log( 'adding place data for org ID "' . $org_id . '"' );
+					$wpsso->debug->log( 'adding place data for org id "' . $org_id . '"' );
 				}
 
 				self::add_place_data( $json_ret, $mod, $org_id, $place_list_el = 'merge' );
@@ -1409,7 +1421,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 					if ( $wpsso->debug->enabled ) {
 
-						$wpsso->debug->log( 'exiting early: no person_id' );
+						$wpsso->debug->log( 'exiting early: no person id' );
 					}
 
 					return 0;	// Return count of persons added.
@@ -1602,7 +1614,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 			if ( $wpsso->debug->enabled ) {
 
-				$wpsso->debug->log( 'adding place data for place ID "' . $place_id . '"' );
+				$wpsso->debug->log( 'adding place data for place id "' . $place_id . '"' );
 			}
 
 			/*
@@ -1988,21 +2000,21 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 				 */
 				if ( ! empty( $mt_single[ 'product:original_price:type' ] ) &&
 					$mt_single[ 'product:original_price:type' ] != $mt_single[ 'product:price:type' ] ) {
-			
+
 					$price_spec = WpssoSchema::get_data_itemprop_from_assoc( $mt_single, array(
 						'priceType'             => 'product:original_price:type',
 						'price'                 => 'product:original_price:amount',
 						'priceCurrency'         => 'product:original_price:currency',
 						'valueAddedTaxIncluded' => 'product:price:vat_included',
 					) );
-			
+
 					if ( false !== $price_spec ) {
 
 						if ( empty( $price_spec[ 'priceCurrency' ] ) ) {	// Make sure we have a price currency.
 
 							$price_spec[ 'priceCurrency' ] = $wpsso->options[ 'og_def_currency' ];
 						}
-					
+
 						$json_ret[ 'priceSpecification' ][] = WpssoSchema::get_schema_type_context( 'https://schema.org/UnitPriceSpecification',
 							$price_spec );
 					}
@@ -2108,7 +2120,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			 */
 			self::add_or_replace_data( $json_data, $json_ret, $list_el );
 
-			return 1;	// Return count of products added.
+			return 1;	// Return count of product offers added.
 		}
 
 		/*
@@ -2261,7 +2273,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			 */
 			self::add_or_replace_data( $json_data, $json_ret, $list_el );
 
-			return 1;	// Return count of products added.
+			return 1;	// Return count of product groups added.
 		}
 
 		/*
@@ -2536,6 +2548,238 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			self::add_or_replace_data( $json_data, $json_ret, $list_el );
 
 			return 1;	// Return count of products added.
+		}
+
+		public static function add_service_data( &$json_data, array $mod, $service_id, $list_el = false ) {
+
+			$wpsso =& Wpsso::get_instance();
+
+			if ( $wpsso->debug->enabled ) {
+
+				$wpsso->debug->mark();
+			}
+
+			/*
+			 * Maybe get options from integration modules.
+			 *
+			 * Returned options can change depending on the locale, but the option key names should NOT be localized.
+			 */
+			$service_opts = apply_filters( 'wpsso_get_service_options', false, $mod, $service_id );
+
+			if ( ! empty( $service_opts ) ) {
+
+				if ( $wpsso->debug->enabled ) {
+
+					$wpsso->debug->log_arr( 'get_service_options', $service_opts );
+				}
+			}
+
+			/*
+			 * Add metadata defaults and custom values to the $service_opts array.
+			 *
+			 * Automatically renames 'schema_service_*' options from the Document SSO metabox to 'service_*'.
+			 */
+			WpssoSchema::add_type_opts_md_pad( $service_opts, $mod, array( 'service' => 'schema_service' ) );
+
+			if ( empty( $service_opts ) ) {
+
+				if ( $wpsso->debug->enabled ) {
+
+					$wpsso->debug->log( 'exiting early: no service options' );
+				}
+
+				return 0;	// Return count of services added.
+			}
+
+			/*
+			 * Add service offers.
+			 */
+			if ( $wpsso->debug->enabled ) {
+
+				$wpsso->debug->log( 'checking for custom service offers' );
+			}
+
+			$have_offers   = false;
+			$md_offers_max = SucomUtil::get_const( 'WPSSO_SCHEMA_METADATA_OFFERS_MAX', 5 );
+			$canonical_url = $wpsso->util->get_canonical_url( $mod );
+
+			foreach ( range( 0, $md_offers_max - 1, 1 ) as $key_num ) {
+
+				$offer_opts = apply_filters( 'wpsso_get_service_offer_options', false, $mod, $service_id, $key_num );
+
+				if ( ! empty( $offer_opts ) ) {
+
+					if ( $wpsso->debug->enabled ) {
+
+						$wpsso->debug->log_arr( 'get_service_offer_options', $offer_opts );
+					}
+				}
+
+				if ( ! is_array( $offer_opts ) ) {
+
+					$offer_opts = array();
+
+					foreach ( array(
+						'offer_name'           => 'schema_service_offer_name',
+						'offer_url'            => 'schema_service_offer_url',
+						'offer_price'          => 'schema_service_offer_price',
+						'offer_price_currency' => 'schema_service_offer_currency',
+						'offer_availability'   => 'schema_service_offer_avail',
+					) as $opt_key => $md_pre ) {
+
+						$offer_opts[ $opt_key ] = $mod[ 'obj' ]->get_options( $mod[ 'id' ], $md_pre . '_' . $key_num );
+					}
+				}
+
+				/*
+				 * Must have at least an offer name and price.
+				 */
+				if ( isset( $offer_opts[ 'offer_name' ] ) && isset( $offer_opts[ 'offer_price' ] ) ) {
+
+					if ( ! isset( $service_opts[ 'offer_url' ] ) ) {
+
+						$offer_opts[ 'offer_url' ] = $canonical_url;
+					}
+
+					if ( ! isset( $offer_opts[ 'offer_valid_from_date' ] ) ) {
+
+						if ( ! empty( $service_opts[ 'service_offers_start_date_iso' ] ) ) {
+
+							$offer_opts[ 'offer_valid_from_date' ] = $service_opts[ 'service_offers_start_date_iso' ];
+						}
+					}
+
+					if ( ! isset( $offer_opts[ 'offer_valid_to_date' ] ) ) {
+
+						if ( ! empty( $service_opts[ 'service_offers_end_date_iso' ] ) ) {
+
+							$offer_opts[ 'offer_valid_to_date' ] = $service_opts[ 'service_offers_end_date_iso' ];
+						}
+					}
+
+					if ( false === $have_offers ) {
+
+						$have_offers = true;
+
+						$service_opts[ 'service_offers' ] = array();	// Clear offers returned by filter.
+					}
+
+					$service_opts[ 'service_offers' ][] = $offer_opts;
+				}
+			}
+
+			/*
+			 * If not adding a list element, get the existing schema type url (if one exists).
+			 */
+			list( $type_id, $type_url ) = self::get_type_info( $json_data, $service_opts, $opt_key = 'service_schema_type', $def_type_id = 'service', $list_el );
+
+			/*
+			 * Begin schema service markup creation.
+			 */
+			$json_ret = WpssoSchema::get_schema_type_context( $type_url );
+
+			/*
+			 * Add place, organization, and person data.
+			 *
+			 * Use $opt_pre => $prop_name association as the property name may be repeated (ie. non-unique).
+			 */
+			foreach ( array(
+				'service_prov_org_id'    => 'provider',	// Provider Org.
+				'service_prov_person_id' => 'provider',	// Provider Person.
+			) as $opt_pre => $prop_name ) {
+
+				foreach ( SucomUtil::preg_grep_keys( '/^' . $opt_pre . '(_[0-9]+)?$/', $service_opts ) as $opt_key => $id ) {
+
+					/*
+					 * Check that the option value is not true, false, null, empty string, or 'none'.
+					 */
+					if ( ! SucomUtil::is_valid_option_value( $id ) ) {
+
+						continue;
+
+					} elseif ( strpos( $opt_pre, '_org_id' ) ) {
+
+						$org_logo_key = 'org_logo_url';
+
+						WpssoSchemaSingle::add_organization_data( $json_ret[ $prop_name ], $mod, $id, $org_logo_key, $org_list_el = true );
+
+					} elseif ( strpos( $opt_pre, '_person_id' ) ) {
+
+						WpssoSchemaSingle::add_person_data( $json_ret[ $prop_name ], $mod, $id, $person_list_el = true );
+					}
+				}
+			}
+
+			/*
+			 * See https://schema.org/areaServed as https://schema.org/GeoShape.
+			 */
+			if ( ! empty( $service_opts[ 'service_latitude' ] ) &&
+				! empty( $service_opts[ 'service_longitude' ] ) &&
+					! empty( $service_opts[ 'service_radius' ] ) ) {
+
+				$json_ret[ 'areaServed' ] = WpssoSchema::get_schema_type_context( 'https://schema.org/GeoShape', array(
+					'circle' => $service_opts[ 'service_latitude' ] . ' ' .
+						$service_opts[ 'service_longitude' ] . ' ' .
+						$service_opts[ 'service_radius' ]
+				) );
+			}
+
+			/*
+			 * Add service offers.
+			 */
+			if ( ! empty( $service_opts[ 'service_offers' ] ) && is_array( $service_opts[ 'service_offers' ] ) ) {
+
+				foreach ( $service_opts[ 'service_offers' ] as $service_offer ) {
+
+					if ( ! is_array( $service_offer ) ) {	// Just in case.
+
+						continue;
+					}
+
+					if ( false !== ( $offer = WpssoSchema::get_data_itemprop_from_assoc( $service_offer, array(
+						'name'          => 'offer_name',
+						'url'           => 'offer_url',
+						'price'         => 'offer_price',
+						'priceCurrency' => 'offer_price_currency',
+						'availability'  => 'offer_availability',	// In stock, Out of stock, Pre-order, etc.
+						'validFrom'     => 'offer_valid_from_date',
+						'validThrough'  => 'offer_valid_to_date',
+					) ) ) ) {
+
+						/*
+						 * Add the offer.
+						 */
+						$json_ret[ 'offers' ][] = WpssoSchema::get_schema_type_context( 'https://schema.org/Offer', $offer );
+					}
+				}
+			}
+
+			/*
+			 * See https://schema.org/hasOfferCatalog.
+			 */
+			WpssoSchema::add_offer_catalogs_data( $json_ret, $mod, $service_opts, $opt_pre = 'service_offer_catalog', $prop_name = 'hasOfferCatalog' );
+
+			/*
+			 * Filter the single service data.
+			 */
+			if ( $wpsso->debug->enabled ) {
+
+				$wpsso->debug->log( 'applying filters "wpsso_json_data_single_service"' );
+			}
+
+			$json_ret = apply_filters( 'wpsso_json_data_single_service', $json_ret, $mod, $service_id );
+
+			/*
+			 * Update the @id string with the $json_ret[ 'url' ], $type_id, and $service_id values.
+			 */
+			WpssoSchema::update_data_id( $json_ret, array( $type_id, $service_id ) );
+
+			/*
+			 * Add or replace the json data.
+			 */
+			self::add_or_replace_data( $json_data, $json_ret, $list_el );
+
+			return 1;	// Return count of services added.
 		}
 
 		/*

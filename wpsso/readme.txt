@@ -12,7 +12,7 @@ Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.8.1
 WC Tested Up To: 9.9.3
-Stable Tag: 19.0.0
+Stable Tag: 20.0.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -26,7 +26,7 @@ Present your content at its best for social sites and search results, no matter 
 
 <p><strong>The most comprehensive and accurate Schema markup plugin for WooCommerce products.</strong></p>
 
-<p>Supports over 500 different Schema types and sub-types (including Schema Event and ProductGroup types for WooCommerce products).</p>
+<p>Supports over 500 different Schema types and sub-types (including Schema Event, Product Group, and Service types for WooCommerce products).</p>
 
 <p><strong>Provides complete Schema markup and meta tags for:</strong></p>
 
@@ -277,6 +277,37 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 20.0.0 (2025/06/14)**
+
+* **New Features**
+	* Added a new SSO &gt; Advanced Settings &gt; Schema Defaults &gt; Service tab.
+	* Added a new Document SSO &gt; Edit Schema &gt; Service Information section:
+		* Provider Org.
+		* Provider Person
+		* Service Latitude
+		* Service Longitude
+		* Service Radius
+		* Service Offers Start
+		* Service Offers End
+		* Service Offers (Name, Price, Currency, Availability)
+		* Offer Catalogs
+			* Offer Catalog Name
+			* Offer Catalog Description
+			* Offer Catalog URL
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Added a new `WpssoMessagesTooltipMetaService` class.
+	* Added a new `WpssoSchema::add_offer_catalogs_data()` method.
+	* Added a new `WpssoSchemaSingle::add_service_data()` method.
+	* Added a new `WpssoEditSchema->filter_mb_sso_edit_schema_service_rows()` method.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
 **Version 19.0.0 (2025/06/11)**
 
 * **New Features**
@@ -464,6 +495,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 20.0.0 =
+
+(2025/06/14) Added a new Document SSO &gt; Edit Schema &gt; Service Information section.
 
 = 19.0.0 =
 

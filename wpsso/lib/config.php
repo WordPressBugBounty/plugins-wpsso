@@ -21,8 +21,8 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			),
 			'plugin' => array(
 				'wpsso' => array(			// Plugin acronym.
-					'version'     => '19.0.0',	// Plugin version.
-					'opt_version' => '1022',	// Increment when changing default option values.
+					'version'     => '20.0.0',	// Plugin version.
+					'opt_version' => '1026',	// Increment when changing default option values.
 					'short'       => 'WPSSO Core',	// Short plugin name.
 					'name'        => 'WPSSO Core',
 					'desc'        => 'Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.',
@@ -191,6 +191,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 								'recipe'              => 'Schema Type Recipe',
 								'review'              => 'Schema Type Review',
 								'searchresultspage'   => 'Schema Type Search Results Page',
+								'service'             => 'Schema Type Service',
 								'softwareapplication' => 'Schema Type Software Application',
 								'thing'               => 'Schema Type Thing',
 								'webpage'             => 'Schema Type WebPage',
@@ -537,7 +538,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				),
 				'wpssofaq' => array(			// Plugin acronym.
 					'short'       => 'WPSSO FAQ',	// Short plugin name.
-					'name'        => 'WPSSO FAQ Manager',
+					'name'        => 'WPSSO Schema FAQ Page Manager',
 					'desc'        => 'Create FAQ and Question / Answer Pages with optional shortcodes to include FAQs and Questions / Answers in your content.',
 					'slug'        => 'wpsso-faq',
 					'base'        => 'wpsso-faq/wpsso-faq.php',
@@ -663,8 +664,8 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				),
 				'wpssomrp' => array(			// Plugin acronym.
 					'short'       => 'WPSSO MRP',	// Short plugin name.
-					'name'        => 'WPSSO Merchant Return Policy Manager',
-					'desc'        => 'Manage any number of Merchant Return Policies for Google Merchant listings.',
+					'name'        => 'WPSSO Schema Merchant Return Policy Manager',
+					'desc'        => 'Manage Merchant Return Policies for Google Merchant listings and Schema markup.',
 					'slug'        => 'wpsso-merchant-return-policy',
 					'base'        => 'wpsso-merchant-return-policy/wpsso-merchant-return-policy.php',
 					'update_auth' => '',		// No premium version.
@@ -726,8 +727,8 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				),
 				'wpssoopm' => array(			// Plugin acronym.
 					'short'       => 'WPSSO OPM',	// Short plugin name.
-					'name'        => 'WPSSO Organization and Place Manager',
-					'desc'        => 'Manage Organizations (publisher, organizer, etc.) and Places for Facebook, Pinterest, and Google local business markup.',
+					'name'        => 'WPSSO Schema Organization and Place Manager',
+					'desc'        => 'Manage Organizations and Places (Local Businesses, Venues, etc.) for Google, Facebook, Pinterest, and Schema markup.',
 					'slug'        => 'wpsso-organization-place',
 					'base'        => 'wpsso-organization-place/wpsso-organization-place.php',
 					'update_auth' => '',		// No premium version.
@@ -1226,7 +1227,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				),
 				'wpssowcmd' => array(			// Plugin acronym.
 					'short'       => 'WPSSO WCMD',	// Short plugin name.
-					'name'        => 'WPSSO Product Metadata for WooCommerce SEO',
+					'name'        => 'WPSSO Product Metadata for WooCommerce',
 					'desc'        => 'MPN, ISBN, GTIN, GTIN-8, UPC, EAN, GTIN-14, net dimensions, and fluid volume for WooCommerce products and variations.',
 					'slug'        => 'wpsso-wc-metadata',
 					'base'        => 'wpsso-wc-metadata/wpsso-wc-metadata.php',
@@ -1289,7 +1290,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				),
 				'wpssowcsdt' => array(			// Plugin acronym.
 					'short'       => 'WPSSO WCSDT',	// Short plugin name.
-					'name'        => 'WPSSO Shipping Delivery Time for WooCommerce SEO',
+					'name'        => 'WPSSO Schema Shipping Delivery Time for WooCommerce',
 					'desc'        => 'Shipping delivery time estimates for WooCommerce shipping zones, methods, and classes.',
 					'slug'        => 'wpsso-wc-shipping-delivery-time',
 					'base'        => 'wpsso-wc-shipping-delivery-time/wpsso-wc-shipping-delivery-time.php',
@@ -1570,21 +1571,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'schema_type_for_article'       => 'article',
 					'schema_type_for_book'          => 'book',
 					'schema_type_for_business'      => 'local.business',
-					'schema_type_for_download'      => 'product',	// For Easy Digital Downloads.
+					'schema_type_for_download'      => 'product',		// For Easy Digital Downloads.
 					'schema_type_for_event'         => 'event',
 					'schema_type_for_howto'         => 'howto',
 					'schema_type_for_job_listing'   => 'job.posting',	// For WP Job Manager.
 					'schema_type_for_jobpost'       => 'job.posting',	// For Simple Job Board.
-					'schema_type_for_organization'  => 'organization',
+					'schema_type_for_organization'  => 'organization',	// For WPSSO OPM.
 					'schema_type_for_page'          => 'article',
 					'schema_type_for_person'        => 'person',
-					'schema_type_for_place'         => 'place',
+					'schema_type_for_place'         => 'place',		// For WPSSO OPM.
 					'schema_type_for_post'          => 'blog.posting',
-					'schema_type_for_product'       => 'product',	// For WooCommerce.
+					'schema_type_for_product'       => 'product',		// For WooCommerce.
 					'schema_type_for_product_group' => 'product.group',	// For WooCommerce.
 					'schema_type_for_qa'            => 'webpage.qa',
-					'schema_type_for_question'      => 'question',	// For WPSSO FAQ.
-					'schema_type_for_review'        => 'review',	// For WP Product Review.
+					'schema_type_for_question'      => 'question',		// For WPSSO FAQ.
+					'schema_type_for_review'        => 'review',		// For WP Product Review.
+					'schema_type_for_service'       => 'service',		// For WPSSO OPM.
 					'schema_type_for_tc_events'     => 'event',		// For Tickera.
 					'schema_type_for_tribe_events'  => 'event',		// For The Events Calendar.
 					'schema_type_for_webpage'       => 'webpage',
@@ -1684,6 +1686,12 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'schema_def_review_rating_min' => 0.5,		// Default Review Rating Min.
 					'schema_def_review_rating_max' => 5.0,		// Default Review Rating Max.
 					'schema_def_review_item_type'  => 'product',	// Default Subject Schema Type.
+
+					/*
+					 * Advanced Settings > Schema Defaults > Service.
+					 */
+					'schema_def_service_prov_org_id'    => 'none',	// Default Service Provider Org.
+					'schema_def_service_prov_person_id' => 'none',	// Default Service Provider Person.
 
 					/*
 					 * X (Twitter) Card options.
@@ -2443,7 +2451,11 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				 * values into numbered options.
 				 */
 				'md_keys_multi' => array(
-					'org_award'            => true,				// Organization Awards.
+					'org_award'         => true,				// Organization Awards.
+					'org_offer_catalog' => array(				// Offer Catalog Name.
+						'org_offer_catalog_text',			// Offer Catalog Description.
+						'org_offer_catalog_url',			// Offer Catalog URL.
+					),
 					'product_award'        => true,				// Product Awards.
 					'product_size_group'   => true,				// Product Size Group.
 					'schema_addl_type_url' => true,				// Microdata Type URLs.
@@ -2472,6 +2484,10 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'schema_review_item_cw_movie_actor_person_name'    => true,
 					'schema_review_item_cw_movie_director_person_name' => true,
 					'schema_sameas_url'                                => true,	// Same-As URLs.
+					'schema_service_offer_catalog' => array(			// Offer Catalog Name.
+						'schema_service_offer_catalog_text',			// Offer Catalog Description.
+						'schema_service_offer_catalog_url',			// Offer Catalog URL.
+					),
 					'schema_webpage_reviewed_by_org_id'                => true,
 					'schema_webpage_reviewed_by_person_id'             => true,
 				),
@@ -2854,7 +2870,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			'menu' => array(
 				'title'     => 'SSO - Social and Search Optimization',	// Menu title.
 				'icon-font' => 'WpssoIcons',				// Icon font family.
-				'icon-code' => '\e81e',					// Icon CSS code.
+				'icon-code' => '\e838',					// Icon CSS code, .icon-orange-6.
 				'dashicons' => array(
 					'add-person'    => 'admin-users',
 					'addons'        => 'admin-plugins',
@@ -3329,6 +3345,33 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				),
 
 				/*
+				 * Organization and Place default selection.
+				 */
+				'org_is_defaults' => array(
+					'schema_def_pub_org_id'             => 'Default Creative Work Publisher Organization',
+					'schema_def_prov_org_id'            => 'Default Creative Work Provider Organization',
+					'schema_def_fund_org_id'            => 'Default Creative Work Funder Organization',
+					'schema_def_event_performer_org_id' => 'Default Event Performer Organization',
+					'schema_def_event_organizer_org_id' => 'Default Event Organizer Organization',
+					'schema_def_event_fund_org_id'      => 'Default Event Funder Organization',
+					'schema_def_job_hiring_org_id'      => 'Default Job Hiring Organization',
+					'schema_def_service_prov_org_id'    => 'Default Service Provider Organization',
+				),
+				'place_is_defaults' => array(
+					'schema_def_event_location_id' => 'Default Event Venue',
+					'schema_def_job_location_id'   => 'Default Job Location',
+				),
+				'service_is_defaults' => array(
+				),
+
+				/*
+				 * GeoShape type.
+				 */
+				'geo_shape' => array(
+					'circle' => 'Circular',
+				),
+
+				/*
 				 * Validated on 2022/12/26.
 				 *
 				 * Used for the Schema Product and Offer 'hasAdultConsideration' property.
@@ -3379,6 +3422,17 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'https://schema.org/GraphicNovel'    => 'Graphic Novel',
 					'https://schema.org/Hardcover'       => 'Hardcover',
 					'https://schema.org/Paperback'       => 'Paperback',
+				),
+
+				/*
+				 * Validated on 2025/06/13.
+				 *
+				 * See https://schema.org/ContactPointOption.
+				 */
+				'contact_point_option' => array(
+					'none'                                        => '[None]',
+					'https://schema.org/HearingImpairedSupported' => 'Hearing Impaired',
+					'https://schema.org/TollFree'                 => 'Toll Free',
 				),
 
 				/*
@@ -3780,6 +3834,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'product'              => 'product',	// Allows for product offer options.
 					'question'             => 'article',
 					'review'               => 'article',
+					'service'              => 'article',
 					'software.application' => 'product',	// Allows for product offer options.
 					'webpage.profile'      => 'profile',
 					'website'              => 'website',
@@ -4416,8 +4471,11 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 							 * A service provided by an organization, e.g. delivery service, print services, etc.
 							 */
 							'service' => array(
-								'service'                    => 'https://schema.org/Service',
-								'service.broadcast'          => 'https://schema.org/BroadcastService',
+								'service'           => 'https://schema.org/Service',
+								'service.broadcast' => array(
+									'service.broadcast'       => 'https://schema.org/BroadcastService',
+									'service.broadcast.radio' => 'https://schema.org/RadioBroadcastService',
+								),
 								'service.cable.or.satellite' => 'https://schema.org/CableOrSatelliteService',
 								'service.financial.product'  => array(
 									'bank.account' => array(
@@ -4443,10 +4501,11 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 								'service.food'       => 'https://schema.org/FoodService',
 								'service.government' => 'https://schema.org/GovernmentService',
 								'service.taxi'       => 'https://schema.org/TaxiService',
+								'service.webapi'     => 'https://schema.org/WebAPI',
 							),
-							'service.channel'  => 'https://schema.org/ServiceChannel',
-							'ticket'           => 'https://schema.org/Ticket',
-							'trip'             => array(
+							'service.channel' => 'https://schema.org/ServiceChannel',
+							'ticket'          => 'https://schema.org/Ticket',
+							'trip'            => array(
 								'trip'         => 'https://schema.org/Trip',
 								'trip.bus'     => 'https://schema.org/BusTrip',
 								'trip.flight'  => 'https://schema.org/Flight',
@@ -5206,7 +5265,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			 *	80 – below Settings
 			 *	100 – below second separator
 			 */
-			$var_const[ 'WPSSO_MENU_ORDER' ]                  = 80;			// Position of the SSO settings menu item.
+			$var_const[ 'WPSSO_MENU_ORDER' ]                  = 85;			// Position of the SSO settings menu item.
 			$var_const[ 'WPSSO_TB_NOTICE_MENU_ORDER' ]        = 55;			// Position of the SSO notices toolbar menu item.
 			$var_const[ 'WPSSO_TB_LOCALE_MENU_ORDER' ]        = 56;			// Position of the user locale toolbar menu item.
 			$var_const[ 'WPSSO_TB_VALIDATE_MENU_ORDER' ]      = 57;			// Position of the validate menu item.

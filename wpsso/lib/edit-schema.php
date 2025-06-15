@@ -53,6 +53,7 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 				'mb_sso_edit_schema_person_rows'           => 5,	// Schema Person.
 				'mb_sso_edit_schema_place_rows'            => 5,	// Schema Place.
 				'mb_sso_edit_schema_product_rows'          => 5,	// Schema Product.
+				'mb_sso_edit_schema_service_rows'          => 5,	// Schema Service.
 			), PHP_INT_MIN );	// Run before any add-on filters.
 		}
 
@@ -176,6 +177,7 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 				'wpsso_mb_sso_edit_schema_person_rows',
 				'wpsso_mb_sso_edit_schema_place_rows',
 				'wpsso_mb_sso_edit_schema_product_rows',
+				'wpsso_mb_sso_edit_schema_service_rows',
 			) as $filter_name ) {
 
 				if ( $this->p->debug->enabled ) {
@@ -2127,6 +2129,142 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 						$awards_max, $show_first = 1 ),
 				),
 
+			);
+
+			return $form->get_md_form_rows( $table_rows, $form_rows, $head_info, $mod );
+		}
+
+		/*
+		 * Schema Service.
+		 */
+		public function filter_mb_sso_edit_schema_service_rows( $table_rows, $form, $head_info, $mod, $args ) {
+
+			$currencies          = SucomUtil::get_currencies_abbrev();
+			$metadata_offers_max = SucomUtil::get_const( 'WPSSO_SCHEMA_METADATA_OFFERS_MAX', 5 );
+			$offer_catalogs_max  = SucomUtil::get_const( 'WPSSO_SCHEMA_OFFER_CATALOGS_MAX', 5 );
+
+			$form_rows = array(
+				'subsection_schema_service' => array(
+					'tr_class' => $args[ 'schema_tr_class' ][ 'service' ],
+					'td_class' => 'subsection',
+					'header'   => 'h5',
+					'label'    => _x( 'Service Information', 'metabox title', 'wpsso' )
+				),
+				'schema_service_prov_org_id' => array(
+					'tr_class' => $args[ 'schema_tr_class' ][ 'service' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Provider Org.', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_service_prov_org_id',
+					'content'  => $form->get_select( 'schema_service_prov_org_id', $args[ 'select_names' ][ 'org' ],
+						$css_class = 'wide', $css_id = '', $is_assoc = true, $is_disabled = false,
+							$selected = false, $event_names = array( 'on_focus_load_json' ),
+								$event_args = array( 'json_var' => 'org_names' ) ),
+				),
+				'schema_service_prov_person_id' => array(
+					'tr_class' => $args[ 'schema_tr_class' ][ 'service' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Provider Person', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_service_prov_person_id',
+					'content'  => $form->get_select( 'schema_service_prov_person_id', $args[ 'select_names' ][ 'person' ],
+						$css_class = 'wide', $css_id = '', $is_assoc = true, $is_disabled = false,
+							$selected = false, $event_names = array( 'on_focus_load_json' ),
+								$event_args = array( 'json_var' => 'person_names' ) ),
+				),
+				'schema_service_latitude' => array(
+					'tr_class' => $args[ 'schema_tr_class' ][ 'service' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Service Latitude', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_service_latitude',
+					'content'  => $form->get_input( 'schema_service_latitude', $css_class = 'latitude' ) . ' ' .
+						_x( 'decimal degrees', 'option comment', 'wpsso' ),
+				),
+				'schema_service_longitude' => array(
+					'tr_class' => $args[ 'schema_tr_class' ][ 'service' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Service Longitude', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_service_longitude',
+					'content'  => $form->get_input( 'schema_service_longitude', $css_class = 'longitude' ) . ' ' .
+						_x( 'decimal degrees', 'option comment', 'wpsso' ),
+				),
+				'schema_service_radius' => array(
+					'tr_class' => $args[ 'schema_tr_class' ][ 'service' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Service Radius', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_service_radius',
+					'content'  => $form->get_input( 'schema_service_radius', $css_class = 'short' ) . ' ' .
+						_x( 'meters from coordinates', 'option comment', 'wpsso' ),
+				),
+				'schema_service_offers_start' => array(
+					'tr_class' => $args[ 'schema_tr_class' ][ 'service' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Service Offers Start', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_service_offers_start',
+					'content'  => $form->get_date_time_timezone( 'schema_service_offers_start' ),
+				),
+				'schema_service_offers_end' => array(
+					'tr_class' => $args[ 'schema_tr_class' ][ 'service' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Service Offers End', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_service_offers_end',
+					'content'  => $form->get_date_time_timezone( 'schema_service_offers_end' ),
+				),
+				'schema_service_offers' => array(
+					'tr_class' => $args[ 'schema_tr_class' ][ 'service' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Service Offers', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_service_offers',
+					'content'  => $form->get_mixed_multi( array(
+						'schema_service_offer_name' => array(
+							'input_title' => _x( 'Service Offer Name', 'option label', 'wpsso' ),
+							'input_type'  => 'text',
+							'input_class' => 'offer_name',
+						),
+						'schema_service_offer_price' => array(
+							'input_title' => _x( 'Service Offer Price', 'option label', 'wpsso' ),
+							'input_type'  => 'text',
+							'input_class' => 'price',
+						),
+						'schema_service_offer_currency' => array(
+							'input_title'    => _x( 'Service Offer Currency', 'option label', 'wpsso' ),
+							'input_type'     => 'select',
+							'input_class'    => 'currency',
+							'select_options' => $currencies,
+							'select_default' => $this->p->options[ 'og_def_currency' ],
+							'event_names'    => array( 'on_focus_load_json' ),
+							'event_args'     => array( 'json_var' => 'currencies' ),
+						),
+						'schema_service_offer_avail' => array(
+							'input_title'    => _x( 'Service Offer Availability', 'option label', 'wpsso' ),
+							'input_type'     => 'select',
+							'input_class'    => 'stock',
+							'select_options' => $this->p->cf[ 'form' ][ 'item_availability' ],
+							'select_default' => 'https://schema.org/InStock',
+						),
+					), $css_class = 'single_line', $css_id = 'schema_service_offer', $metadata_offers_max, $show_first = 2 ),
+				),
+				'schema_service_offer_catalogs' => array(
+					'tr_class' => $args[ 'schema_tr_class' ][ 'service' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Offer Catalogs', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_service_offer_catalogs',
+					'content'  => $form->get_mixed_multi( array(
+						'schema_service_offer_catalog' => array(
+							'input_label' => _x( 'Offer Catalog Name', 'option label', 'wpsso' ),
+							'input_type'  => 'text',
+							'input_class' => 'wide offer_catalog_name',
+						),
+						'schema_service_offer_catalog_text' => array(
+							'input_label' => _x( 'Offer Catalog Description', 'option label', 'wpsso' ),
+							'input_type'  => 'textarea',
+							'input_class' => 'wide offer_catalog_text',
+						),
+						'schema_service_offer_catalog_url' => array(
+							'input_label' => _x( 'Offer Catalog URL', 'option label', 'wpsso' ),
+							'input_type'  => 'text',
+							'input_class' => 'wide offer_catalog_url',
+						),
+					), $css_class = '', $css_id = 'schema_service_offer_catalogs', $offer_catalogs_max, $show_first = 1 ),
+				),
 			);
 
 			return $form->get_md_form_rows( $table_rows, $form_rows, $head_info, $mod );

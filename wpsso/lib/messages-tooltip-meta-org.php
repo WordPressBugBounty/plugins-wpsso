@@ -30,13 +30,13 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaOrg' ) ) {
 
 				case 'tooltip-meta-org_name':	// Organization Name.
 
-					$text = __( 'The complete or common name for this organization.', 'wpsso' );
+					$text = __( 'A name for this organization (required).', 'wpsso' );
 
 					break;
 
 				case 'tooltip-meta-org_name_alt':	// Organization Alternate Name.
 
-					$text = __( 'An alternate name for this organization that you would like Google to consider.', 'wpsso' );
+					$text = __( 'An alternate name for this organization.', 'wpsso' );
 
 					break;
 
@@ -50,7 +50,7 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaOrg' ) ) {
 
 					$text = __( 'You may choose a more accurate Schema type for this organization (default is Organization).', 'wpsso' ) . ' ';
 
-					$text .= sprintf( __( 'Note that Google considers a Schema Organization sub-type which is also a Schema Place sub-type, like the <a href="%s">Schema LocalBusiness</a> type for example, as a place and not an organization.', 'wpsso' ), 'https://schema.org/LocalBusiness' ) . ' ';
+					$text .= sprintf( __( 'Note that Google considers a Schema Organization sub-type, which is also a Schema Place sub-type like <a href="%s">Schema LocalBusiness</a> for example, as a place and not an organization.', 'wpsso' ), 'https://schema.org/LocalBusiness' ) . ' ';
 
 					$text .= __( 'For this reason, the Schema Organization selector does not include any Schema Place sub-types.', 'wpsso' ) . ' ';
 
@@ -128,6 +128,12 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaOrg' ) ) {
 
 					break;
 
+				case 'tooltip-meta-org_offer_catalogs':	// Offer Catalogs.
+
+					$text = __( 'A list of offer catalogs for this organization, including the catalog name, description and URL.', 'wpsso' );
+
+					break;
+
 				/*
 				 * News Media Organization section.
 				 */
@@ -160,8 +166,7 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaOrg' ) ) {
 					$text = apply_filters( 'wpsso_messages_tooltip_meta_org', $text, $msg_key, $info );
 
 					break;
-
-			}	// End of 'tooltip-meta-org' switch.
+			}
 
 			return $text;
 		}

@@ -835,7 +835,7 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 			}
 
 			if ( $product->is_on_sale() ) {
-				
+
 				$md_defs[ 'product_price_type' ]= 'https://schema.org/SalePrice';
 
 			} else $md_defs[ 'product_price_type' ] = $this->p->get_options( 'schema_def_product_price_type', 'https://schema.org/ListPrice' );
@@ -865,36 +865,39 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 			) = $this->get_shipping_length_width_height_weight( $product );
 
 			/*
-			 * Add event offers.
+			 * Add event and service offer defaults.
 			 */
-			$md_defs = SucomUtil::preg_grep_keys( '/^schema_event_offer_/', $md_defs, $invert = true );
+			foreach ( array( 'schema_event_offer', 'schema_service_offer' ) as $md_pre ) {
 
-			$avail_variations = $this->p->util->wc->get_available_variations( $product );	// Always returns an array.
+				$md_defs = SucomUtil::preg_grep_keys( '/^' . $md_pre . '_/', $md_defs, $invert = true );	// Remove any pre-existing offers.
 
-			if ( ! empty( $avail_variations ) ) {
+				$avail_variations = $this->p->util->wc->get_available_variations( $product );	// Always returns an array.
 
-				foreach( $avail_variations as $num => $variation ) {
+				if ( ! empty( $avail_variations ) ) {
 
-					if ( $var_product = $this->p->util->wc->get_variation_product( $variation ) ) {	// Get the product for the variation.
+					foreach( $avail_variations as $num => $variation ) {
 
-						$var_product_price      = $this->get_product_price( $var_product );
-						$var_product_price_fmtd = $this->get_product_price_formatted( $var_product, $var_product_price, $product_incl_vat );
+						if ( $var_product = $this->p->util->wc->get_variation_product( $variation ) ) {	// Get the product for the variation.
 
-						$md_defs[ 'schema_event_offer_name_' . $num ]     = $this->get_product_variation_title( $mod, $var_product, $variation );
-						$md_defs[ 'schema_event_offer_url_' . $num ]      = $this->get_product_url( $var_product );
-						$md_defs[ 'schema_event_offer_price_' . $num ]    = $var_product_price_fmtd;
-						$md_defs[ 'schema_event_offer_currency_' . $num ] = $product_currency;
-						$md_defs[ 'schema_event_offer_avail_' . $num ]    = $this->get_product_avail( $var_product );
+							$var_product_price      = $this->get_product_price( $var_product );
+							$var_product_price_fmtd = $this->get_product_price_formatted( $var_product, $var_product_price, $product_incl_vat );
+
+							$md_defs[ $md_pre . '_name_' . $num ]     = $this->get_product_variation_title( $mod, $var_product, $variation );
+							$md_defs[ $md_pre . '_url_' . $num ]      = $this->get_product_url( $var_product );
+							$md_defs[ $md_pre . '_price_' . $num ]    = $var_product_price_fmtd;
+							$md_defs[ $md_pre . '_currency_' . $num ] = $product_currency;
+							$md_defs[ $md_pre . '_avail_' . $num ]    = $this->get_product_avail( $var_product );
+						}
 					}
+
+				} else {
+
+					$md_defs[ $md_pre . '_name_0' ]     = $this->get_product_title( $product );
+					$md_defs[ $md_pre . '_url_0' ]      = $this->get_product_url( $product );
+					$md_defs[ $md_pre . '_price_0' ]    = $product_price_fmtd;
+					$md_defs[ $md_pre . '_currency_0' ] = $product_currency;
+					$md_defs[ $md_pre . '_avail_0' ]    = $product_avail;
 				}
-
-			} else {
-
-				$md_defs[ 'schema_event_offer_name_0' ]     = $this->get_product_title( $product );
-				$md_defs[ 'schema_event_offer_url_0' ]      = $this->get_product_url( $product );
-				$md_defs[ 'schema_event_offer_price_0' ]    = $product_price_fmtd;
-				$md_defs[ 'schema_event_offer_currency_0' ] = $product_currency;
-				$md_defs[ 'schema_event_offer_avail_0' ]    = $product_avail;
 			}
 
 			$md_defs = apply_filters( 'wpsso_get_md_defaults_woocommerce', $md_defs, $mod );
@@ -2151,7 +2154,7 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 				 * See woocommerce/includes/shipping/flat-rate/class-wc-shipping-flat-rate.php line 75.
 				 */
 				$rate_cost = $reflect->invoke( $method_obj, $rate_cost, array( 'qty'  => 1, 'cost' => $product_price ) );
-				
+
 				if ( $this->p->debug->enabled ) {
 
 					$this->p->debug->log( 'resolved rate cost = ' . $rate_cost );
@@ -2247,7 +2250,7 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 					'shipping_rate' => $shipping_rate,
 					'delivery_time' => $delivery_time,
 				);
-		
+
 			} elseif ( $this->p->debug->enabled ) {
 
 				$this->p->debug->log( 'invalid rate cost = ' . $rate_cost );
