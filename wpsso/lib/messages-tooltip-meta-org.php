@@ -122,9 +122,15 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaOrg' ) ) {
 
 					break;
 
+				case 'tooltip-meta-org_contact_id':	// Organization Contact Points.
+
+					$text = __( 'A contact point - for example, a customer service department or mailing address.', 'wpsso' );
+
+					break;
+
 				case 'tooltip-meta-org_award':	// Organization Awards.
 
-					$text = __( 'One or more awards this organization has won.', 'wpsso' );
+					$text = __( 'Awards this organization has won.', 'wpsso' );
 
 					break;
 

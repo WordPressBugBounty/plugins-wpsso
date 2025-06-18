@@ -11,8 +11,8 @@ Contributors: jsmoriss
 Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.8.1
-WC Tested Up To: 9.9.3
-Stable Tag: 20.0.0
+WC Tested Up To: 9.9.4
+Stable Tag: 21.0.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -277,6 +277,39 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 21.0.0 (2025/06/18)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Refactored several methods to support Schema Contact Points for Organizations.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Added a new `SucomUtil::sanitize_schema_id()` method.
+	* Added a new `SucomUtil::add_multi_values()` method.
+	* Added a new `SucomUtil::get_multi_values()` method.
+	* Added a new `WpssoMessagesTooltipMetaContact` class.
+	* Added a new `WpssoSchemaSingle::add_contact_data()` method.
+	* Renamed `WpssoOpenGraph->get_og_type_id_for()` to `get_og_type_id()`.
+	* Renamed `WpssoSchema->get_schema_type_id_for()` to `get_schema_type_id()`.
+	* Renamed `WpssoSchema->get_default_schema_type_name_for()` to `get_default_schema_type_name()`.
+	* Refactored `WpssoOpenGraph->get_og_type_id()`.
+	* Refactored `WpssoSchema->get_schema_type_id()`.
+	* Refactored `WpssoSchema->get_default_schema_type_name()`.
+	* Refactored `WpssoSchema->get_schema_type_url_parts()`.
+	* Refactored `WpssoSchema->return_data_from_filter()`.
+	* Refactored `WpssoSchemaSingle::add_organization_data()`.
+	* Refactored `WpssoSchemaSingle::add_place_data()`.
+	* Refactored `WpssoJsonTypeOrganization->filter_json_data_https_schema_org_organization()`.
+	* Refactored `WpssoJsonTypePlace->filter_json_data_https_schema_org_place()`.
+	* Removed the `WpssoJsonTypeFoodEstablishment` class.
+	* Removed the `WpssoJsonTypeLocalBusiness` class.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
 **Version 20.0.0 (2025/06/14)**
 
 * **New Features**
@@ -299,7 +332,6 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 * **Bugfixes**
 	* None.
 * **Developer Notes**
-	* Added a new `WpssoMessagesTooltipMetaService` class.
 	* Added a new `WpssoSchema::add_offer_catalogs_data()` method.
 	* Added a new `WpssoSchemaSingle::add_service_data()` method.
 	* Added a new `WpssoEditSchema->filter_mb_sso_edit_schema_service_rows()` method.
@@ -495,6 +527,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 21.0.0 =
+
+(2025/06/18) Refactored several methods to support Schema Contact Points for Organizations.
 
 = 20.0.0 =
 

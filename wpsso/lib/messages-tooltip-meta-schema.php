@@ -154,7 +154,7 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 
 				case 'tooltip-meta-schema_award':		// Creative Work Awards.
 
-					$text = __( 'One or more awards this creative work has won.', 'wpsso' );
+					$text = __( 'Awards this creative work has won.', 'wpsso' );
 
 				 	break;
 
@@ -950,6 +950,12 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 
 		 					break;
 
+						case 'tooltip-meta-schema_service_award':	// Service Awards.
+
+							$text = __( 'Awards this service has won.', 'wpsso' );
+
+							break;
+
 						case 'tooltip-meta-schema_service_latitude':	// Service Latitude.
 
 							$text = __( 'The numeric decimal degrees latitude for this service.', 'wpsso' ) . ' ';
@@ -967,11 +973,11 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 							break;
 
 						case 'tooltip-meta-schema_service_radius':	// Service Radius.
-		
+
 							$text = __( 'The geographic area where a service is provided, in meters around a set of latitude and longitude coordinates.', 'wpsso' );
-		
+
 							break;
-		
+
 						case 'tooltip-meta-schema_service_offers_start':	// Service Offers Start.
 
 							$text = __( 'The date and time when tickets go on sale.', 'wpsso' );
@@ -991,9 +997,9 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 						 	break;
 
 						case 'tooltip-meta-schema_service_offer_catalogs':	// Offer Catalogs.
-		
+
 							$text = __( 'A list of offer catalogs for this service, including the catalog name, description and URL.', 'wpsso' );
-		
+
 						 	break;
 
 					}	// End of 'tooltip-meta-schema_service' switch.

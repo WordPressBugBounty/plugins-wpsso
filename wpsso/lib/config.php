@@ -21,7 +21,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			),
 			'plugin' => array(
 				'wpsso' => array(			// Plugin acronym.
-					'version'     => '20.0.0',	// Plugin version.
+					'version'     => '21.0.0',	// Plugin version.
 					'opt_version' => '1026',	// Increment when changing default option values.
 					'short'       => 'WPSSO Core',	// Short plugin name.
 					'name'        => 'WPSSO Core',
@@ -1227,7 +1227,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				),
 				'wpssowcmd' => array(			// Plugin acronym.
 					'short'       => 'WPSSO WCMD',	// Short plugin name.
-					'name'        => 'WPSSO Product Metadata for WooCommerce',
+					'name'        => 'WPSSO Schema Product Metadata for WooCommerce',
 					'desc'        => 'MPN, ISBN, GTIN, GTIN-8, UPC, EAN, GTIN-14, net dimensions, and fluid volume for WooCommerce products and variations.',
 					'slug'        => 'wpsso-wc-metadata',
 					'base'        => 'wpsso-wc-metadata/wpsso-wc-metadata.php',
@@ -1487,6 +1487,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'og_type_for_article'           => 'article',
 					'og_type_for_book'              => 'book',
 					'og_type_for_business'          => 'place',
+					'og_type_for_contact_point'     => 'place',
 					'og_type_for_download'          => 'product',	// For Easy Digital Downloads.
 					'og_type_for_organization'      => 'website',
 					'og_type_for_page'              => 'article',
@@ -1571,6 +1572,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'schema_type_for_article'       => 'article',
 					'schema_type_for_book'          => 'book',
 					'schema_type_for_business'      => 'local.business',
+					'schema_type_for_contact_point' => 'contact.point',
 					'schema_type_for_download'      => 'product',		// For Easy Digital Downloads.
 					'schema_type_for_event'         => 'event',
 					'schema_type_for_howto'         => 'howto',
@@ -1741,7 +1743,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'sc_publisher_url'        => '',	// Soundcloud Business Page URL (localized).
 					'tiktok_publisher_url'    => '',	// TikTok Business Page URL (localized).
 					'tumblr_publisher_url'    => '',	// Tumblr Business Page URL (localized).
-					'wikipedia_publisher_url' => '',	// Wikipedia Organization Page URL (localized).
+					'wikipedia_publisher_url' => '',	// Wikipedia Org. Page URL (localized).
 					'yt_publisher_url'        => '',	// YouTube Business Channel URL (localized).
 
 					/*
@@ -2452,6 +2454,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				 */
 				'md_keys_multi' => array(
 					'org_award'         => true,				// Organization Awards.
+					'org_contact_id'    => true,				// Organization Contact Points.
 					'org_offer_catalog' => array(				// Offer Catalog Name.
 						'org_offer_catalog_text',			// Offer Catalog Description.
 						'org_offer_catalog_url',			// Offer Catalog URL.
@@ -2484,12 +2487,13 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'schema_review_item_cw_movie_actor_person_name'    => true,
 					'schema_review_item_cw_movie_director_person_name' => true,
 					'schema_sameas_url'                                => true,	// Same-As URLs.
+					'schema_service_award'         => true,				// Service Awards.
 					'schema_service_offer_catalog' => array(			// Offer Catalog Name.
 						'schema_service_offer_catalog_text',			// Offer Catalog Description.
 						'schema_service_offer_catalog_url',			// Offer Catalog URL.
 					),
-					'schema_webpage_reviewed_by_org_id'                => true,
-					'schema_webpage_reviewed_by_person_id'             => true,
+					'schema_webpage_reviewed_by_org_id'    => true,
+					'schema_webpage_reviewed_by_person_id' => true,
 				),
 
 				/*
@@ -3347,6 +3351,8 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				/*
 				 * Organization and Place default selection.
 				 */
+				'contact_is_defaults' => array(
+				),
 				'org_is_defaults' => array(
 					'schema_def_pub_org_id'             => 'Default Creative Work Publisher Organization',
 					'schema_def_prov_org_id'            => 'Default Creative Work Provider Organization',
@@ -3360,8 +3366,6 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				'place_is_defaults' => array(
 					'schema_def_event_location_id' => 'Default Event Venue',
 					'schema_def_job_location_id'   => 'Default Job Location',
-				),
-				'service_is_defaults' => array(
 				),
 
 				/*
@@ -3828,13 +3832,14 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				'og_type_by_schema_type' => array(
 					'article'              => 'article',
 					'book'                 => 'book',
+					'event'                => 'product',
 					'item.list'            => 'website',
 					'place'                => 'place',	// Check for Schema place before Schema organization.
 					'organization'         => 'website',	// Check for Schema place before Schema organization.
 					'product'              => 'product',	// Allows for product offer options.
 					'question'             => 'article',
 					'review'               => 'article',
-					'service'              => 'article',
+					'service'              => 'product',
 					'software.application' => 'product',	// Allows for product offer options.
 					'webpage.profile'      => 'profile',
 					'website'              => 'website',
@@ -4503,7 +4508,39 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 								'service.taxi'       => 'https://schema.org/TaxiService',
 								'service.webapi'     => 'https://schema.org/WebAPI',
 							),
-							'service.channel' => 'https://schema.org/ServiceChannel',
+							'service.channel'  => 'https://schema.org/ServiceChannel',
+							'structured.value' => array(
+								'cdc.pmd.record' => 'https://schema.org/CDCPMDRecord',
+								'contact.point'  => array(
+									'contact.point'  => 'https://schema.org/ContactPoint',
+									'postal.address' => 'https://schema.org/PostalAddress',
+								),
+								'defined.region'                  => 'https://schema.org/DefinedRegion',
+								'engine.specification'            => 'https://schema.org/EngineSpecification',
+								'exchange.rate.specification'     => 'https://schema.org/ExchangeRateSpecification',
+								'geo.coordinates'                 => 'https://schema.org/GeoCoordinates',
+								'geo.shape'                       => 'https://schema.org/GeoShape',
+								'interaction.counter'             => 'https://schema.org/InteractionCounter',
+								'monetary.amount'                 => 'https://schema.org/MonetaryAmount',
+								'nutrition.information'           => 'https://schema.org/NutritionInformation',
+								'offer.shipping.details'          => 'https://schema.org/OfferShippingDetails',
+								'opening.hours.specification'     => 'https://schema.org/OpeningHoursSpecification',
+								'ownership.info'                  => 'https://schema.org/OwnershipInfo',
+								'postal.code.range.specification' => 'https://schema.org/PostalCodeRangeSpecification',
+								'price.specification'             => 'https://schema.org/PriceSpecification',
+								'property.value'                  => 'https://schema.org/PropertyValue',
+								'quantitative.value'              => 'https://schema.org/QuantitativeValue',
+								'quantitative.value.distribution' => 'https://schema.org/QuantitativeValueDistribution',
+								'repayment.specification'         => 'https://schema.org/RepaymentSpecification',
+								'service.period'                  => 'https://schema.org/ServicePeriod',
+								'shipping.conditions'             => 'https://schema.org/ShippingConditions',
+								'shipping.delivery.time'          => 'https://schema.org/ShippingDeliveryTime',
+								'Shipping.rate.settings'          => 'https://schema.org/ShippingRateSettings',
+								'Shipping.service'                => 'https://schema.org/ShippingService',
+								'structured.value'                => 'https://schema.org/StructuredValue',
+								'type.and.quantity.node'          => 'https://schema.org/TypeAndQuantityNode',
+								'warranty.promise'                => 'https://schema.org/WarrantyPromise',
+							),
 							'ticket'          => 'https://schema.org/Ticket',
 							'trip'            => array(
 								'trip'         => 'https://schema.org/Trip',
@@ -5294,14 +5331,26 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			/*
 			 * Schema limits.
 			 */
+			$var_const[ 'WPSSO_SCHEMA_ADDL_TYPE_URL_MAX' ]       = 8;
+			$var_const[ 'WPSSO_SCHEMA_AWARDS_MAX' ]              = 5;
+			$var_const[ 'WPSSO_SCHEMA_CITATIONS_MAX' ]           = 5;
 			$var_const[ 'WPSSO_SCHEMA_COMMENTS_MAX' ]            = 50;		// Maximum number of comments when "Break comments into pages" is unchecked.
+			$var_const[ 'WPSSO_SCHEMA_CONTACT_POINTS_MAX' ]      = 5;
 			$var_const[ 'WPSSO_SCHEMA_HOWTO_STEPS_MAX' ]         = 40;
 			$var_const[ 'WPSSO_SCHEMA_HOWTO_SUPPLIES_MAX' ]      = 30;
 			$var_const[ 'WPSSO_SCHEMA_HOWTO_TOOLS_MAX' ]         = 20;
+			$var_const[ 'WPSSO_SCHEMA_ISPARTOF_URL_MAX' ]        = 10;
+			$var_const[ 'WPSSO_SCHEMA_METADATA_OFFERS_MAX' ]     = 5;
+			$var_const[ 'WPSSO_SCHEMA_MOVIE_ACTORS_MAX' ]        = 10;
+			$var_const[ 'WPSSO_SCHEMA_MOVIE_DIRECTORS_MAX' ]     = 5;
+			$var_const[ 'WPSSO_SCHEMA_OFFER_CATALOGS_MAX' ]      = 5;
+			$var_const[ 'WPSSO_SCHEMA_ORGANIZATION_TYPE_ID' ]    = 'organization';
 			$var_const[ 'WPSSO_SCHEMA_PRODUCT_VALID_MAX_TIME' ]  = YEAR_IN_SECONDS;	// Used for Schema 'priceValidUntil' property default.
 			$var_const[ 'WPSSO_SCHEMA_RECIPE_INGREDIENTS_MAX' ]  = 40;
 			$var_const[ 'WPSSO_SCHEMA_RECIPE_INSTRUCTIONS_MAX' ] = 40;
 			$var_const[ 'WPSSO_SCHEMA_REVIEWS_MAX' ]             = 100;
+			$var_const[ 'WPSSO_SCHEMA_SAMEAS_URL_MAX' ]          = 5;
+			$var_const[ 'WPSSO_SCHEMA_WEBPAGE_REVIEWED_BY_MAX' ] = 5;
 
 			/*
 			 * Setting and meta array names.

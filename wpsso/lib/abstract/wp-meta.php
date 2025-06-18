@@ -503,9 +503,9 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 					'product_gtin8'                 => '',				// Product GTIN-8.
 					'product_gtin'                  => '',				// Product GTIN.
 					'product_isbn'                  => '',				// Product ISBN.
-					'product_award_0'               => '',				// Product Awards.
-					'product_award_1'               => '',				// Product Awards.
-					'product_award_2'               => '',				// Product Awards.
+					'product_award_0'               => '',				// Product Award.
+					'product_award_1'               => '',				// Product Award.
+					'product_award_2'               => '',				// Product Award.
 
 					/*
 					 * All Schema Types.
@@ -898,6 +898,9 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 					 */
 					'schema_service_prov_org_id'          => $opts[ 'schema_def_service_prov_org_id' ],	// Provider Org.
 					'schema_service_prov_person_id'       => $opts[ 'schema_def_service_prov_person_id' ],	// Provider Person.
+					'schema_service_award_0'              => '',						// Service Award.
+					'schema_service_award_1'              => '',						// Service Award.
+					'schema_service_award_2'              => '',						// Service Award.
 					'schema_service_latitude'             => '',						// Service Latitude.
 					'schema_service_longitude'            => '',						// Service Longitude.
 					'schema_service_radius'               => '',						// Service Radius.
@@ -934,7 +937,7 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 				/*
 				 * Set the reviewed by options.
 				 */
-				$reviewed_by_max = SucomUtil::get_const( 'WPSSO_SCHEMA_WEBPAGE_REVIEWED_BY_MAX', 5 );
+				$reviewed_by_max = SucomUtil::get_const( 'WPSSO_SCHEMA_WEBPAGE_REVIEWED_BY_MAX' );
 
 				foreach ( range( 0, $reviewed_by_max - 1 ) as $num ) {
 
@@ -1331,9 +1334,7 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 			$container_id = 'wpsso_mb_' . $metabox_id . '_inside';
 
 			$metabox_html = "\n" . '<div id="' . $container_id . '">';
-
 			$metabox_html .= $this->p->util->metabox->get_tabbed( $metabox_id, $tabs, $table_rows, $tabbed_args );
-
 			$metabox_html .= '<!-- ' . $container_id . '_footer begin -->' . "\n";
 
 			if ( $this->p->debug->enabled ) {
@@ -1342,11 +1343,8 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 			}
 
 			$metabox_html .= apply_filters( $container_id . '_footer', '', $mod );
-
 			$metabox_html .= '<!-- ' . $container_id . '_footer end -->' . "\n";
-
 			$metabox_html .= $this->get_metabox_javascript( $container_id );
-
 			$metabox_html .= '</div><!-- #'. $container_id . ' -->' . "\n";
 
 			return $metabox_html;
@@ -2163,21 +2161,6 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 			$this->p->opt->add_versions_checksum( $md_opts );	// $md_opts must be an array.
 
 			return $md_opts;
-		}
-
-		/*
-		 * Combine multiple options with a common prefix to an array of values.
-		 */
-		public function md_keys_multi_array( array &$md_opts, $opt_prefix, $opt_key = null ) {
-
-			if ( null === $opt_key ) {
-
-				$opt_key = $opt_prefix;
-			}
-
-			$array = SucomUtil::preg_grep_keys( '/^' . $opt_prefix . '_[0-9]+$/', $md_opts );
-
-			$md_opts[ $opt_key ] = array_values( $array );
 		}
 
 		/*

@@ -80,6 +80,7 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 			$args = array(
 				'schema_tr_class' => WpssoSchema::get_schema_type_row_class( 'schema_type' ),
 				'select_names'    => array(
+					'contact'          => $this->p->util->get_form_cache( 'contact_names', $add_none = true ),
 					'google_prod_cats' => $this->p->util->get_google_product_categories(),
 					'mrp'              => $this->p->util->get_form_cache( 'mrp_names', $add_none = true ),
 					'org'              => $this->p->util->get_form_cache( 'org_names', $add_none = true ),
@@ -199,9 +200,9 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 			$def_schema_headline     = $this->p->page->get_title( $mod, $md_key = 'schema_title', $max_len = 'schema_headline' );
 			$def_schema_text         = $this->p->page->get_text( $mod, $md_key = '', $max_len = 'schema_text' );
 			$def_schema_keywords_csv = $this->p->page->get_keywords_csv( $mod, $md_key = '' );
-			$awards_max              = SucomUtil::get_const( 'WPSSO_SCHEMA_AWARDS_MAX', 5 );
-			$ispartof_url_max        = SucomUtil::get_const( 'WPSSO_SCHEMA_ISPARTOF_URL_MAX', 20 );
-			$citations_max           = SucomUtil::get_const( 'WPSSO_SCHEMA_CITATIONS_MAX', 5 );
+			$awards_max              = SucomUtil::get_const( 'WPSSO_SCHEMA_AWARDS_MAX' );
+			$citations_max           = SucomUtil::get_const( 'WPSSO_SCHEMA_CITATIONS_MAX' );
+			$ispartof_url_max        = SucomUtil::get_const( 'WPSSO_SCHEMA_ISPARTOF_URL_MAX' );
 			$input_limits            = WpssoConfig::get_input_limits();	// Uses a local cache.
 
 			$form_rows = array(
@@ -1148,6 +1149,13 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 				/*
 				 * Schema Review Subject: Place.
 				 */
+				'schema_review_item_place_phone' => array(
+					'tr_class' => 'hide_schema_type ' . $item_type_row_class[ 'place' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Subject Telephone', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-place_phone',
+					'content'  => $form->get_input( 'schema_review_item_place_phone' ),
+				),
 				'schema_review_item_place_street_address' => array(
 					'tr_class' => 'hide_schema_type ' . $item_type_row_class[ 'place' ],
 					'th_class' => 'medium',
@@ -1190,13 +1198,10 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 					'tooltip'  => 'meta-place_country',
 					'content'  => $form->get_select_country( 'schema_review_item_place_country' ),
 				),
-				'schema_review_item_place_phone' => array(
-					'tr_class' => 'hide_schema_type ' . $item_type_row_class[ 'place' ],
-					'th_class' => 'medium',
-					'label'    => _x( 'Subject Telephone', 'option label', 'wpsso' ),
-					'tooltip'  => 'meta-place_phone',
-					'content'  => $form->get_input( 'schema_review_item_place_phone' ),
-				),
+				
+				/*
+				 * Schema Review Subject: Place > LocalBusiness.
+				 */
 				'schema_review_item_place_price_range' => array(
 					'tr_class' => 'hide_schema_type ' . $item_type_row_class[ 'local.business' ],
 					'th_class' => 'medium',
@@ -1953,7 +1958,7 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 					'content'  => $form->get_select( 'product_size_system', $this->p->cf[ 'form' ][ 'size_system' ] ),
 				),
 				'schema_product_age_group' => $mod[ 'is_public' ] ? array(
-					'tr_class' => 'hide_og_type hide_og_type_product',
+					'tr_class' => $args[ 'schema_tr_class' ][ 'product' ],
 					'th_class' => 'medium',
 					'label'    => _x( 'Product Age Group', 'option label', 'wpsso' ),
 					'tooltip'  => 'meta-product_age_group',
@@ -2140,6 +2145,7 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 		public function filter_mb_sso_edit_schema_service_rows( $table_rows, $form, $head_info, $mod, $args ) {
 
 			$currencies          = SucomUtil::get_currencies_abbrev();
+			$awards_max          = SucomUtil::get_const( 'WPSSO_SCHEMA_AWARDS_MAX', 5 );
 			$metadata_offers_max = SucomUtil::get_const( 'WPSSO_SCHEMA_METADATA_OFFERS_MAX', 5 );
 			$offer_catalogs_max  = SucomUtil::get_const( 'WPSSO_SCHEMA_OFFER_CATALOGS_MAX', 5 );
 
@@ -2169,6 +2175,14 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 						$css_class = 'wide', $css_id = '', $is_assoc = true, $is_disabled = false,
 							$selected = false, $event_names = array( 'on_focus_load_json' ),
 								$event_args = array( 'json_var' => 'person_names' ) ),
+				),
+				'schema_service_award' => array(
+					'tr_class' => $args[ 'schema_tr_class' ][ 'service' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Service Awards', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_service_award',
+					'content'  => $form->get_input_multi( 'schema_service_award', $css_class = 'wide', $css_id = '',
+						$awards_max, $show_first = 1),
 				),
 				'schema_service_latitude' => array(
 					'tr_class' => $args[ 'schema_tr_class' ][ 'service' ],
