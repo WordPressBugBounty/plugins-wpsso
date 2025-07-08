@@ -11,8 +11,8 @@ Contributors: jsmoriss
 Requires PHP: 7.4.33
 Requires At Least: 5.9
 Tested Up To: 6.8.1
-WC Tested Up To: 9.9.4
-Stable Tag: 21.0.0
+WC Tested Up To: 9.9.5
+Stable Tag: 21.1.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -26,7 +26,7 @@ Present your content at its best for social sites and search results, no matter 
 
 <p><strong>The most comprehensive and accurate Schema markup plugin for WooCommerce products.</strong></p>
 
-<p>Supports over 500 different Schema types and sub-types (including Schema Event, Product Group, and Service types for WooCommerce products).</p>
+<p>Supports over 500 different Schema types and sub-types (including Schema Event, Product Group, and the Service type for WooCommerce products).</p>
 
 <p><strong>Provides complete Schema markup and meta tags for:</strong></p>
 
@@ -276,6 +276,21 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 <p><strong>WPSSO Core Standard edition users (ie. the plugin hosted on WordPress.org) have access to <a href="https://wordpress.org/plugins/wpsso/advanced/">the latest development version under the Advanced Options section</a>.</strong></p>
 
 <h3>Changelog / Release Notes</h3>
+
+**Version 21.1.0 (2025/07/08)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Updated toolbar notification message timeouts.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* None.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 **Version 21.0.0 (2025/06/18)**
 
@@ -527,6 +542,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 21.1.0 =
+
+(2025/07/08) Updated toolbar notification message timeouts.
 
 = 21.0.0 =
 
