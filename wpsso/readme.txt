@@ -10,9 +10,9 @@ Tags: schema, woocommerce, search results, optimize, meta tags
 Contributors: jsmoriss
 Requires PHP: 7.4.33
 Requires At Least: 5.9
-Tested Up To: 6.8.1
+Tested Up To: 6.8.2
 WC Tested Up To: 9.9.5
-Stable Tag: 21.2.0
+Stable Tag: 21.3.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -277,6 +277,22 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 21.3.0 (2025/07/22)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Added a check for 'noindex' on product brands before including them in the Schema product markup.
+* **Bugfixes**
+	* Fixed the potential for a Schema product "brand" property error by preventing more than one product brand from being added.
+* **Developer Notes**
+	* Refactored `WpssoIntegEcomAbstractWooCommerceBrands->filter_og_ecom_woocommerce()` to check terms for 'noindex'.
+	* Refactored `WpssoIntegEcomAbstractWooCommerceBrands->filter_json_data_https_schema_org_product()` to check terms for 'noindex' and use only the first brand.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v5.9.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
 **Version 21.2.0 (2025/07/14)**
 
 * **New Features**
@@ -371,6 +387,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 21.3.0 =
+
+(2025/07/22) Added a check for 'noindex' on product brands before including them in the Schema product markup.
 
 = 21.2.0 =
 
