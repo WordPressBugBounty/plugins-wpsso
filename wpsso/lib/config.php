@@ -21,8 +21,8 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			),
 			'plugin' => array(
 				'wpsso' => array(			// Plugin acronym.
-					'version'     => '21.3.0',	// Plugin version.
-					'opt_version' => '1028',	// Increment when changing default option values.
+					'version'     => '21.4.0',	// Plugin version.
+					'opt_version' => '1029',	// Increment when changing default option values.
 					'short'       => 'WPSSO Core',	// Short plugin name.
 					'name'        => 'WPSSO Core',
 					'desc'        => 'Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.',
@@ -1924,6 +1924,8 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'plugin_new_user_is_person'      => 0,			// Add Person Role for New Users.
 					'plugin_inherit_featured'        => 1,			// Inherit Featured Image.
 					'plugin_inherit_images'          => 1,			// Inherit Custom Images.
+					'plugin_attached_images'         => 1,			// Consider Attached Images.
+					'plugin_content_images'          => 0,			// Consider Content Images.
 					'plugin_check_img_dims'          => 1,			// Image Dimension Checks.
 					'plugin_prevent_thumb_conflicts' => 1,			// Prevent Thumbnail Conflicts.
 					'plugin_upscale_images'          => 1,			// Upscale Media Library Images.
@@ -5296,7 +5298,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			$var_const[ 'WPSSO_TB_NOTICE_TIME_ERR' ]          = 2000;	// Show notification (-1 don't show, 0 show until clicked, ms to auto-show).
 			$var_const[ 'WPSSO_TB_NOTICE_TIME_WARN' ]         = -1;		// Show notification (-1 don't show, 0 show until clicked, ms to auto-show).
 			$var_const[ 'WPSSO_TB_NOTICE_TIME_INF' ]          = -1;		// Show notification (-1 don't show, 0 show until clicked, ms to auto-show).
-			$var_const[ 'WPSSO_TB_NOTICE_TIME_UPD' ]          = 1500;	// Show notification (-1 don't show, 0 show until clicked, ms to auto-show).
+			$var_const[ 'WPSSO_TB_NOTICE_TIME_UPD' ]          = 1000;	// Show notification (-1 don't show, 0 show until clicked, ms to auto-show).
 			$var_const[ 'WPSSO_TB_LOCALE_MENU_ORDER' ]        = 56;		// Position of the user locale toolbar menu item.
 			$var_const[ 'WPSSO_TB_VALIDATE_MENU_ORDER' ]      = 57;		// Position of the validate menu item.
 			$var_const[ 'WPSSO_TB_VIEW_PROFILE_MENU_ORDER' ]  = 80;		// Position of the view profile menu item.
