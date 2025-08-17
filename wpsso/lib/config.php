@@ -21,7 +21,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			),
 			'plugin' => array(
 				'wpsso' => array(			// Plugin acronym.
-					'version'     => '21.4.3',	// Plugin version.
+					'version'     => '21.5.0',	// Plugin version.
 					'opt_version' => '1030',	// Increment when changing default option values.
 					'short'       => 'WPSSO Core',	// Short plugin name.
 					'name'        => 'WPSSO Core',
@@ -1699,7 +1699,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					 * X (Twitter) Card options.
 					 */
 					'tc_site'           => '',			// X (Twitter) Business @username (localized).
-					'tc_type_singular'  => 'summary_large_image',	// X (Twitter) Card for Post / Page Image.
+					'tc_type_singular'  => 'summary_large_image',	// X (Twitter) Card for Singular with Image.
 					'tc_type_default'   => 'summary',		// X (Twitter) Card Type by Default.
 
 					/*

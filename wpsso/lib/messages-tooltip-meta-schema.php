@@ -39,6 +39,8 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 
 					$text .= __( 'The default value is inherited from the SEO title.', 'wpsso' ) . ' ';
 
+					$text .= sprintf( __( 'You may use the <code>%1$s</code> and/or <code>%2$s</code> filters to modify the default and custom values respectively.', 'wpsso' ), 'wpsso_the_title', 'wpsso_title' ) . ' ';
+
 				 	break;
 
 				case 'tooltip-meta-schema_title_alt':	// Alternate Name.
@@ -46,6 +48,8 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 					$text = __( 'A customized alternate name (aka title) for the Schema "alternateName" property.', 'wpsso' ) . ' ';
 
 					$text .= __( 'The default value is inherited from the Schema name or SEO title.', 'wpsso' ) . ' ';
+
+					$text .= sprintf( __( 'You may use the <code>%1$s</code> and/or <code>%2$s</code> filters to modify the default and custom values respectively.', 'wpsso' ), 'wpsso_the_title', 'wpsso_title' ) . ' ';
 
 				 	break;
 
@@ -55,6 +59,8 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 
 					$text .= __( 'The default value is inherited from the Schema alternate name, Schema name, or SEO title.', 'wpsso' ) . ' ';
 
+					$text .= sprintf( __( 'You may use the <code>%1$s</code> and/or <code>%2$s</code> filters to modify the default and custom values respectively.', 'wpsso' ), 'wpsso_the_title', 'wpsso_title' ) . ' ';
+
 				 	break;
 
 				case 'tooltip-meta-schema_desc':	// Description.
@@ -63,27 +69,45 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 
 					$text .= __( 'The default value is inherited from the SEO description.', 'wpsso' ) . ' ';
 
+					$text .= sprintf( __( 'You may use the <code>%1$s</code> and/or <code>%2$s</code> filters to modify the default and custom values respectively.', 'wpsso' ), 'wpsso_the_description', 'wpsso_description' ) . ' ';
+
 				 	break;
 
 				case 'tooltip-meta-schema_lang':	// Language.
 
-					$text = __( 'The language (aka locale) of this webpage.', 'wpsso' );
+					$text = __( 'The language (aka locale) of this webpage.', 'wpsso' ) . ' ';
+
+					$text .= sprintf( __( 'You may use the <code>%1$s</code> and/or <code>%2$s</code> filters to modify the default and custom values respectively.', 'wpsso' ), 'sucom_get_locale', 'wpsso_schema_lang' ) . ' ';
 
 				 	break;
 
 				case 'tooltip-meta-schema_addl_type_url':	// Microdata Type URLs.
 
+					$tp_frags = $this->get_tooltip_fragments( 'addl_type_urls' );	// Uses a local cache.
+
 					$text = __( 'Additional microdata type URL(s) for the content, typically used to specify more precise type(s) from an external vocabulary.', 'wpsso' ) . ' ';
 
-					$text .= sprintf( __( 'For example, an additional microdata type URL for a Schema Product type could be %1$s (see %2$s for more examples).', 'wpsso' ), 'http://www.productontology.org/id/Hammer', __( '<a href="http://www.productontology.org/">The Product Types Ontology</a>', 'wpsso' ) );
+					$text .= sprintf( __( 'For example, an additional microdata type URL for a Schema Product type could be %1$s (see %2$s for more examples).', 'wpsso' ), 'http://www.productontology.org/id/Hammer', __( '<a href="http://www.productontology.org/">The Product Types Ontology</a>', 'wpsso' ) ) . ' ';
+
+					if ( ! empty( $tp_frags[ 'filter' ] ) ) {	// Just in case.
+
+						$text .= sprintf( __( 'You may use the <code>%s</code> filter to modify the custom values.', 'wpsso' ), $tp_frags[ 'filter' ] ) . ' ';
+					}
 
 				 	break;
 
 				case 'tooltip-meta-schema_sameas_url':	// Same-As URLs.
 
+					$tp_frags = $this->get_tooltip_fragments( 'sameas_urls' );	// Uses a local cache.
+
 					$text = __( 'Additional webpage reference URL(s) that unambiguously indicates the content\'s identity.', 'wpsso' ) . ' ';
 
 					$text .= __( 'For example, the URL for the content subject\'s Wikipedia page, Wikidata entry, IMDB page, official website, etc.', 'wpsso' );
+
+					if ( ! empty( $tp_frags[ 'filter' ] ) ) {	// Just in case.
+
+						$text .= sprintf( __( 'You may use the <code>%s</code> filter to modify the custom values.', 'wpsso' ), $tp_frags[ 'filter' ] ) . ' ';
+					}
 
 				 	break;
 
@@ -93,11 +117,17 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 
 					$text .= __( 'The default value is inherited from the Schema name, alternate name, or the SEO title.', 'wpsso' ) . ' ';
 
+					$text .= sprintf( __( 'You may use the <code>%1$s</code> and/or <code>%2$s</code> filters to modify the default and custom values respectively.', 'wpsso' ), 'wpsso_the_title', 'wpsso_title' ) . ' ';
+
 				 	break;
 
 				case 'tooltip-meta-schema_text':	// Full Text.
 
-					$text = __( 'The complete textual and searchable content for this creative work.', 'wpsso' );
+					$text = __( 'The complete textual and searchable content for this creative work.', 'wpsso' ) . ' ';
+
+					$text .= __( 'The default value is the current object (for example, the post/page) content text with shortcodes and blocks expanded and HTML removed.', 'wpsso' ) . ' ';
+
+					$text .= sprintf( __( 'You may use the <code>%1$s</code> and/or <code>%2$s</code> filters to modify the default and custom values respectively.', 'wpsso' ), 'wpsso_the_text', 'wpsso_text' ) . ' ';
 
 				 	break;
 
@@ -440,7 +470,7 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 
 						case 'tooltip-meta-schema_job_title':	// Job Title.
 
-							$text = __( 'The title of this job, which may be different than the WordPress post / page title.', 'wpsso' );
+							$text = __( 'The title of this job, which may be different than the WordPress post/page title.', 'wpsso' );
 
 						 	break;
 

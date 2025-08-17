@@ -123,7 +123,7 @@
 
 'wpsso_image_upscale_test' ( WPSSO_IMAGE_UPSCALE_TEST = false, $image_src_args )
 
-'wpsso_import_cf_{custom_field_name}' ( $value, array $mod, array $wp_meta )	// The WordPress custom field (aka metadata) does not need to exist - $value = null if the custom field does not exist.
+'wpsso_import_cf_{custom_field_name}' ( $value, array $mod, array $wp_meta )	// The WordPress custom field (aka metadata) does not need to exist - $value is null if the custom field does not exist.
 
 'wpsso_import_content_blocks' ( array $md_opts, array $mod, $content )
 
@@ -385,7 +385,7 @@
 
 'wpsso_title_seed' ( '', $mod, $num_hashtags, $md_key, $title_sep )
 
-'wpsso_title' ( $title_text, $mod, $num_hashtags, $md_key, $title_sep )
+'wpsso_title' ( $title_text, $mod, $num_hashtags, $md_key, $title_sep )	// Example $md_key value: 'og_title', 'schema_title', 'schema_title_alt', 'schema_title_bc'.
 
 'wpsso_user_image_ids' ( array $ids, $size_name, $user_id )
 
