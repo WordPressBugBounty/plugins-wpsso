@@ -1048,14 +1048,9 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			/*
 			 * Returns an associative array of term IDs and their names or objects.
 			 *
-			 * If the custom primary or default term ID exists in the post terms array, it will be moved to the top.
+			 * If the custom primary or default term ID exists in the post terms, it will be moved to the top.
 			 */
-			$post_terms = $this->p->post->get_primary_terms( $mod, $tax_slug = 'category', $output = 'objects' );
-
-			/*
-			 * The 'wpsso_primary_tax_slug' filter is hooked by the WooCommerce integration module.
-			 */
-			$primary_tax_slug = apply_filters( 'wpsso_primary_tax_slug', $tax_slug = 'category', $mod );
+			$post_terms = $this->p->post->get_primary_terms( $mod, $mod[ 'post_primary_tax_slug' ], $output = 'objects' );
 
 			$category_names = array();
 
@@ -1063,7 +1058,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 
 				$parent_term_id = $parent_term_obj->term_id;
 
-				$ancestor_ids = get_ancestors( $parent_term_id, $primary_tax_slug, $resource_type = 'taxonomy' );
+				$ancestor_ids = get_ancestors( $parent_term_id, $mod[ 'post_primary_tax_slug' ], $resource_type = 'taxonomy' );
 
 				if ( empty( $ancestor_ids ) || ! is_array( $ancestor_ids ) ) {
 
@@ -1714,10 +1709,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 
 						$type_id = $md_opts[ 'schema_type' ];
 
-					} else {
-
-						$type_id = $this->p->schema->get_mod_schema_type_id( $mod, $use_md_opts = false );
-					}
+					} else $type_id = $this->p->schema->get_mod_schema_type_id( $mod, $use_md_opts = false );
 
 					/*
 					 * Check if the Schema type matches a pre-defined Open Graph type.

@@ -25,6 +25,8 @@
 
 'wpsso_add_menu_submenu_item_{menu_id}' ( $bool )	// Remove an SSO menu item (ie. 'dashboard', 'setup', etc.).
 
+'wpsso_add_schema_unit_price_specification' ( $bool )
+
 'wpsso_add_toolbar_validate' ( $bool )
 
 'wpsso_archive_page_url' ( $url, $mod )
@@ -64,8 +66,6 @@
 'wpsso_content_image_preg_pid_attr' ( $default = 'data-[a-z]+-pid' )
 
 'wpsso_cropped_image_filepath' ( $new_filepath, $filepath, $size_info )
-
-'wpsso_default_term_id' ( $default_term_id, $mod, $tax_slug )
 
 'wpsso_description' ( $desc_text, $mod, $num_hashtags, $md_key )
 
@@ -217,6 +217,8 @@
 
 'wpsso_meta_name' ( $mt_name, $mod )
 
+'wpsso_og' ( array $mt_og, $mod )
+
 'wpsso_og_add_media_from_url' ( $url, $service )	// $service = 'facebook' or 'soundcloud'.
 
 'wpsso_og_add_media_throttle_secs' ( $secs = 5, $service )	// $service = 'facebook' or 'soundcloud'.
@@ -253,11 +255,11 @@
 
 'wpsso_og_ns' ( $ns )
 
-'wpsso_og' ( array $mt_og, $mod )
-
 'wpsso_og_seed' ( array $mt_og, $mod )
 
 'wpsso_og_type' ( $type_id, $mod, $is_custom )
+
+'wpsso_og_video_image_url' ( $image_url, $video_url )	// Image URL or empty string.
 
 'wpsso_option_type' ( $option_type = '', $base_key, $network, $mod )	// Return the sanitation type for a given option key.
 
@@ -284,6 +286,8 @@
 'wpsso_primary_tax_slug' ( $tax_slug, $mod )
 
 'wpsso_primary_term_id' ( $primary_term_id, $mod, $tax_slug, $is_custom )
+
+'wpsso_primary_term_id_is_custom' ( $bool, $mod, $tax_slug, $primary_term_id )
 
 'wpsso_primary_terms' ( $primary_terms, $mod, $tax_slug, $output )
 

@@ -344,6 +344,18 @@ if ( ! class_exists( 'WpssoMessagesTooltipSchema' ) ) {
 
 		 			break;
 
+				case 'tooltip-schema_def_product_price_valid_days':	// Default Product Prices Valid For.
+
+					$def_value = $this->p->opt->get_defaults( 'schema_def_product_price_valid_days' );
+
+					$text = sprintf( __( 'The default expiration time of product prices can be adjusted to reflect how often your product prices change (default is %d days).', 'wpsso' ), $def_value ) . ' ';
+
+					$text .= __( 'Enter "0" to disable the addition of a default product price expiration time.', 'wpsso' ) . ' ';
+
+					$text .= __( 'If a product is on sale, the expiration time for its product price will be the sale end date (if one is available) instead of the default price expiration time.', 'wpsso' ) . ' ';
+
+					break;
+
 				case ( 0 === strpos( $msg_key, 'tooltip-schema_def_product_' ) ? true : false ):
 
 					$tp_frags = $this->get_tooltip_fragments( preg_replace( '/^tooltip-schema_def_/', '', $msg_key ) );	// Uses a local cache.

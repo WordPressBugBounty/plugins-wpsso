@@ -3,11 +3,11 @@
 <table>
 <tr><th align="right" valign="top" nowrap>Plugin Name</th><td>WPSSO Core</td></tr>
 <tr><th align="right" valign="top" nowrap>Summary</th><td>Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.</td></tr>
-<tr><th align="right" valign="top" nowrap>Stable Version</th><td>21.6.0</td></tr>
+<tr><th align="right" valign="top" nowrap>Stable Version</th><td>21.11.2</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires PHP</th><td>7.4.33 or newer</td></tr>
-<tr><th align="right" valign="top" nowrap>Requires WordPress</th><td>5.9 or newer</td></tr>
-<tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>6.8.2</td></tr>
-<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>10.1.2</td></tr>
+<tr><th align="right" valign="top" nowrap>Requires WordPress</th><td>6.0 or newer</td></tr>
+<tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>6.9</td></tr>
+<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>10.4.3</td></tr>
 <tr><th align="right" valign="top" nowrap>Contributors</th><td>jsmoriss</td></tr>
 <tr><th align="right" valign="top" nowrap>License</th><td><a href="https://www.gnu.org/licenses/gpl.txt">GPLv3</a></td></tr>
 <tr><th align="right" valign="top" nowrap>Tags / Keywords</th><td>schema, woocommerce, search results, optimize, meta tags</td></tr>
@@ -235,7 +235,6 @@
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/how-can-i-see-what-the-facebook-crawler-sees/">How can I see what the Facebook crawler sees?</a></li>
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/how-do-i-create-a-schema-faqpage/">How do I create a Schema FAQPage?</a></li>
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/how-do-i-enable-wordpress-wp_debug/">How do I enable WordPress WP_DEBUG?</a></li>
-<li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/how-do-i-fix-google-structured-data-hatom-errors/">How do I fix Google Structured Data &gt; hatom errors?</a></li>
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/how-do-i-remove-duplicate-meta-tags/">How do I remove duplicate meta tags?</a></li>
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/how-does-wpsso-find-detect-select-images/">How does WPSSO Core find and select images?</a></li>
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/how-does-wpsso-find-detect-select-videos/">How does WPSSO Core find and select videos?</a></li>

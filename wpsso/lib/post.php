@@ -383,6 +383,34 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 						}
 					}
 
+					$mod[ 'post_taxonomies' ] = get_post_taxonomies( $mod[ 'wp_obj' ] );
+
+					if ( is_array( $mod[ 'post_taxonomies' ] ) ) {	// Just in case.
+
+						if ( ! in_array( $mod[ 'post_primary_tax_slug' ], $mod[ 'post_taxonomies' ] ) ) {
+
+							$mod[ 'post_primary_tax_slug' ] = '';	// Default value is not valid.
+
+							foreach ( $mod[ 'post_taxonomies' ] as $tax_slug ) {
+
+								if ( preg_match( '/_(cat|category)$/', $tax_slug ) ) {	// Matches WooCommerce 'product_cat' for example.
+
+									if ( $this->p->debug->enabled ) {
+	
+										$this->p->debug->log( 'using ' . $tax_slug . ' as the primary taxonomy' );
+									}
+
+									$mod[ 'post_primary_tax_slug' ] = $tax_slug;
+
+									unset( $tax_slug );
+
+									break;
+								}
+							}
+						}
+
+					} else $mod[ 'post_taxonomies' ] = array();
+
 				} else $mod[ 'wp_obj' ] = false;
 			}
 
@@ -391,7 +419,23 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			 *
 			 * See WpssoIntegUserCoAuthors->filter_get_post_mod().
 			 */
-			$mod = apply_filters( 'wpsso_get_post_mod', $mod, $post_id );
+			$filter_name = 'wpsso_get_post_mod';
+
+			if ( $this->p->debug->enabled ) {
+	
+				$this->p->debug->log( 'applying filters "' . $filter_name . '"' );
+			}
+
+			$mod = apply_filters( $filter_name, $mod, $post_id );
+
+			$filter_name = 'wpsso_primary_tax_slug';
+
+			if ( $this->p->debug->enabled ) {
+	
+				$this->p->debug->log( 'applying filters "' . $filter_name . '"' );
+			}
+
+			$mod[ 'post_primary_tax_slug' ] = apply_filters( $filter_name, $mod[ 'post_primary_tax_slug' ], $mod );
 
 			if ( $this->p->debug->enabled ) {
 
@@ -1911,27 +1955,22 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			 */
 			if ( 'publish' === $mod[ 'post_status' ] ) {
 
-				$post_taxonomies = get_post_taxonomies( $mod[ 'wp_obj' ] );
+				foreach ( $mod[ 'post_taxonomies' ] as $tax_slug ) {
 
-				if ( is_array( $post_taxonomies ) ) {	// Just in case.
+					$post_terms = wp_get_post_terms( $post_id, $tax_slug );	// Returns WP_Error if taxonomy does not exist.
 
-					foreach ( $post_taxonomies as $tax_slug ) {
+					if ( is_array( $post_terms ) ) {	// Just in case.
 
-						$post_terms = wp_get_post_terms( $post_id, $tax_slug );	// Returns WP_Error if taxonomy does not exist.
+						foreach ( $post_terms as $term_obj ) {
 
-						if ( is_array( $post_terms ) ) {	// Just in case.
-
-							foreach ( $post_terms as $term_obj ) {
-
-								$this->p->term->clear_cache( $term_obj->term_id, $tax_slug );
-							}
-
-							unset( $post_terms, $term_obj );
+							$this->p->term->clear_cache( $term_obj->term_id, $tax_slug );
 						}
-					}
 
-					unset( $post_taxonomies, $tax_slug );
+						unset( $post_terms, $term_obj );
+					}
 				}
+
+				unset( $tax_slug );
 			}
 
 			/*
@@ -2550,6 +2589,11 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 		 */
 		public function get_primary_term_id( array $mod, $tax_slug = 'category' ) {
 
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->mark();
+			}
+
 			$primary_term_id = false;
 
 			if ( $mod[ 'is_post' ] ) {	// Just in case.
@@ -2569,11 +2613,6 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 				$local_fifo = SucomUtil::array_slice_fifo( $local_fifo, WPSSO_CACHE_ARRAY_FIFO_MAX );
 
 				/*
-				 * The 'wpsso_primary_tax_slug' filter is hooked by the WooCommerce integration module.
-				 */
-				$primary_tax_slug = apply_filters( 'wpsso_primary_tax_slug', $tax_slug, $mod );
-
-				/*
 				 * Returns null if a custom primary term ID has not been selected.
 				 */
 				$primary_term_id = $this->get_options( $post_id, $md_key = 'primary_term_id' );
@@ -2581,20 +2620,42 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 				/*
 				 * Make sure the term is not null or false, and still exists.
 				 *
-				 * Note that term_exists() requires an integer ID, not a string ID.
+				 * Note that term_exists() requires an integer ID, not a string ID, so cast as integer.
 				 */
-				if ( ! empty( $primary_term_id ) && term_exists( (int) $primary_term_id ) ) {
+				$is_custom = $primary_term_id && term_exists( (int) $primary_term_id ) ? true : false;
 
-					$is_custom = true;
+				$filter_name = 'wpsso_primary_term_id_is_custom';
+
+				if ( $this->p->debug->enabled ) {
+	
+					$this->p->debug->log( 'applying filters "' . $filter_name . '"' );
+				}
+
+				$is_custom = apply_filters( $filter_name, $is_custom, $mod, $tax_slug, $primary_term_id );
+
+				if ( $is_custom ) {
+
+					$filter_name = 'wpsso_primary_term_id';
+	
+					if ( $this->p->debug->enabled ) {
+	
+						$this->p->debug->log( 'applying filters "' . $filter_name . '"' );
+					}
+	
+					$primary_term_id = apply_filters( $filter_name, $primary_term_id, $mod, $tax_slug, $is_custom );
 
 				} else {
 
-					$is_custom = false;
-
+					/*
+					 * WpssoPost->get_default_term_id() applies the 'wpsso_primary_term_id' filter with $is_custom = false.
+					 */
+					if ( $this->p->debug->enabled ) {
+	
+						$this->p->debug->log( 'calling WpssoPost->get_default_term_id()' );
+					}
+	
 					$primary_term_id = $this->get_default_term_id( $mod, $tax_slug );
 				}
-
-				$primary_term_id = apply_filters( 'wpsso_primary_term_id', $primary_term_id, $mod, $tax_slug, $is_custom );
 
 				$local_fifo[ $post_id ][ $tax_slug ] = empty( $primary_term_id ) ? false : (int) $primary_term_id;
 			}
@@ -2607,16 +2668,16 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 		 */
 		public function get_default_term_id( array $mod, $tax_slug = 'category' ) {
 
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->mark();
+			}
+
 			$default_term_id = false;
 
 			if ( $mod[ 'is_post' ] ) {	// Just in case.
 
-				/*
-				 * The 'wpsso_primary_tax_slug' filter is hooked by the WooCommerce integration module.
-				 */
-				$primary_tax_slug = apply_filters( 'wpsso_primary_tax_slug', $tax_slug, $mod );
-
-				$post_terms = wp_get_post_terms( $mod[ 'id' ], $primary_tax_slug, $args = array( 'number' => 1 ) );
+				$post_terms = wp_get_post_terms( $mod[ 'id' ], $tax_slug, $args = array( 'number' => 1 ) );
 
 				if ( ! empty( $post_terms ) && is_array( $post_terms ) ) {	// Have one or more terms and taxonomy exists.
 
@@ -2628,7 +2689,18 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 					}
 				}
 
-				$default_term_id = apply_filters( 'wpsso_default_term_id', $default_term_id, $mod, $tax_slug );
+				/*
+				 * Apply the 'wpsso_primary_term_id' filter to get the Yoast SEO primary category (for example) and
+				 * use it as the default value.
+				 */
+				$filter_name = 'wpsso_primary_term_id';
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'applying filters "' . $filter_name . '" with $is_custom = false' );
+				}
+
+				$default_term_id = apply_filters( $filter_name, $default_term_id, $mod, $tax_slug, $is_custom = false );
 			}
 
 			return $default_term_id;
@@ -2650,20 +2722,20 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 				/*
 				 * Returns a custom or default term ID, or false if a term for the $tax_slug is not found.
 				 */
+				if ( $this->p->debug->enabled ) {
+	
+					$this->p->debug->log( 'calling WpssoPost->get_primary_term_id()' );
+				}
+	
 				$primary_term_id = $this->p->post->get_primary_term_id( $mod, $tax_slug );	// Returns false or term ID.
 
 				if ( $primary_term_id ) {
 
-					/*
-					 * The 'wpsso_primary_tax_slug' filter is hooked by the WooCommerce integration module.
-					 */
-					$primary_tax_slug = apply_filters( 'wpsso_primary_tax_slug', $tax_slug, $mod );
-
-					$primary_term_obj = get_term_by( 'id', $primary_term_id, $primary_tax_slug, OBJECT, 'raw' );
+					$primary_term_obj = get_term_by( 'id', $primary_term_id, $tax_slug, OBJECT, 'raw' );
 
 					if ( $primary_term_obj ) {
 
-						$post_terms = wp_get_post_terms( $post_id, $primary_tax_slug );
+						$post_terms = wp_get_post_terms( $post_id, $tax_slug );
 
 						if ( ! empty( $post_terms ) && is_array( $post_terms ) ) {	// Have one or more terms and taxonomy exists.
 

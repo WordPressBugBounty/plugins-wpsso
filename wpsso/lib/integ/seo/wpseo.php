@@ -108,20 +108,49 @@ if ( ! class_exists( 'WpssoIntegSeoWpseo' ) ) {
 				$this->p->debug->mark();
 			}
 
-			$meta_val = null;
+			if ( $is_custom ) {
 
-			if ( ! $is_custom ) {
+				if ( $this->p->debug->enabled ) {
 
-				if ( $mod[ 'id' ] ) {
+					$this->p->debug->log( 'exiting early: $is_custom is true' );
+				}
 
-					if ( $mod[ 'is_post' ] ) {
+				return $primary_term_id;
 
-						$meta_val = $this->get_post_meta_value( $mod[ 'id' ], $meta_key = 'primary_category' );
-					}
+			} elseif ( empty( $mod[ 'is_post' ] ) || empty( $mod[ 'id' ] ) ) {
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'exiting early: not post object or no post ID' );
+				}
+
+				return $primary_term_id;
+
+			} elseif ( empty( $tax_slug ) ) {
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'exiting early: $tax_slug is empty' );
+				}
+
+				return $primary_term_id;
+
+			} else {
+
+				$meta_key = 'primary_' . $tax_slug;
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'calling WpssoIntegSeoWpseo->get_post_meta_value() for ' . $meta_key );
+				}
+
+				if ( $ret = $this->get_post_meta_value( $mod[ 'id' ], $meta_key ) ) {
+				
+					return $ret;
 				}
 			}
 
-			return $meta_val ? $meta_val : $primary_term_id;
+			return $primary_term_id;
 		}
 
 		public function filter_title_seed( $title_text, $mod, $num_hashtags, $md_key, $title_sep ) {
@@ -259,6 +288,11 @@ if ( ! class_exists( 'WpssoIntegSeoWpseo' ) ) {
 
 			if ( class_exists( 'WPSEO_Meta' ) && method_exists( 'WPSEO_Meta', 'get_value' ) ) {
 
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'calling WPSEO_Meta::get_value() for ' . $meta_key );
+				}
+
 				if ( $meta_val = WPSEO_Meta::get_value( $meta_key, $post_obj->ID ) ) {
 
 					if ( $this->p->debug->enabled ) {
@@ -275,6 +309,11 @@ if ( ! class_exists( 'WpssoIntegSeoWpseo' ) ) {
 			if ( empty( $meta_val ) ) {	// Fallback to the value from the Yoast SEO settings.
 
 				$opts_key = $meta_key . '-' . $post_obj->post_type;
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'Checking for ' . $opts_key . ' in wpseo options (aka settings)' );
+				}
 
 				if ( empty( $this->wpseo_opts[ $opts_key ] ) ) {
 

@@ -31,7 +31,7 @@ if ( ! class_exists( 'WpssoIntegDataWpseoMeta' ) ) {
 
 		protected $opt_meta_keys = array(
 			'post' => array(
-				'primary_term_id'     => '_yoast_wpseo_primary_category',
+				'primary_term_id'     => '_yoast_wpseo_primary_%%post_primary_tax_slug%%',
 				'og_title'            => '_yoast_wpseo_opengraph-title',
 				'og_desc'             => '_yoast_wpseo_opengraph-description',
 				'og_img_id'           => '_yoast_wpseo_opengraph-image-id',

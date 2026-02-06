@@ -21,8 +21,8 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			),
 			'plugin' => array(
 				'wpsso' => array(			// Plugin acronym.
-					'version'     => '21.6.0',	// Plugin version.
-					'opt_version' => '1030',	// Increment when changing default option values.
+					'version'     => '21.11.2',	// Plugin version.
+					'opt_version' => '1037',	// Increment when changing default option values.
 					'short'       => 'WPSSO Core',	// Short plugin name.
 					'name'        => 'WPSSO Core',
 					'desc'        => 'Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.',
@@ -282,132 +282,6 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					 */
 					'wc_compat' => array(
 						'custom_order_tables',
-					),
-				),
-				'wpssoafs' => array(			// Plugin acronym.
-					'short'       => 'WPSSO AFS',	// Short plugin name.
-					'name'        => 'WPSSO Add Five Stars',
-					'desc'        => 'Add a 5 star rating and review from the site organization if the Schema markup does not already have an \'aggregateRating\' property.',
-					'slug'        => 'wpsso-add-five-stars',
-					'base'        => 'wpsso-add-five-stars/wpsso-add-five-stars.php',
-					'update_auth' => '',		// No premium version.
-
-					/*
-					 * URLs or relative paths to plugin banners and icons.
-					 */
-					'assets' => array(
-
-						/*
-						 * Banner image array keys are 'low' and 'high'.
-						 */
-						'banners' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-add-five-stars/assets/banner-772x250.jpg',
-							'high' => 'https://surniaulula.github.io/wpsso-add-five-stars/assets/banner-1544x500.jpg',
-						),
-
-						/*
-						 * Icon image array keys are '1x' and '2x'.
-						 */
-						'icons' => array(
-							'1x' => 'https://surniaulula.github.io/wpsso-add-five-stars/assets/icon-128x128.png',
-							'2x' => 'https://surniaulula.github.io/wpsso-add-five-stars/assets/icon-256x256.png',
-						),
-					),
-					'hosts' => array(
-						'wp_org' => true,
-						'github' => true,
-						'wpsso'  => true,
-					),
-					'url' => array(
-
-						/*
-						 * WordPress.org URLs.
-						 */
-						'home'   => 'https://wordpress.org/plugins/wpsso-add-five-stars/',
-						'forum'  => 'https://wordpress.org/support/plugin/wpsso-add-five-stars',
-						'review' => 'https://wordpress.org/support/plugin/wpsso-add-five-stars/reviews/?rate=5#new-post',
-
-						/*
-						 * GitHub.com URLs.
-						 */
-						'readme_txt' => 'https://raw.githubusercontent.com/SurniaUlula/wpsso-add-five-stars/master/readme.txt',
-
-						/*
-						 * WPSSO.com URLs.
-						 */
-						'changelog' => 'https://wpsso.com/extend/plugins/wpsso-add-five-stars/changelog/',
-						'docs'      => 'https://wpsso.com/docs/plugins/wpsso-add-five-stars/',
-						'install'   => 'https://wpsso.com/docs/plugins/wpsso-add-five-stars/installation/',
-						'faqs'      => '',
-						'notes'     => '',
-						'support'   => '',	// Premium support ticket.
-						'purchase'  => '',	// Purchase page.
-						'info'      => '',	// License information.
-						'update'    => 'https://wpsso.com/extend/plugins/wpsso-add-five-stars/update/',
-						'download'  => 'https://wpsso.com/extend/plugins/wpsso-add-five-stars/latest/',
-					),
-				),
-				'wpssoam' => array(			// Plugin acronym.
-					'short'       => 'WPSSO AM',	// Short plugin name.
-					'name'        => 'WPSSO Mobile App Meta Tags',
-					'desc'        => 'Apple Store and Google Play App meta tags for Apple\'s mobile Safari banner and X\'s (Twitter) App Card.',
-					'slug'        => 'wpsso-am',
-					'base'        => 'wpsso-am/wpsso-am.php',
-					'update_auth' => '',		// No premium version.
-
-					/*
-					 * URLs or relative paths to plugin banners and icons.
-					 */
-					'assets' => array(
-
-						/*
-						 * Banner image array keys are 'low' and 'high'.
-						 */
-						'banners' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-am/assets/banner-772x250.jpg',
-							'high' => 'https://surniaulula.github.io/wpsso-am/assets/banner-1544x500.jpg',
-						),
-
-						/*
-						 * Icon image array keys are '1x' and '2x'.
-						 */
-						'icons' => array(
-							'1x' => 'https://surniaulula.github.io/wpsso-am/assets/icon-128x128.png',
-							'2x' => 'https://surniaulula.github.io/wpsso-am/assets/icon-256x256.png',
-						),
-					),
-					'hosts' => array(
-						'wp_org' => true,
-						'github' => true,
-						'wpsso'  => true,
-					),
-					'url' => array(
-
-						/*
-						 * WordPress.org URLs.
-						 */
-						'home'   => 'https://wordpress.org/plugins/wpsso-am/',
-						'forum'  => 'https://wordpress.org/support/plugin/wpsso-am',
-						'review' => 'https://wordpress.org/support/plugin/wpsso-am/reviews/?rate=5#new-post',
-
-						/*
-						 * GitHub.com URLs.
-						 */
-						'readme_txt' => 'https://raw.githubusercontent.com/SurniaUlula/wpsso-am/master/readme.txt',
-
-						/*
-						 * WPSSO.com URLs.
-						 */
-						'changelog' => 'https://wpsso.com/extend/plugins/wpsso-am/changelog/',
-						'docs'      => 'https://wpsso.com/docs/plugins/wpsso-am/',
-						'install'   => 'https://wpsso.com/docs/plugins/wpsso-am/installation/',
-						'faqs'      => '',
-						'notes'     => '',
-						'support'   => '',	// Premium support ticket.
-						'purchase'  => '',	// Purchase page.
-						'info'      => '',	// License information.
-						'update'    => 'https://wpsso.com/extend/plugins/wpsso-am/update/',
-						'download'  => 'https://wpsso.com/extend/plugins/wpsso-am/latest/',
 					),
 				),
 				'wpssobc' => array(			// Plugin acronym.
@@ -914,69 +788,6 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 						'download'  => 'https://wpsso.com/extend/plugins/wpsso-rest-api/latest/',
 					),
 				),
-				'wpssorrssb' => array(			// Plugin acronym.
-					'short'       => 'WPSSO RRSSB',	// Short plugin name.
-					'name'        => 'WPSSO Ridiculously Responsive Social Sharing Buttons',
-					'desc'        => 'Ridiculously Responsive (SVG) Social Sharing Buttons for your content, excerpts, CSS sidebar, widget, shortcode, templates, and editor.',
-					'slug'        => 'wpsso-rrssb',
-					'base'        => 'wpsso-rrssb/wpsso-rrssb.php',
-					'update_auth' => '',		// No premium version.
-
-					/*
-					 * URLs or relative paths to plugin banners and icons.
-					 */
-					'assets' => array(
-
-						/*
-						 * Banner image array keys are 'low' and 'high'.
-						 */
-						'banners' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-rrssb/assets/banner-772x250.jpg',
-							'high' => 'https://surniaulula.github.io/wpsso-rrssb/assets/banner-1544x500.jpg',
-						),
-
-						/*
-						 * Icon image array keys are '1x' and '2x'.
-						 */
-						'icons' => array(
-							'1x' => 'https://surniaulula.github.io/wpsso-rrssb/assets/icon-128x128.png',
-							'2x' => 'https://surniaulula.github.io/wpsso-rrssb/assets/icon-256x256.png',
-						),
-					),
-					'hosts' => array(
-						'wp_org' => true,
-						'github' => true,
-						'wpsso'  => true,
-					),
-					'url' => array(
-
-						/*
-						 * WordPress.org URLs.
-						 */
-						'home'   => 'https://wordpress.org/plugins/wpsso-rrssb/',
-						'forum'  => 'https://wordpress.org/support/plugin/wpsso-rrssb',
-						'review' => 'https://wordpress.org/support/plugin/wpsso-rrssb/reviews/?rate=5#new-post',
-
-						/*
-						 * GitHub.com URLs.
-						 */
-						'readme_txt' => 'https://raw.githubusercontent.com/SurniaUlula/wpsso-rrssb/master/readme.txt',
-
-						/*
-						 * WPSSO.com URLs.
-						 */
-						'changelog' => 'https://wpsso.com/extend/plugins/wpsso-rrssb/changelog/',
-						'docs'      => 'https://wpsso.com/docs/plugins/wpsso-rrssb/',
-						'install'   => 'https://wpsso.com/docs/plugins/wpsso-rrssb/installation/',
-						'faqs'      => '',
-						'notes'     => 'https://wpsso.com/docs/plugins/wpsso-rrssb/notes/',
-						'support'   => '',	// Premium support ticket.
-						'purchase'  => '',	// Purchase page.
-						'info'      => '',	// License information.
-						'update'    => 'https://wpsso.com/extend/plugins/wpsso-rrssb/update/',
-						'download'  => 'https://wpsso.com/extend/plugins/wpsso-rrssb/latest/',
-					),
-				),
 				'wpssossm' => array(			// Plugin acronym.
 					'short'       => 'WPSSO SSM',	// Short plugin name.
 					'name'        => 'WPSSO Strip Schema Microdata',
@@ -1228,7 +1039,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				'wpssowcmd' => array(			// Plugin acronym.
 					'short'       => 'WPSSO WCMD',	// Short plugin name.
 					'name'        => 'WPSSO Schema Product Metadata for WooCommerce',
-					'desc'        => 'MPN, ISBN, GTIN, GTIN-8, UPC, EAN, GTIN-14, net dimensions, and fluid volume for WooCommerce products and variations.',
+					'desc'        => 'MPN, ISBN, GTIN-8, UPC, EAN, GTIN-14, net dimensions, and fluid volume for better WooCommerce Schema markup.',
 					'slug'        => 'wpsso-wc-metadata',
 					'base'        => 'wpsso-wc-metadata/wpsso-wc-metadata.php',
 					'update_auth' => '',		// No premium version.
@@ -1464,8 +1275,8 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'og_title_sep'              => '-',		// Title Separator.
 					'og_ellipsis'               => '...',		// Truncated Text Ellipsis.
 					'og_desc_hashtags'          => 0,		// Description Hashtags.
-					'og_vid_max'                => 1,
-					'og_vid_autoplay'           => 1,
+					'og_vid_max'                => 1,		// Maximum Videos to Include.
+					'og_vid_autoplay'           => 0,		// Force Autoplay when Possible.
 					'og_vid_prev_img'           => 1,		// Include Video Preview Images.
 
 					/*
@@ -1664,6 +1475,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					 * Advanced Settings > Schema Defaults > Product.
 					 */
 					'schema_def_product_aggr_offers'           => 0,						// Aggregate Offers by Currency.
+					'schema_def_product_price_valid_days'      => 30,						// Default Product Prices Valid For.
 					'schema_def_product_adult_type'            => 'none',						// Default Product Adult Type.
 					'schema_def_product_age_group'             => 'none',						// Default Product Age Group.
 					'schema_def_product_category'              => 'none',						// Default Product Google Category.
@@ -1671,7 +1483,6 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'schema_def_product_energy_efficiency_min' => 'https://schema.org/EUEnergyEfficiencyCategoryD',
 					'schema_def_product_energy_efficiency_max' => 'https://schema.org/EUEnergyEfficiencyCategoryA3Plus',
 					'schema_def_product_mrp'                   => 'none',						// Default Product Return Policy.
-					'schema_def_product_price_type'            => 'https://schema.org/ListPrice',			// Default Product Price Type.
 					'schema_def_product_size_group_0'          => 'none',
 					'schema_def_product_size_group_1'          => 'none',
 					'schema_def_product_size_system'           => 'none',
@@ -1925,7 +1736,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'plugin_inherit_featured'        => 1,			// Inherit Featured Image.
 					'plugin_inherit_images'          => 1,			// Inherit Custom Images.
 					'plugin_attached_images'         => 1,			// Consider Attached Images.
-					'plugin_content_images'          => 1,			// Consider Content Images.
+					'plugin_content_images'          => 0,			// Consider Content Images.
 					'plugin_check_img_dims'          => 1,			// Image Dimension Checks.
 					'plugin_prevent_thumb_conflicts' => 1,			// Prevent Thumbnail Conflicts.
 					'plugin_upscale_images'          => 1,			// Upscale Media Library Images.
@@ -1934,15 +1745,15 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/*
 					 * Advanced Settings > Integration > Plugin and Theme Integration.
 					 */
-					'plugin_speakable_css_csv'        => '',	// Speakable CSS Selectors.
-					'plugin_check_head'               => 1,		// Check for Duplicate Meta Tags.
-					'plugin_product_include_vat'      => 0,		// Include VAT in Product Prices.
-					'plugin_import_aioseop_meta'      => 0,		// Import All in One SEO Pack Metadata.
-					'plugin_import_rankmath_meta'     => 0,		// Import Rank Math SEO Metadata.
-					'plugin_import_seoframework_meta' => 0,		// Import The SEO Framework Metadata.
-					'plugin_import_wpmetaseo_meta'    => 0,		// Import WP Meta SEO Metadata.
-					'plugin_import_wpseo_meta'        => 0,		// Import Yoast SEO Metadata.
-					'plugin_import_wpseo_blocks'      => 0,		// Import Yoast SEO Block Attrs.
+					'plugin_speakable_css_csv'        => '',		// Speakable CSS Selectors.
+					'plugin_check_head'               => 1,			// Check for Duplicate Meta Tags.
+					'plugin_product_include_vat'      => 0,			// Include VAT in Product Prices.
+					'plugin_import_aioseop_meta'      => 0,			// Import All in One SEO Pack Metadata.
+					'plugin_import_rankmath_meta'     => 0,			// Import Rank Math SEO Metadata.
+					'plugin_import_seoframework_meta' => 0,			// Import The SEO Framework Metadata.
+					'plugin_import_wpmetaseo_meta'    => 0,			// Import WP Meta SEO Metadata.
+					'plugin_import_wpseo_meta'        => 0,			// Import Yoast SEO Metadata.
+					'plugin_import_wpseo_blocks'      => 0,			// Import Yoast SEO Block Attrs.
 
 					/*
 					 * Advanced Settings > Default Text.
@@ -2233,51 +2044,51 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/*
 					 * Advanced Settings > Attributes and Metadata > Custom Fields.
 					 */
-					'plugin_cf_addl_type_urls'                => '',	// Microdata Type URLs Custom Field.
-					'plugin_cf_book_isbn'                     => '',	// Book ISBN Custom Field.
-					'plugin_cf_img_url'                       => '',	// Image URL Custom Field.
-					'plugin_cf_product_adult_type'            => '',	// Product Adult Type Custom Field.
-					'plugin_cf_product_age_group'             => '',	// Product Age Group Custom Field.
-					'plugin_cf_product_avail'                 => '',	// Product Availability Custom Field.
-					'plugin_cf_product_brand'                 => '',	// Product Brand Custom Field.
-					'plugin_cf_product_category'              => '',	// Product Google Cat. ID Custom Field.
-					'plugin_cf_product_color'                 => '',	// Product Color Custom Field.
-					'plugin_cf_product_condition'             => '',	// Product Condition Custom Field.
-					'plugin_cf_product_currency'              => '',	// Product Currency Custom Field.
-					'plugin_cf_product_energy_efficiency'     => '',	// Product Energy Rating Custom Field.
-					'plugin_cf_product_fluid_volume_value'    => '',	// Product Fluid Volume Custom Field.
-					'plugin_cf_product_gtin14'                => '',	// Product GTIN-14 Custom Field.
-					'plugin_cf_product_gtin13'                => '',	// Product GTIN-13 (EAN) Custom Field.
-					'plugin_cf_product_gtin12'                => '',	// Product GTIN-12 (UPC) Custom Field.
-					'plugin_cf_product_gtin8'                 => '',	// Product GTIN-8 Custom Field.
-					'plugin_cf_product_gtin'                  => '',	// Product GTIN Custom Field.
-					'plugin_cf_product_isbn'                  => '',	// Product ISBN Custom Field.
-					'plugin_cf_product_height_value'          => '',	// Product Net Height Custom Field.
-					'plugin_cf_product_length_value'          => '',	// Product Net Len. / Depth Custom Field.
-					'plugin_cf_product_material'              => '',	// Product Material Custom Field.
-					'plugin_cf_product_mfr_part_no'           => '',	// Product MPN Custom Field.
-					'plugin_cf_product_min_advert_price'      => '',	// Product Min Advert Price Custom Field.
-					'plugin_cf_product_pattern'               => '',	// Product Pattern Custom Field.
-					'plugin_cf_product_price'                 => '',	// Product Price Custom Field.
-					'plugin_cf_product_price_type'            => '',	// Product Price Type Custom Field.
-					'plugin_cf_product_retailer_part_no'      => '',	// Product SKU Custom Field.
-					'plugin_cf_product_shipping_height_value' => '',	// Product Shipping Height Custom Field.
-					'plugin_cf_product_shipping_length_value' => '',	// Product Shipping Length Custom Field.
-					'plugin_cf_product_shipping_weight_value' => '',	// Product Shipping Weight Custom Field.
-					'plugin_cf_product_shipping_width_value'  => '',	// Product Shipping Width Custom Field.
-					'plugin_cf_product_size'                  => '',	// Product Size Custom Field.
-					'plugin_cf_product_size_group'            => '',	// Product Size Group Custom Field.
-					'plugin_cf_product_size_system'           => '',	// Product Size System Custom Field.
-					'plugin_cf_product_target_gender'         => '',	// Product Target Gender Custom Field.
-					'plugin_cf_product_weight_value'          => '',	// Product Net Weight Custom Field.
-					'plugin_cf_product_width_value'           => '',	// Product Net Width Custom Field.
-					'plugin_cf_review_item_name'              => '',	// Review Subject Name Custom Field.
-					'plugin_cf_review_item_desc'              => '',	// Review Subject Desc Custom Field.
-					'plugin_cf_review_rating'                 => '',	// Review Rating Custom Field.
-					'plugin_cf_review_rating_alt_name'        => '',	// Review Rating Alt Name Custom Field.
-					'plugin_cf_sameas_urls'                   => '',	// Same-As URLs Custom Field.
-					'plugin_cf_vid_embed'                     => '',	// Video Embed HTML Custom Field.
-					'plugin_cf_vid_url'                       => '',	// Video URL Custom Field.
+					'plugin_cf_addl_type_urls'                => '',			// Microdata Type URLs Custom Field.
+					'plugin_cf_book_isbn'                     => '',			// Book ISBN Custom Field.
+					'plugin_cf_img_url'                       => '',			// Image URL Custom Field.
+					'plugin_cf_product_adult_type'            => '',			// Product Adult Type Custom Field.
+					'plugin_cf_product_age_group'             => '',			// Product Age Group Custom Field.
+					'plugin_cf_product_avail'                 => '',			// Product Availability Custom Field.
+					'plugin_cf_product_brand'                 => '',			// Product Brand Custom Field.
+					'plugin_cf_product_category'              => '',			// Product Google Cat. ID Custom Field.
+					'plugin_cf_product_color'                 => '',			// Product Color Custom Field.
+					'plugin_cf_product_condition'             => '',			// Product Condition Custom Field.
+					'plugin_cf_product_currency'              => '',			// Product Currency Custom Field.
+					'plugin_cf_product_energy_efficiency'     => '',			// Product Energy Rating Custom Field.
+					'plugin_cf_product_fluid_volume_value'    => '',			// Product Fluid Volume Custom Field.
+					'plugin_cf_product_gtin14'                => '',			// Product GTIN-14 Custom Field.
+					'plugin_cf_product_gtin13'                => '',			// Product GTIN-13 (EAN) Custom Field.
+					'plugin_cf_product_gtin12'                => '',			// Product GTIN-12 (UPC) Custom Field.
+					'plugin_cf_product_gtin8'                 => '',			// Product GTIN-8 Custom Field.
+					'plugin_cf_product_gtin'                  => '_global_unique_id',	// Product GTIN Custom Field.
+					'plugin_cf_product_isbn'                  => '',			// Product ISBN Custom Field.
+					'plugin_cf_product_height_value'          => '',			// Product Net Height Custom Field.
+					'plugin_cf_product_length_value'          => '',			// Product Net Len. / Depth Custom Field.
+					'plugin_cf_product_material'              => '',			// Product Material Custom Field.
+					'plugin_cf_product_mfr_part_no'           => '',			// Product MPN Custom Field.
+					'plugin_cf_product_min_advert_price'      => '',			// Product Min Advert Price Custom Field.
+					'plugin_cf_product_pattern'               => '',			// Product Pattern Custom Field.
+					'plugin_cf_product_price'                 => '',			// Product Price Custom Field.
+					'plugin_cf_product_price_type'            => '',			// Product Price Type Custom Field.
+					'plugin_cf_product_retailer_part_no'      => '',			// Product SKU Custom Field.
+					'plugin_cf_product_shipping_height_value' => '',			// Product Shipping Height Custom Field.
+					'plugin_cf_product_shipping_length_value' => '',			// Product Shipping Length Custom Field.
+					'plugin_cf_product_shipping_weight_value' => '',			// Product Shipping Weight Custom Field.
+					'plugin_cf_product_shipping_width_value'  => '',			// Product Shipping Width Custom Field.
+					'plugin_cf_product_size'                  => '',			// Product Size Custom Field.
+					'plugin_cf_product_size_group'            => '',			// Product Size Group Custom Field.
+					'plugin_cf_product_size_system'           => '',			// Product Size System Custom Field.
+					'plugin_cf_product_target_gender'         => '',			// Product Target Gender Custom Field.
+					'plugin_cf_product_weight_value'          => '',			// Product Net Weight Custom Field.
+					'plugin_cf_product_width_value'           => '',			// Product Net Width Custom Field.
+					'plugin_cf_review_item_name'              => '',			// Review Subject Name Custom Field.
+					'plugin_cf_review_item_desc'              => '',			// Review Subject Desc Custom Field.
+					'plugin_cf_review_rating'                 => '',			// Review Rating Custom Field.
+					'plugin_cf_review_rating_alt_name'        => '',			// Review Rating Alt Name Custom Field.
+					'plugin_cf_sameas_urls'                   => '',			// Same-As URLs Custom Field.
+					'plugin_cf_vid_embed'                     => '',			// Video Embed HTML Custom Field.
+					'plugin_cf_vid_url'                       => '',			// Video URL Custom Field.
 
 					/*
 					 * Premium Licenses.
@@ -2520,7 +2331,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			 */
 			'um' => array(
 				'min_version' => '7.2.0',	// Released on 2024/09/18.
-				'rec_version' => '7.2.2',	// Released on 2024/11/01.
+				'rec_version' => '7.3.0',	// Released on 2025/10/13.
 				'version_filter' => array(
 					'dev'    => 'Development and Up',
 					'alpha'  => 'Alpha and Up',
@@ -2971,14 +2782,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'saturday'       => 'Saturday',
 					'publicholidays' => 'Public Holidays',
 				),
-				'time_seconds' => array(
-					'hour'  => HOUR_IN_SECONDS,
-					'day'   => DAY_IN_SECONDS,
-					'week'  => WEEK_IN_SECONDS,
-					'month' => MONTH_IN_SECONDS,
-					'year'  => YEAR_IN_SECONDS,
-				),
-				'time_text' => array(
+				'salary_period' => array(
 					'hour'  => 'Hour',
 					'day'   => 'Day',
 					'week'  => 'Week',
@@ -3575,6 +3379,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'https://schema.org/RegularPrice'           => 'Regular Price',
 					'https://schema.org/SalePrice'              => 'Sale Price',
 					'https://schema.org/SRP'                    => 'Suggested Retail Price',
+					'https://schema.org/StrikethroughPrice'     => 'Strikethrough Price',
 				),
 
 				/*
@@ -3836,6 +3641,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				'og_type_by_schema_type' => array(
 					'article'              => 'article',
 					'book'                 => 'book',
+					'webpage.checkout'     => 'website',
 					'event'                => 'product',
 					'item.list'            => 'website',
 					'place'                => 'place',	// Check for Schema place before Schema organization.
@@ -5353,7 +5159,6 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			$var_const[ 'WPSSO_SCHEMA_MOVIE_DIRECTORS_MAX' ]     = 5;
 			$var_const[ 'WPSSO_SCHEMA_OFFER_CATALOGS_MAX' ]      = 5;
 			$var_const[ 'WPSSO_SCHEMA_ORGANIZATION_TYPE_ID' ]    = 'organization';
-			$var_const[ 'WPSSO_SCHEMA_PRODUCT_VALID_MAX_TIME' ]  = YEAR_IN_SECONDS;	// Used for Schema 'priceValidUntil' property default.
 			$var_const[ 'WPSSO_SCHEMA_RECIPE_INGREDIENTS_MAX' ]  = 40;
 			$var_const[ 'WPSSO_SCHEMA_RECIPE_INSTRUCTIONS_MAX' ] = 40;
 			$var_const[ 'WPSSO_SCHEMA_REVIEWS_MAX' ]             = 100;

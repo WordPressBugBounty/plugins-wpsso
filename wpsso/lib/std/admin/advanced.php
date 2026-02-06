@@ -553,6 +553,13 @@ if ( ! class_exists( 'WpssoStdAdminAdvanced' ) ) {
 		 */
 		public function filter_mb_advanced_services_media_rows( $table_rows, $form, $args ) {
 
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->mark();
+			}
+
+			$max_media_items = $this->p->cf[ 'form' ][ 'max_media_items' ];
+
 			$table_rows[] = '<td colspan="2">' . $this->p->msgs->pro_feature( 'wpsso' ) . '</td>';
 
 			$table_rows[ 'plugin_gravatar_image' ] = $form->get_tr_hide( $in_view = 'basic', 'plugin_gravatar_image' ) .
@@ -565,17 +572,33 @@ if ( ! class_exists( 'WpssoStdAdminAdvanced' ) ) {
 					$css_class = '', $css_id = 'plugin_gravatar_size' ) .
 				'<td class="blank">' . $form->get_no_input( 'plugin_gravatar_size', $css_class = 'short' ) . '</td>';
 
-			$checkboxes = '';
+			$table_rows[ 'og_vid_max' ] = $form->get_tr_hide( $in_view = 'basic', 'og_vid_max' ) .
+				$form->get_th_html( _x( 'Maximum Videos to Include', 'option label', 'wpsso' ),
+					$css_class = '', $css_id = 'og_vid_max' ) .
+				'<td class="blank">' . $form->get_no_select( 'og_vid_max', range( 0, $max_media_items ),
+					$css_class = 'short', $css_id = '', $is_assoc = true ) . '</td>';
+
+			$table_rows[ 'og_vid_prev_img' ] = '' .
+				$form->get_th_html( _x( 'Include Video Preview Images', 'option label', 'wpsso' ),
+					$css_class = '', $css_id = 'og_vid_prev_img' ) .
+				$form->get_no_td_checkbox( 'og_vid_prev_img', $this->p->msgs->preview_images_are_first() );
+
+			$table_rows[ 'og_vid_autoplay' ] = $form->get_tr_hide( $in_view = 'basic', 'og_vid_autoplay' ) .
+				$form->get_th_html( _x( 'Force Autoplay when Possible', 'option label', 'wpsso' ),
+					$css_class = '', $css_id = 'og_vid_autoplay' ) .
+				$form->get_no_td_checkbox( 'og_vid_autoplay' );
+
+			$check_embed_html = '';
 
 			foreach ( $this->p->cf[ 'form' ][ 'embed_media' ] as $opt_key => $opt_label ) {
 
-				$checkboxes .= '<p>' . $form->get_no_checkbox_comment( $opt_key ) . ' ' . _x( $opt_label, 'option value', 'wpsso' ) . '</p>';
+				$check_embed_html .= '<p>' . $form->get_no_checkbox_comment( $opt_key ) . ' ' . _x( $opt_label, 'option value', 'wpsso' ) . '</p>';
 			}
 
 			$table_rows[ 'plugin_embed_media' ] = '' .
 				$form->get_th_html( _x( 'Detect Embedded Media', 'option label', 'wpsso' ),
 					$css_class = '', $css_id = 'plugin_embed_media' ).
-				'<td class="blank">' . $checkboxes . '</td>';
+				'<td class="blank">' . $check_embed_html . '</td>';
 
 			return $table_rows;
 		}
@@ -1117,6 +1140,13 @@ if ( ! class_exists( 'WpssoStdAdminAdvanced' ) ) {
 						sprintf( _x( '(not compatible with <a href="%s">price drop appearance</a>)', 'option comment', 'wpsso' ),
 							'https://developers.google.com/search/docs/data-types/product#price-drop'),
 				),
+				'schema_def_product_price_valid_days' => array(
+					'td_class' => 'blank',
+					'label'    => _x( 'Default Product Prices Valid For', 'option label', 'wpsso' ),
+					'tooltip'  => 'schema_def_product_price_valid_days',
+					'content'  => $form->get_no_input( 'schema_def_product_price_valid_days', $css_class = 'short' ) . ' ' .
+						_x( 'Days', 'option comment', 'wpsso' ),
+				),
 				'schema_def_product_mrp' => array(
 					'td_class' => 'blank',
 					'label'    => _x( 'Default Product Return Policy', 'option label', 'wpsso' ),
@@ -1130,12 +1160,6 @@ if ( ! class_exists( 'WpssoStdAdminAdvanced' ) ) {
 					'tooltip'  => 'schema_def_product_category',
 					'content'  => $form->get_no_select( 'schema_def_product_category', $args[ 'select' ][ 'google_prod_cats' ],
 						$css_class = 'wide', $css_id = '', $is_assoc = true ),
-				),
-				'schema_def_product_price_type' => array(
-					'td_class' => 'blank',
-					'label'    => _x( 'Default Product Price Type', 'option label', 'wpsso' ),
-					'tooltip'  => 'schema_def_product_price_type',
-					'content'  => $form->get_no_select( 'schema_def_product_price_type', $this->p->cf[ 'form' ][ 'price_type' ] ),
 				),
 				'schema_def_product_condition' => array(
 					'td_class' => 'blank',

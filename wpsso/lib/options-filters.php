@@ -75,11 +75,11 @@ if ( ! class_exists( 'WpssoOptionsFilters' ) ) {
 					case 'plugin_ratings_reviews_months_max':	// Maximum Age of Reviews.
 					case 'plugin_upscale_pct_max':			// Maximum Image Upscale Percent.
 
-						return 'pos_int';
+						return 'pos_int';	// Integer options that must be 1 or more.
 
 					case 'plugin_stamped_store_hash':	// Stamped.io Store Hash.
 
-						return 'blank_num';
+						return 'blank_num';	// Empty string or numeric.
 
 					case 'plugin_title_part_site':		// Title Tag Site Prefix / Suffix.
 					case 'plugin_title_part_tagline':	// Title Tag Tagline Prefix / Suffix.
@@ -190,7 +190,6 @@ if ( ! class_exists( 'WpssoOptionsFilters' ) ) {
 
 					case 'schema_book_pages':			// Number of Pages.
 					case 'schema_reading_mins':			// Est. Reading Time.
-					case 'schema_vid_max':				// Maximum Videos to Include.
 
 						if ( empty( $mod[ 'name' ] ) ) {	// Must be an interger for plugin settings (ie. no module).
 
@@ -198,6 +197,10 @@ if ( ! class_exists( 'WpssoOptionsFilters' ) ) {
 						}
 
 						return 'blank_int';
+
+					case 'schema_def_product_price_valid_days':		// Default Product Prices Valid For.
+
+						return 'zero_pos_int';	// Integer options that must be 0 or more.
 
 					case 'schema_howto_step_section':		// How-To Step or Section (0 or 1).
 					case 'schema_recipe_instruction_section':	// Recipe Instruction or Section (0 or 1).
@@ -296,12 +299,12 @@ if ( ! class_exists( 'WpssoOptionsFilters' ) ) {
 					case 'schema_review_item_cw_author_name':			// Review: Subject Author Name.
 					case 'schema_review_item_cw_movie_actor_person_name':		// Review: Subject Movie Cast Names.
 					case 'schema_review_item_cw_movie_director_person_name':	// Review: Subject Movie Director Names.
-					case 'schema_review_item_software_app_cat':
-					case 'schema_review_item_software_app_os':
+					case 'schema_review_item_software_app_cat':	// Reviews: Software App Category.
+					case 'schema_review_item_software_app_os':	// Reviews: Software App Operating System.
 					case 'schema_service_offer_catalog':		// Offer Catalog Name.
 					case 'schema_service_offer_catalog_text':	// Offer Catalog Description.
-					case 'schema_software_app_cat':
-					case 'schema_software_app_os':
+					case 'schema_software_app_cat':		// Application Category.
+					case 'schema_software_app_os':		// Operating System.
 
 						return 'one_line';
 
@@ -336,7 +339,6 @@ if ( ! class_exists( 'WpssoOptionsFilters' ) ) {
 					case 'schema_def_product_energy_efficiency_min':
 					case 'schema_def_product_energy_efficiency_max':
 					case 'schema_def_product_mrp':			// Default Product Return Policy.
-					case 'schema_def_product_price_type':		// Default Product Price Type.
 					case 'schema_def_product_size_system':		// Default Product Size System.
 					case 'schema_def_pub_org_id':			// Default Publisher Org.
 					case 'schema_def_pub_person_id':		// Default Publisher Person.
@@ -395,8 +397,10 @@ if ( ! class_exists( 'WpssoOptionsFilters' ) ) {
 					case 'schema_review_item_sameas_url':		// Review: Subject Same-As URL.
 					case 'schema_review_item_cw_author_url':	// Review: Subject Author URL.
 					case 'schema_review_claim_first_url':		// First Appearance URL.
+					case 'schema_review_item_software_app_dl_url':	// Reviews: Software App Download URL.
 					case 'schema_sameas_url':			// Same-As URLs.
 					case 'schema_service_offer_catalog_url':	// Offer Catalog URL.
+					case 'schema_software_app_dl_url':		// Download URL.
 
 						return 'url';
 				}
@@ -493,10 +497,10 @@ if ( ! class_exists( 'WpssoOptionsFilters' ) ) {
 				/*
 				 * Cast as integer (zero and -1 is ok).
 				 */
-				case 'og_img_max':				// Maximum Images.
-				case 'og_vid_max':				// Maximum Videos to Include.
-				case 'og_desc_hashtags': 			// Description Hashtags.
-				case 'primary_term_id':				// Primary Category.
+				case 'og_img_max':			// Maximum Images.
+				case 'og_vid_max':			// Maximum Videos to Include.
+				case 'og_desc_hashtags': 		// Description Hashtags.
+				case 'primary_term_id':			// Primary Category.
 				case ( preg_match( '/_(cache_exp|caption_hashtags|filter_prio)$/', $base_key ) ? true : false ):
 				case ( preg_match( '/_(img|logo|banner)_url(:width|:height)$/', $base_key ) ? true : false ):
 

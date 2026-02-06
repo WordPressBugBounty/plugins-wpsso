@@ -1004,6 +1004,23 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 			self::get_schema_type_row_class( $name = 'schema_review_item_type', $read_cache = false );
 		}
 
+		public static function get_schema_product_price_valid_date() {
+
+			$wpsso =& Wpsso::get_instance();
+
+			static $valid_date = null;
+
+			if ( null === $valid_date ) {
+
+				if ( ! empty( $wpsso->options[ 'schema_def_product_price_valid_days' ] ) ) {
+
+					$valid_date = gmdate( 'c', time() + ( $wpsso->options[ 'schema_def_product_price_valid_days' ] * DAY_IN_SECONDS ) );
+				}
+			}
+
+			return $valid_date;
+		}
+
 		/*
 		 * Returns a one-dimensional (flat) array of schema types by default, otherwise returns a multi-dimensional array
 		 * of all schema types, including cross-references for sub-types with multiple parent types.
@@ -2508,6 +2525,7 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 					self::add_data_itemprop_from_assoc( $json_data, $md_opts, array(
 						'applicationCategory'  => 'schema_review_item_software_app_cat',
 						'operatingSystem'      => 'schema_review_item_software_app_os',
+						'downloadUrl'          => 'schema_review_item_software_app_dl_url',
 					) );
 
 					$metadata_offers_max = SucomUtil::get_const( 'WPSSO_SCHEMA_METADATA_OFFERS_MAX' );
@@ -2531,15 +2549,10 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 								'availability'  => 'offer_avail',	// In stock, Out of stock, Pre-order, etc.
 							) ) ) ) {
 
-								/*
-								 * Avoid Google validator warnings.
-								 */
-								$offer[ 'url' ]             = $json_data[ 'url' ];
-								$offer[ 'priceValidUntil' ] = gmdate( 'c', time() + MONTH_IN_SECONDS );
+								$offer[ 'url' ] = $json_data[ 'url' ];
 
-								/*
-								 * Add the offer.
-								 */
+								$offer[ 'priceValidUntil' ] = self::get_schema_product_price_valid_date();
+
 								$json_data[ 'offers' ][] = self::get_schema_type_context( 'https://schema.org/Offer', $offer );
 							}
 						}

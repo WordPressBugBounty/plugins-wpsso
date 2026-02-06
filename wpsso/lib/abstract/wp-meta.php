@@ -33,62 +33,64 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 		protected static $head_info = array();
 
 		private static $mod_defaults = array(
-			'id'                      => 0,		// Post, term, or user ID.
-			'name'                    => false,	// Module name ('post', 'term', or 'user').
-			'name_transl'             => false,	// Module name translated.
-			'obj'                     => false,	// Module object.
-			'wp_obj'                  => false,	// WP object (WP_Post, WP_Term, etc.).
-			'query_vars'              => array(),	// Defined by WpssoPage->get_mod().
+			'id'                      => 0,			// Post, term, or user ID.
+			'name'                    => false,		// Module name ('post', 'term', or 'user').
+			'name_transl'             => false,		// Module name translated.
+			'obj'                     => false,		// Module object.
+			'wp_obj'                  => false,		// WP object (WP_Post, WP_Term, etc.).
+			'query_vars'              => array(),		// Defined by WpssoPage->get_mod().
 			'posts_args'              => array(),
-			'paged'                   => false,	// False or numeric (aka $wp_query->query_vars[ 'paged' ]).
-			'paged_total'             => false,	// False or numberic (aka $wp_query->max_num_pages).
+			'paged'                   => false,		// False or numeric (aka $wp_query->query_vars[ 'paged' ]).
+			'paged_total'             => false,		// False or numberic (aka $wp_query->max_num_pages).
 			'is_404'                  => false,
 			'is_archive'              => false,
-			'is_attachment'           => false,	// Post type is 'attachment'.
+			'is_attachment'           => false,		// Post type is 'attachment'.
 			'is_comment'              => false,
 			'is_date'                 => false,
 			'is_day'                  => false,
-			'is_feed'                 => false,	// RSS feed.
-			'is_home'                 => false,	// Home page (static or blog archive).
-			'is_home_page'            => false,	// Static front page (singular post).
-			'is_home_posts'           => false,	// Static posts page or blog archive page.
+			'is_feed'                 => false,		// RSS feed.
+			'is_home'                 => false,		// Home page (static or blog archive).
+			'is_home_page'            => false,		// Static front page (singular post).
+			'is_home_posts'           => false,		// Static posts page or blog archive page.
 			'is_month'                => false,
 			'is_post'                 => false,
-			'is_post_type_archive'    => false,	// Post is an archive page.
+			'is_post_type_archive'    => false,		// Post is an archive page.
 			'is_public'               => true,
 			'is_search'               => false,
 			'is_term'                 => false,
 			'is_user'                 => false,
 			'is_year'                 => false,
-			'comment_author'          => false,	// Comment author user ID.
-			'comment_author_name'     => false,	// Comment author name.
-			'comment_author_url'      => false,	// Comment author URL.
-			'comment_paged'           => false,	// False or numeric (aka $wp_query->query_vars[ 'cpage' ]).
+			'comment_author'          => false,		// Comment author user ID.
+			'comment_author_name'     => false,		// Comment author name.
+			'comment_author_url'      => false,		// Comment author URL.
+			'comment_paged'           => false,		// False or numeric (aka $wp_query->query_vars[ 'cpage' ]).
 			'comment_parent'          => false,
 			'comment_rating'          => false,
 			'comment_time'            => false,
 			'use_post'                => false,
-			'post_slug'               => false,	// Post name (aka slug).
-			'post_type'               => false,	// Post type name.
-			'post_type_label_plural'  => false,	// Post type plural name.
-			'post_type_label_single'  => false,	// Post type singular name.
-			'post_mime_type'          => false,	// Post mime type (ie. image/jpg).
-			'post_mime_group'         => false,	// Post mime group (ie. image).
-			'post_mime_subgroup'      => false,	// Post mime subgroup (ie. jpg).
-			'post_status'             => false,	// Post status name.
-			'post_author'             => false,	// Post author id.
+			'post_slug'               => false,		// Post name (aka slug).
+			'post_type'               => false,		// Post type name.
+			'post_type_label_plural'  => false,		// Post type plural name.
+			'post_type_label_single'  => false,		// Post type singular name.
+			'post_mime_type'          => false,		// Post mime type (ie. image/jpg).
+			'post_mime_group'         => false,		// Post mime group (ie. image).
+			'post_mime_subgroup'      => false,		// Post mime subgroup (ie. jpg).
+			'post_status'             => false,		// Post status name.
+			'post_author'             => false,		// Post author id.
 			'post_coauthors'          => array(),
-			'post_time'               => false,	// Post published time (ISO 8601 date or false).
-			'post_timestamp'          => false,	// Post published time (Unit timestamp or false).
-			'post_modified_time'      => false,	// Post modified time (ISO 8601 date or false).
-			'post_modified_timestamp' => false,	// Post modified time (Unit timestamp or false).
-			'post_parent'             => false,	// Post parent id.
-			'term_tax_id'             => false,
+			'post_time'               => false,		// Post published time (ISO 8601 date or false).
+			'post_timestamp'          => false,		// Post published time (Unit timestamp or false).
+			'post_modified_time'      => false,		// Post modified time (ISO 8601 date or false).
+			'post_modified_timestamp' => false,		// Post modified time (Unit timestamp or false).
+			'post_parent'             => false,		// Post parent id.
+			'post_primary_tax_slug'   => 'category',	// Primary taxonomy, filtered by 'wpsso_primary_tax_slug' in WpssoPost->get_mod().
+			'post_taxonomies'         => array(),		// Post taxonomy slugs.
 			'tax_slug'                => '',
-			'tax_label_plural'        => false,	// Taxonomy plural name.
-			'tax_label_single'        => false,	// Taxonomy singular name.
-			'user_name'               => '',	// User display name.
-			'wpml_code'               => '',	// WPML language code.
+			'tax_label_plural'        => false,		// Taxonomy plural name.
+			'tax_label_single'        => false,		// Taxonomy singular name.
+			'term_tax_id'             => false,
+			'user_name'               => '',		// User display name.
+			'wpml_code'               => '',		// WPML language code.
 		);
 
 		public function __construct( &$plugin ) {
@@ -356,32 +358,28 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 				$def_dimension_units = WpssoUtilUnits::get_dimension_text();
 				$def_fluid_vol_units = WpssoUtilUnits::get_fluid_volume_text();
 				$def_weight_units    = WpssoUtilUnits::get_weight_text();
-
 				$def_og_type         = $this->p->og->get_mod_og_type_id( $mod, $use_md_opts = false );
 				$def_schema_type     = $this->p->schema->get_mod_schema_type_id( $mod, $use_md_opts = false );
-				$def_primary_term_id = $this->p->post->get_default_term_id( $mod, $tax_slug = 'category' );	// Returns term id or false.
+				$def_primary_term_id = $this->p->post->get_default_term_id( $mod, $mod[ 'post_primary_tax_slug' ] );	// Returns term id or false.
 				$def_reading_mins    = $this->p->page->get_reading_mins( $mod );
-
-				$def_currency      = $this->p->get_options( 'og_def_currency', 'USD' );
-				$def_country       = $this->p->get_options( 'og_def_country', 'none' );
-				$def_timezone      = $this->p->get_options( 'og_def_timezone', 'UTC' );
-				$def_art_section   = $this->p->get_options( 'schema_def_article_section', 'none' );
-				$def_adult_type    = $this->p->get_options( 'schema_def_product_adult_type', 'none' );
-				$def_age_group     = $this->p->get_options( 'schema_def_product_age_group', 'none' );
-				$def_product_cat   = $this->p->get_options( 'schema_def_product_category', 'none' );	// Default Product Google Category.
-				$def_product_cond  = $this->p->get_options( 'schema_def_product_condition', 'none' );	// Default Product Condition.
-				$def_product_mrp   = $this->p->get_options( 'schema_def_product_mrp', 'none' );		// Default Product Return Policy.
-				$def_ener_eff_min  = $this->p->get_options( 'schema_def_product_energy_efficiency_min', 'https://schema.org/EUEnergyEfficiencyCategoryD' );
-				$def_ener_eff_max  = $this->p->get_options( 'schema_def_product_energy_efficiency_max', 'https://schema.org/EUEnergyEfficiencyCategoryA3Plus' );
-				$def_price_type    = $this->p->get_options( 'schema_def_product_price_type', 'https://schema.org/ListPrice' );
-				$def_size_group_0  = $this->p->get_options( 'schema_def_product_size_group_0', 'none' );
-				$def_size_group_1  = $this->p->get_options( 'schema_def_product_size_group_1', 'none' );
-				$def_size_system   = $this->p->get_options( 'schema_def_product_size_system', 'none' );
-				$def_target_gender = $this->p->get_options( 'schema_def_product_target_gender', 'none' );
-
-				$def_size_name     = 'wpsso-opengraph';
-				$def_media_request = array( 'og_vid_upload' );
-				$def_media_info    = $this->p->media->get_media_info( $def_size_name, $def_media_request, $mod, $md_pre = 'none' );
+				$def_currency        = $this->p->get_options( 'og_def_currency', 'USD' );
+				$def_country         = $this->p->get_options( 'og_def_country', 'none' );
+				$def_timezone        = $this->p->get_options( 'og_def_timezone', 'UTC' );
+				$def_art_section     = $this->p->get_options( 'schema_def_article_section', 'none' );
+				$def_adult_type      = $this->p->get_options( 'schema_def_product_adult_type', 'none' );
+				$def_age_group       = $this->p->get_options( 'schema_def_product_age_group', 'none' );
+				$def_product_cat     = $this->p->get_options( 'schema_def_product_category', 'none' );		// Default Product Google Category.
+				$def_product_cond    = $this->p->get_options( 'schema_def_product_condition', 'none' );		// Default Product Condition.
+				$def_product_mrp     = $this->p->get_options( 'schema_def_product_mrp', 'none' );		// Default Product Return Policy.
+				$def_ener_eff_min    = $this->p->get_options( 'schema_def_product_energy_efficiency_min', 'https://schema.org/EUEnergyEfficiencyCategoryD' );
+				$def_ener_eff_max    = $this->p->get_options( 'schema_def_product_energy_efficiency_max', 'https://schema.org/EUEnergyEfficiencyCategoryA3Plus' );
+				$def_size_group_0    = $this->p->get_options( 'schema_def_product_size_group_0', 'none' );
+				$def_size_group_1    = $this->p->get_options( 'schema_def_product_size_group_1', 'none' );
+				$def_size_system     = $this->p->get_options( 'schema_def_product_size_system', 'none' );
+				$def_target_gender   = $this->p->get_options( 'schema_def_product_target_gender', 'none' );
+				$def_size_name       = 'wpsso-opengraph';
+				$def_media_request   = array( 'og_vid_upload' );
+				$def_media_info      = $this->p->media->get_media_info( $def_size_name, $def_media_request, $mod, $md_pre = 'none' );
 
 				$md_defs = array(
 					'checksum'          => '',	// Checksum of plugin versions.
@@ -414,10 +412,10 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 					/*
 					 * Edit Media tab.
 					 */
-					'og_img_max'             => isset( $opts[ 'og_img_max' ] ) ? (int) $opts[ 'og_img_max' ] : 1,	// 1 by default.
-					'og_vid_max'             => isset( $opts[ 'og_vid_max' ] ) ? (int) $opts[ 'og_vid_max' ] : 1,	// 1 by default.
-					'og_vid_prev_img'        => empty( $opts[ 'og_vid_prev_img' ] ) ? 0 : 1,	// Enabled by default.
-					'og_vid_autoplay'        => empty( $opts[ 'og_vid_autoplay' ] ) ? 0 : 1,	// Enabled by default.
+					'og_img_max'             => isset( $opts[ 'og_img_max' ] ) ? (int) $opts[ 'og_img_max' ] : 1,
+					'og_vid_max'             => isset( $opts[ 'og_vid_max' ] ) ? (int) $opts[ 'og_vid_max' ] : 1,
+					'og_vid_prev_img'        => empty( $opts[ 'og_vid_prev_img' ] ) ? 0 : 1,
+					'og_vid_autoplay'        => empty( $opts[ 'og_vid_autoplay' ] ) ? 0 : 1,
 					'og_img_id'              => '',
 					'og_img_id_lib'          => 'wp',
 					'og_img_url'             => '',
@@ -458,7 +456,6 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 					'product_category'              => $def_product_cat,		// Product Google Category.
 					'product_brand'                 => '',
 					'product_price'                 => '0.00',			// Product Price.
-					'product_price_type'            => $def_price_type,
 					'product_currency'              => $def_currency,
 					'product_min_advert_price'      => '0.00',			// Product Min Advert Price.
 					'product_avail'                 => 'none',			// Product Availability.
@@ -872,8 +869,9 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 					/*
 					 * Schema Review Subject: Software Application.
 					 */
-					'schema_review_item_software_app_os'               => '',	// Operating System.
 					'schema_review_item_software_app_cat'              => '',	// Application Category.
+					'schema_review_item_software_app_os'               => '',	// Operating System.
+					'schema_review_item_software_app_dl_url'           => '',	// Download URL.
 					'schema_review_item_software_app_offer_name_0'     => '',
 					'schema_review_item_software_app_offer_name_1'     => '',
 					'schema_review_item_software_app_offer_name_2'     => '',
@@ -917,8 +915,9 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 					/*
 					 * Schema Software Application.
 					 */
-					'schema_software_app_os'  => '',	// Operating System.
-					'schema_software_app_cat' => '',	// Application Category.
+					'schema_software_app_cat'    => '',	// Application Category.
+					'schema_software_app_os'     => '',	// Operating System.
+					'schema_software_app_dl_url' => '',	// Download URL.
 
 					/*
 					 * Schema WebPage.

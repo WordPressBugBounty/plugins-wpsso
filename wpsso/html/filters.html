@@ -49,6 +49,8 @@
 
 <tr><th>wpsso_add_menu_submenu_item_{menu_id}</th><td>(&nbsp;$bool&nbsp;)</td><td>Remove an SSO menu item (ie. 'dashboard', 'setup', etc.).</tr>
 
+<tr><th>wpsso_add_schema_unit_price_specification</th><td>(&nbsp;$bool&nbsp;)</td></tr>
+
 <tr><th>wpsso_add_toolbar_validate</th><td>(&nbsp;$bool&nbsp;)</td></tr>
 
 <tr><th>wpsso_archive_page_url</th><td>(&nbsp;$url, $mod&nbsp;)</td></tr>
@@ -88,8 +90,6 @@
 <tr><th>wpsso_content_image_preg_pid_attr</th><td>(&nbsp;$default = 'data-[a-z]+-pid'&nbsp;)</td></tr>
 
 <tr><th>wpsso_cropped_image_filepath</th><td>(&nbsp;$new_filepath, $filepath, $size_info&nbsp;)</td></tr>
-
-<tr><th>wpsso_default_term_id</th><td>(&nbsp;$default_term_id, $mod, $tax_slug&nbsp;)</td></tr>
 
 <tr><th>wpsso_description</th><td>(&nbsp;$desc_text, $mod, $num_hashtags, $md_key&nbsp;)</td></tr>
 
@@ -241,6 +241,8 @@
 
 <tr><th>wpsso_meta_name</th><td>(&nbsp;$mt_name, $mod&nbsp;)</td></tr>
 
+<tr><th>wpsso_og</th><td>(&nbsp;array $mt_og, $mod&nbsp;)</td></tr>
+
 <tr><th>wpsso_og_add_media_from_url</td></td>(&nbsp;$url, $service&nbsp;)</td><td>$service = 'facebook' or 'soundcloud'.</td></tr>
 
 <tr><th>wpsso_og_add_mt_offers</th><td>(&nbsp;$bool = true, $mod&nbsp;)</td></tr>
@@ -275,11 +277,11 @@
 
 <tr><th>wpsso_og_ns</th><td>(&nbsp;$ns&nbsp;)</td></tr>
 
-<tr><th>wpsso_og</th><td>(&nbsp;array $mt_og, $mod&nbsp;)</td></tr>
-
 <tr><th>wpsso_og_seed</th><td>(&nbsp;array $mt_og, $mod&nbsp;)</td></tr>
 
 <tr><th>wpsso_og_type</th><td>(&nbsp;$type_id, $mod, $is_custom&nbsp;)</td></tr>
+
+<tr><th>wpsso_og_video_image_url</th><td>(&nbsp;$image_url, $video_url&nbsp;)</td><td>Image URL or empty string.</td></tr>
 
 <tr><th>wpsso_option_type</th><td>(&nbsp;$option_type = '', $base_key, $network, $mod&nbsp;)</td><td>Return the sanitation type for a given option key.</td></tr>
 
@@ -306,6 +308,8 @@
 <tr><th>wpsso_primary_tax_slug</th><td>(&nbsp;$tax_slug, $mod&nbsp;)</td></tr>
 
 <tr><th>wpsso_primary_term_id</th><td>(&nbsp;$primary_term_id, $mod, $tax_slug, $is_custom&nbsp;)</td></tr>
+
+<tr><th>wpsso_primary_term_id_is_custom</th><td>(&nbsp;$bool, $mod, $tax_slug, $primary_term_id&nbsp;)</td></tr>
 
 <tr><th>wpsso_primary_terms</th><td>(&nbsp;$primary_terms, $mod, $tax_slug, $output&nbsp;)</td></tr>
 

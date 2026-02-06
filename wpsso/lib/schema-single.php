@@ -589,9 +589,6 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 						'validThrough'  => 'offer_valid_to_date',
 					) ) ) ) {
 
-						/*
-						 * Add the offer.
-						 */
 						$json_ret[ 'offers' ][] = WpssoSchema::get_schema_type_context( 'https://schema.org/Offer', $offer );
 					}
 				}
@@ -1989,8 +1986,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
-			list( $type_id, $type_url ) = self::get_type_info( $json_data, $type_opts = false,
-				$opt_key = false, $def_type_id, $list_el );
+			list( $type_id, $type_url ) = self::get_type_info( $json_data, $type_opts = false, $opt_key = false, $def_type_id, $list_el );
 
 			/*
 			 * Begin schema product markup creation.
@@ -2041,31 +2037,10 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 			/*
 			 * Prevents a missing property warning from the Google validator.
-			 *
-			 * By default, define normal product prices (not on sale) as valid for 1 year.
-			 *
-			 * Uses a static cache for all offers to allow for a common value in AggregateOffer markup.
 			 */
 			if ( empty( $json_ret[ 'priceValidUntil' ] ) ) {
 
-				static $price_valid_until = null;
-
-				if ( null === $price_valid_until ) {
-
-					/*
-					 * Skip if WPSSO_SCHEMA_PRODUCT_VALID_MAX_TIME = 0 or false.
-					 */
-					if ( $valid_max_time = SucomUtil::get_const( 'WPSSO_SCHEMA_PRODUCT_VALID_MAX_TIME' ) ) {
-
-						$price_valid_until = gmdate( 'c', time() + $valid_max_time );
-
-					} else $price_valid_until = false;	// Check only once.
-				}
-
-				if ( $price_valid_until ) {
-
-					$json_ret[ 'priceValidUntil' ] = $price_valid_until;
-				}
+				$json_ret[ 'priceValidUntil' ] = WpssoSchema::get_schema_product_price_valid_date();
 			}
 
 			/*
@@ -2073,90 +2048,116 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			 *
 			 * Create the priceSpecification for the current pricing - this could be a list price or a sale price.
 			 */
-			$price_spec = WpssoSchema::get_data_itemprop_from_assoc( $mt_single, array(
-				'priceType'             => 'product:price:type',
-				'price'                 => 'product:price:amount',
-				'priceCurrency'         => 'product:price:currency',
-				'validFrom'             => 'product:sale_price_dates:start',
-				'validThrough'          => 'product:sale_price_dates:end',
-				'valueAddedTaxIncluded' => 'product:price:vat_included',
-			) );
+			if ( apply_filters( 'wpsso_add_schema_unit_price_specification', true ) ) {
 
-			if ( false !== $price_spec ) {
-
-				if ( empty( $price_spec[ 'priceCurrency' ] ) ) {	// Make sure we have a price currency.
-
-					$price_spec[ 'priceCurrency' ] = $wpsso->options[ 'og_def_currency' ];
-				}
-
-				if ( empty( $price_spec[ 'validThrough' ] ) ) {	// Avoid Google validator warnings.
-
-					$price_spec[ 'validThrough' ] = gmdate( 'c', time() + MONTH_IN_SECONDS );
-				}
-
-				/*
-				 * See http://wiki.goodrelations-vocabulary.org/Documentation/UN/CEFACT_Common_Codes.
-				 */
-				$quantity = WpssoSchema::get_data_itemprop_from_assoc( $mt_single, array(
-					'value'    => 'product:eligible_quantity:value',
-					'minValue' => 'product:eligible_quantity:min_value',
-					'maxValue' => 'product:eligible_quantity:max_value',
-					'unitCode' => 'product:eligible_quantity:unit_code',
-					'unitText' => 'product:eligible_quantity:unit_text',
-				) );
-
-				if ( false !== $quantity ) {
-
-					if ( ! isset( $quantity[ 'value' ] ) ) {
-
-						if ( isset( $quantity[ 'minValue' ] ) && isset( $quantity[ 'maxValue' ] ) &&
-							$quantity[ 'minValue' ] === $quantity[ 'maxValue' ] ) {
-
-							if ( $wpsso->debug->enabled ) {
-
-								$wpsso->debug->log( 'identical minValue and maxValue', $quantity );
-							}
-
-							$quantity[ 'value' ] = $quantity[ 'minValue' ];
-
-							unset( $quantity[ 'minValue' ], $quantity[ 'maxValue' ] );
-						}
+				if ( false !== ( $price_spec = WpssoSchema::get_data_itemprop_from_assoc( $mt_single, array(
+					'priceType'             => 'product:price:type',
+					'price'                 => 'product:price:amount',
+					'priceCurrency'         => 'product:price:currency',
+					'validFrom'             => 'product:sale_price_dates:start',
+					'validThrough'          => 'product:sale_price_dates:end',
+					'valueAddedTaxIncluded' => 'product:price:vat_included',
+				) ) ) ) {
+	
+					/*
+					 * Google only supports the Schem,a StrikethroughPrice type - remove other types like SalePrice or ListPrice.
+					 *
+					 * See https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#sale-pricing-example.
+					 */
+					if ( isset( $price_spec[ 'priceType' ] ) && 'https://schema.org/StrikethroughPrice' !== $price_spec[ 'priceType' ] ) {
+	
+						unset( $price_spec[ 'priceType' ] );
+	
+						/*
+						 * If we're using price specifications, remove the main price information.
+						 */
+						unset ( $json_ret[ 'price' ], $json_ret[ 'priceCurrency' ] );
 					}
-
-					$price_spec[ 'eligibleQuantity' ] = WpssoSchema::get_schema_type_context( 'https://schema.org/QuantitativeValue', $quantity );
-				}
-
-				$json_ret[ 'priceSpecification' ][] = WpssoSchema::get_schema_type_context( 'https://schema.org/UnitPriceSpecification', $price_spec );
-
-				/*
-				 * If we have an original price (ie. regular or list price), and the original price type is
-				 * different to the current price type, then add the original price as well. Do not add the
-				 * eligible quantity, as the eligible quantity for the current sale (for example) may be different
-				 * than the original eligible quantity.
-				 */
-				if ( ! empty( $mt_single[ 'product:original_price:type' ] ) &&
-					$mt_single[ 'product:original_price:type' ] != $mt_single[ 'product:price:type' ] ) {
-
-					$price_spec = WpssoSchema::get_data_itemprop_from_assoc( $mt_single, array(
-						'priceType'             => 'product:original_price:type',
-						'price'                 => 'product:original_price:amount',
-						'priceCurrency'         => 'product:original_price:currency',
-						'valueAddedTaxIncluded' => 'product:price:vat_included',
+		
+					if ( empty( $price_spec[ 'priceCurrency' ] ) ) {	// Make sure we have a price currency.
+		
+						$price_spec[ 'priceCurrency' ] = $wpsso->options[ 'og_def_currency' ];
+					}
+	
+					if ( empty( $price_spec[ 'validThrough' ] ) ) {		// Avoid Google validator warnings.
+	
+						$price_spec[ 'validThrough' ] = WpssoSchema::get_schema_product_price_valid_date();
+					}
+	
+					/*
+					 * See http://wiki.goodrelations-vocabulary.org/Documentation/UN/CEFACT_Common_Codes.
+					 */
+					$quantity = WpssoSchema::get_data_itemprop_from_assoc( $mt_single, array(
+						'value'    => 'product:eligible_quantity:value',
+						'minValue' => 'product:eligible_quantity:min_value',
+						'maxValue' => 'product:eligible_quantity:max_value',
+						'unitCode' => 'product:eligible_quantity:unit_code',
+						'unitText' => 'product:eligible_quantity:unit_text',
 					) );
-
-					if ( false !== $price_spec ) {
-
-						if ( empty( $price_spec[ 'priceCurrency' ] ) ) {	// Make sure we have a price currency.
-
-							$price_spec[ 'priceCurrency' ] = $wpsso->options[ 'og_def_currency' ];
+	
+					if ( false !== $quantity ) {
+	
+						if ( ! isset( $quantity[ 'value' ] ) ) {
+	
+							if ( isset( $quantity[ 'minValue' ] ) && isset( $quantity[ 'maxValue' ] ) &&
+								$quantity[ 'minValue' ] === $quantity[ 'maxValue' ] ) {
+	
+								if ( $wpsso->debug->enabled ) {
+	
+									$wpsso->debug->log( 'identical minValue and maxValue', $quantity );
+								}
+	
+								$quantity[ 'value' ] = $quantity[ 'minValue' ];
+	
+								unset( $quantity[ 'minValue' ], $quantity[ 'maxValue' ] );
+							}
 						}
-
-						$json_ret[ 'priceSpecification' ][] = WpssoSchema::get_schema_type_context( 'https://schema.org/UnitPriceSpecification',
-							$price_spec );
+	
+						$price_spec[ 'eligibleQuantity' ] = WpssoSchema::get_schema_type_context( 'https://schema.org/QuantitativeValue', $quantity );
+					}
+	
+					$json_ret[ 'priceSpecification' ][] = WpssoSchema::get_schema_type_context( 'https://schema.org/UnitPriceSpecification', $price_spec );
+	
+					/*
+					 * If we have an original price (ie. regular or list price), and the original price type is
+					 * different to the current price type, then add the original price as well. Do not add the
+					 * eligible quantity, as the eligible quantity for the current sale (for example) may be different
+					 * than the original eligible quantity.
+					 */
+					if ( ! empty( $mt_single[ 'product:original_price:type' ] ) && $mt_single[ 'product:original_price:type' ] != $mt_single[ 'product:price:type' ] ) {
+	
+						if ( false !== ( $price_spec = WpssoSchema::get_data_itemprop_from_assoc( $mt_single, array(
+							'priceType'             => 'product:original_price:type',
+							'price'                 => 'product:original_price:amount',
+							'priceCurrency'         => 'product:original_price:currency',
+							'valueAddedTaxIncluded' => 'product:price:vat_included',
+						) ) ) ) {
+	
+							/*
+							 * Google only supports the Schem,a StrikethroughPrice type - remove other types like SalePrice or ListPrice.
+							 *
+							 * See https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#sale-pricing-example.
+							 */
+							if ( isset( $price_spec[ 'priceType' ] ) && 'https://schema.org/SalePrice' === $price_spec[ 'priceType' ] ) {
+	
+								unset( $price_spec[ 'priceType' ] );
+							}
+	
+							if ( empty( $price_spec[ 'priceCurrency' ] ) ) {	// Make sure we have a price currency.
+	
+								$price_spec[ 'priceCurrency' ] = $wpsso->options[ 'og_def_currency' ];
+							}
+	
+							$json_ret[ 'priceSpecification' ][] = WpssoSchema::get_schema_type_context( 'https://schema.org/UnitPriceSpecification', $price_spec );
+						}
 					}
 				}
-			}
 
+			} elseif ( $wpsso->debug->enabled ) {
+
+				$wpsso->debug->log( 'skipped schema unit price specification: filter returned false' );
+			}
+	
 			/*
 			 * Schema shippingDetails property.
 			 */

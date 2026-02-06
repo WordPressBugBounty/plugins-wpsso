@@ -242,7 +242,8 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 			 * original number to get all possible videos (from its cache), then maybe limit the number of preview
 			 * images if necessary.
 			 */
-			$max_nums  = $this->p->util->get_max_nums( $mod );
+			$max_nums = $this->p->util->get_max_nums( $mod );
+
 			$mt_videos = $this->get_all_videos( $max_nums[ 'og_vid_max' ], $mod, $md_pre, $force_prev );
 
 			$this->p->util->clear_uniq_urls( $uniq_context = array( 'preview' ), $mod );
@@ -327,7 +328,12 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 
 			$this->p->util->clear_uniq_urls( array( 'video', 'video_details' ), $mod );
 
-			$use_prev = $this->p->options[ 'og_vid_prev_img' ];
+			$add_vid_prev = empty( $this->p->options[ 'og_vid_prev_img' ] ) ? false : true;	// Change value from 0/1 to false/true.
+
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->log( '$add_vid_prev is ' . ( $add_vid_prev ? 'true' : 'false' ) );
+			}
 
 			$num_diff = SucomUtil::array_count_diff( $mt_videos, $num );
 
@@ -339,14 +345,14 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 				/*
 				 * Note that get_options() returns null if an index key is not found.
 				 */
-				if ( ( $mod_prev = $mod[ 'obj' ]->get_options( $mod[ 'id' ], 'og_vid_prev_img' ) ) !== null ) {
-
-					$use_prev = $mod_prev;	// Use true/false/1/0 value from the custom option.
+				if ( ( $mod_vid_prev = $mod[ 'obj' ]->get_options( $mod[ 'id' ], 'og_vid_prev_img' ) ) !== null ) {	// Returns null, 0, or 1.
 
 					if ( $this->p->debug->enabled ) {
 
-						$this->p->debug->log( 'setting use_prev to ' . ( empty( $use_prev ) ? 'false' : 'true' ) . ' from meta data' );
+						$this->p->debug->log( '$mod_vid_prev is ' . ( $mod_vid_prev ? 'true' : 'false' ) );
 					}
+
+					$add_vid_prev = empty( $mod_vid_prev ) ? false : true;	// Change value from 0/1 to false/true.
 				}
 
 				if ( $this->p->debug->enabled ) {
@@ -388,16 +394,16 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 				}
 			}
 
-			$this->p->util->slice_max( $mt_videos, $num );
+			$this->p->util->slice_max( $mt_videos, $num );	// Maybe trim the $mt_videos array.
 
 			/*
 			 * Maybe remove the image meta tags (aka video preview).
 			 */
-			if ( empty( $use_prev ) && empty( $force_prev ) ) {
+			if ( empty( $add_vid_prev ) && empty( $force_prev ) ) {
 
 				if ( $this->p->debug->enabled ) {
 
-					$this->p->debug->log( 'use_prev and force_prev are false - removing video preview images' );
+					$this->p->debug->log( 'removing video preview images: $add_vid_prev and $force_prev are both false' );
 				}
 
 				foreach ( $mt_videos as &$mt_single_video ) {	// Uses reference.
@@ -2615,11 +2621,46 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 					}
 				}
 
+				$mt_single_video[ 'og:video:has_image' ] = false;	// Default.
+
+				/*
+				 * Check for preview image.
+				 */
+				$vid_img_url = '';
+
 				if ( ! empty( $args[ 'prev_url' ] ) ) {
 
-					$mt_single_video[ 'og:video:thumbnail_url' ] = $args[ 'prev_url' ];
+					$vid_img_url = $args[ 'prev_url' ];
+
+				} elseif ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'prev_url missing from args array' );
+				}
+
+				$filter_name = 'wpsso_og_video_image_url';
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'applying filters "' . $filter_name . '" for "' . $vid_img_url . '"' );
+				}
+
+				if ( $vid_img_url = apply_filters( $filter_name, $vid_img_url, $args[ 'url' ] ) ) {
+
+					if ( $this->p->debug->enabled ) {
+
+						$this->p->debug->log( 'adding video preview url = ' . $vid_img_url );
+					}
+
+					if ( SucomUtil::is_https( $vid_img_url ) ) {	// Just in case.
+
+						$mt_single_video[ 'og:image:secure_url' ] = $vid_img_url;
+
+						unset( $mt_single_video[ 'og:image:url' ] );	// Just in case.
+
+					} else $mt_single_video[ 'og:image:url' ] = $vid_img_url;
+
+					$mt_single_video[ 'og:video:thumbnail_url' ] = $vid_img_url;
 					$mt_single_video[ 'og:video:has_image' ]     = true;
-					$mt_single_video[ 'og:image:url' ]           = $args[ 'prev_url' ];
 
 					/*
 					 * Add correct image sizes for the image URL using getimagesize().

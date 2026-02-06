@@ -9,10 +9,10 @@ Assets URI: https://surniaulula.github.io/wpsso/assets/
 Tags: schema, woocommerce, search results, optimize, meta tags
 Contributors: jsmoriss
 Requires PHP: 7.4.33
-Requires At Least: 5.9
-Tested Up To: 6.8.2
-WC Tested Up To: 10.1.2
-Stable Tag: 21.6.0
+Requires At Least: 6.0
+Tested Up To: 6.9
+WC Tested Up To: 10.4.3
+Stable Tag: 21.11.2
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -221,7 +221,6 @@ WPSSO Core and its add-ons can also run in combination with other SEO plugins to
 * [How can I see what the Facebook crawler sees?](https://wpsso.com/docs/plugins/wpsso/faqs/how-can-i-see-what-the-facebook-crawler-sees/)
 * [How do I create a Schema FAQPage?](https://wpsso.com/docs/plugins/wpsso/faqs/how-do-i-create-a-schema-faqpage/)
 * [How do I enable WordPress WP_DEBUG?](https://wpsso.com/docs/plugins/wpsso/faqs/how-do-i-enable-wordpress-wp_debug/)
-* [How do I fix Google Structured Data &gt; hatom errors?](https://wpsso.com/docs/plugins/wpsso/faqs/how-do-i-fix-google-structured-data-hatom-errors/)
 * [How do I remove duplicate meta tags?](https://wpsso.com/docs/plugins/wpsso/faqs/how-do-i-remove-duplicate-meta-tags/)
 * [How does WPSSO Core find and select images?](https://wpsso.com/docs/plugins/wpsso/faqs/how-does-wpsso-find-detect-select-images/)
 * [How does WPSSO Core find and select videos?](https://wpsso.com/docs/plugins/wpsso/faqs/how-does-wpsso-find-detect-select-videos/)
@@ -277,47 +276,59 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
-**Version 21.6.0 (2025/09/30)**
+**Version 21.11.2 (2025/12/25)**
 
 * **New Features**
 	* None.
 * **Improvements**
-	* Updated "Consider Content Images" default value from disabled to enabled.
-	* Updated "Maximum Image Upscale Percent" default value from 10 to 20.
+	* Updated the SSO &gt; Advanced Settings &gt; Attributes and Metadata &gt; Custom Fields &gt; Product GTIN Custom Field default option value to "_global_unique_id" for compatibility with WooCommerce.
 * **Bugfixes**
 	* None.
 * **Developer Notes**
 	* None.
 * **Requires At Least**
 	* PHP v7.4.33.
-	* WordPress v5.9.
+	* WordPress v6.0.
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
-**Version 21.5.1 (2025/08/26)**
+**Version 21.11.1 (2025/12/23)**
 
 * **New Features**
 	* None.
 * **Improvements**
 	* None.
 * **Bugfixes**
-	* Fixed PHP 8.4 warning "implicitly marking parameter as nullable is deprecated" in `SucomErrorException->__construct()`.
+	* Fixed getting the primary category ID for WooCommerce products from Yoast SEO.
 * **Developer Notes**
-	* None.
+	* Added new 'post_primary_tax_slug' and 'post_taxonomies' elements to the `$mod` array.
+	* Added the 'wpsso_primary_term_id' filter to the `WpssoPost->get_default_term_id()` method.
+	* Added support for inline variables to `WpssoIntegDataAbstractSeoMeta->filter_get_post_options()`.
+	* Refactored the `WpssoIntegSeoWpseo->filter_primary_term_id()` method to use the `$tax_slug` value as part of the meta key.
+	* Added a new 'wpsso_primary_term_id_is_custom' filter to the `WpssoPost->get_primary_term_id()` method.
+	* Removed the 'wpsso_default_term_id' filter.
 * **Requires At Least**
 	* PHP v7.4.33.
 	* WordPress v5.9.
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
-**Version 21.5.0 (2025/08/17)**
+**Version 21.11.0 (2025/12/20)**
 
 * **New Features**
 	* None.
 * **Improvements**
-	* Updated Document SSO options help text and French translations.
+	* Added the Schema StrikethroughPrice price type in price specification markup.
+	* Removed the Schema SalePrice and ListPrice price types in price specification markup (no longer supported by Google).
+	* Removed the "Default Product Price Type" option from the SSO &gt; Advanced Settings page.
+	* Updated the add-ons for filter name changes:
+		* WPSSO Schema Breadcrumbs Markup
+		* WPSSO Ratings and Reviews
 * **Bugfixes**
 	* None.
 * **Developer Notes**
-	* None.
+	* Added a new 'wpsso_add_schema_unit_price_specification' filter.
+	* Renamed the 'wpsso_add_custom_post_type_options' filter to 'wpsso_custom_post_type_options'.
+	* Renamed the 'wpsso_add_custom_post_type_archive_options' filter to 'wpsso_custom_post_type_archive_options'.
+	* Renamed the 'wpsso_add_custom_taxonomy_options' filter to 'wpsso_custom_taxonomy_options'.
 * **Requires At Least**
 	* PHP v7.4.33.
 	* WordPress v5.9.
@@ -325,15 +336,15 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 == Upgrade Notice ==
 
-= 21.6.0 =
+= 21.11.2 =
 
-(2025/09/30) Updated "Consider Content Images" and "Maximum Image Upscale Percent" default values.
+(2025/12/25) Updated the SSO &gt; Advanced Settings &gt; Attributes and Metadata &gt; Custom Fields &gt; Product GTIN Custom Field default option value to "_global_unique_id" for compatibility with WooCommerce.
 
-= 21.5.1 =
+= 21.11.1 =
 
-(2025/08/26) Fixed PHP 8.4 warning "implicitly marking parameter as nullable is deprecated" in `SucomErrorException->__construct()`.
+(2025/12/23) Fixed getting the primary category ID for WooCommerce products from Yoast SEO.
 
-= 21.5.0 =
+= 21.11.0 =
 
-(2025/08/17) Updated Document SSO options help text and French translations.
+(2025/12/20) Added Schema StrikethroughPrice and removed SalePrice and ListPrice price types in price specification markup (no longer supported by Google).
 

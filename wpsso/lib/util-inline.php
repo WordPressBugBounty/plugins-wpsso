@@ -54,13 +54,13 @@ if ( ! class_exists( 'WpssoUtilInline' ) ) {
 
 					$this->p->debug->mark();
 				}
-			}
 
-			if ( $local_recursion > 32 ) {	// Just in case.
+			} elseif ( $local_recursion > 32 ) {	// Just in case.
 
 				return $value;
-			}
 
+			}
+			
 			if ( is_array( $value ) ) {
 
 				/*
@@ -89,11 +89,11 @@ if ( ! class_exists( 'WpssoUtilInline' ) ) {
 
 				return $value;
 
-			} elseif ( ! is_string( $value ) ) {
+			} elseif ( ! is_string( $value ) ) {	// Just in case - accept only arrays and strings.
 
 				return $value;
 
-			} elseif ( false === strpos( $value, '%%' ) ) {
+			} elseif ( false === strpos( $value, '%%' ) ) {	// No inline variable.
 
 				return $value;
 			}
@@ -203,7 +203,7 @@ if ( ! class_exists( 'WpssoUtilInline' ) ) {
 			$add_page  = isset( $atts[ 'add_page' ] ) ? $atts[ 'add_page' ] : false;
 			$title_sep = isset( $atts[ 'title_sep' ] ) ? $atts[ 'title_sep' ] : $local_cache[ 'def_title_sep' ];
 
-			if ( 0 === strpos( $varname, 'post' ) ) {
+			if ( 0 === strpos( $varname, 'post' ) ) {	// The inline variable includes 'post' in its name.
 
 				if ( $mod[ 'is_post' ] ) {	// Just in case.
 
@@ -218,6 +218,12 @@ if ( ! class_exists( 'WpssoUtilInline' ) ) {
 
 							break;
 
+						case 'post_description':	// Used by AIOSEOP.
+
+							$ret_val = $this->p->page->get_the_description( $mod );
+
+							break;
+
 						case 'post_modified':
 						case 'post_modified_date':
 
@@ -228,9 +234,9 @@ if ( ! class_exists( 'WpssoUtilInline' ) ) {
 
 							break;
 
-						case 'post_description':	// Used by AIOSEOP.
+						case 'post_primary_tax_slug':
 
-							$ret_val = $this->p->page->get_the_description( $mod );
+							$ret_val = $mod[ 'post_primary_tax_slug' ];
 
 							break;
 
@@ -242,7 +248,7 @@ if ( ! class_exists( 'WpssoUtilInline' ) ) {
 					}
 				}
 
-			} elseif ( 0 === strpos( $varname, 'term' ) ) {
+			} elseif ( 0 === strpos( $varname, 'term' ) ) {	// The inline variable includes 'term' in its name.
 
 				if ( $mod[ 'is_term' ] ) {	// Just in case.
 
@@ -303,7 +309,7 @@ if ( ! class_exists( 'WpssoUtilInline' ) ) {
 					}
 				}
 
-			} elseif ( 0 === strpos( $varname, 'cf_' ) ) {
+			} elseif ( 0 === strpos( $varname, 'cf_' ) ) {	// The inline variable includes 'cf_' in its name.
 
 				if ( $meta_key = substr( $varname, 3 ) ) {	// Just in case.
 

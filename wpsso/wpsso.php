@@ -12,10 +12,10 @@
  * License URI: https://www.gnu.org/licenses/gpl.txt
  * Description: Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
  * Requires PHP: 7.4.33
- * Requires At Least: 5.9
- * Tested Up To: 6.8.2
- * WC Tested Up To: 10.1.2
- * Version: 21.6.0
+ * Requires At Least: 6.0
+ * Tested Up To: 6.9
+ * WC Tested Up To: 10.4.3
+ * Version: 21.11.2
  *
  * Version Numbering: {major}.{minor}.{bugfix}[-{stage}.{level}]
  *
@@ -337,7 +337,8 @@ if ( ! class_exists( 'Wpsso' ) ) {
 					$this->debug->log( 'WP version ' . $wp_version );
 					$this->debug->log( 'WP home URL ' . get_home_url() );
 					$this->debug->log( 'WP site URL ' . get_site_url() );
-					$this->debug->log_arr( 'generator list', $this->check->get_ext_gen_list() );
+					$this->debug->log_arr( 'generator', $this->check->get_ext_gen_list() );
+					$this->debug->log_arr( 'avail', $this->avail );
 				}
 
 			} else $this->debug = new SucomNoDebug();	// Class always loaded in WpssoConfig::require_libs().

@@ -664,11 +664,11 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 
 				if ( 'category' === $tax_slug ) {
 
-					$tax_slug = $this->cat_taxonomy;
+					return $this->cat_taxonomy;
 
 				} elseif ( 'tag' === $tax_slug ) {
 
-					$tax_slug = $this->tag_taxonomy;
+					return $this->tag_taxonomy;
 				}
 			}
 
@@ -715,15 +715,15 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 
 				if ( $mod[ 'id' ] === $this->page_ids[ 'account' ] ) {
 
-					$desc_text = 'Account Page';
+					$desc_text = __( 'My account page', 'woocommerce' );
 
 				} elseif ( $mod[ 'id' ] === $this->page_ids[ 'cart' ] ) {
 
-					$desc_text = 'Shopping Cart';
+					$desc_text = __( 'Cart page', 'woocommerce' );
 
 				} elseif ( $mod[ 'id' ] === $this->page_ids[ 'checkout' ] ) {
 
-					$desc_text = 'Checkout Page';
+					$desc_text = __( 'Checkout page', 'woocommerce' );
 				}
 			}
 
@@ -800,6 +800,14 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 
 			if ( ! SucomUtilWP::is_mod_post_type( $mod, $this->prod_post_type ) ) {
 
+				/*
+				 * Maybe force the schema type for the account, cart, and checkout pages.
+				 */
+				if ( $schema_type = $this->filter_schema_type( null, $mod, $is_custom = false ) ) {
+
+					$md_defs[ 'schema_type' ] = $schema_type;
+				}
+
 				return $md_defs;
 
 			} elseif ( false === ( $product = $this->p->util->wc->get_product( $mod[ 'id' ] ) ) ) {
@@ -845,7 +853,7 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 
 				$md_defs[ 'product_price_type' ]= 'https://schema.org/SalePrice';
 
-			} else $md_defs[ 'product_price_type' ] = $this->p->get_options( 'schema_def_product_price_type', 'https://schema.org/ListPrice' );
+			} else $md_defs[ 'product_price_type' ] = 'https://schema.org/ListPrice';
 
 			$md_defs[ 'product_price' ]            = $product_price_fmtd;
 			$md_defs[ 'product_currency' ]         = $product_currency;
@@ -1482,9 +1490,12 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 					$this->p->debug->log( 'get_regular_price() returned "' . $regular_price . '" (type is ' . gettype( $regular_price ) . ')' );
 				}
 
-				$mt_ecom[ 'product:original_price:type' ]     = $this->p->get_options( 'schema_def_product_price_type', 'https://schema.org/ListPrice' );
-				$mt_ecom[ 'product:original_price:amount' ]   = $regular_price_fmtd;
-				$mt_ecom[ 'product:original_price:currency' ] = $product_currency;
+				if ( '' !== $regular_price_fmtd && $regular_price_fmtd !== $product_price_fmtd ) {
+
+					$mt_ecom[ 'product:original_price:type' ]     = 'https://schema.org/ListPrice';
+					$mt_ecom[ 'product:original_price:amount' ]   = $regular_price_fmtd;
+					$mt_ecom[ 'product:original_price:currency' ] = $product_currency;
+				}
 
 			} elseif ( $this->p->debug->enabled ) {
 
@@ -1498,7 +1509,13 @@ if ( ! class_exists( 'WpssoIntegEcomWooCommerce' ) ) {
 					$this->p->debug->log( 'product is on sale' );
 				}
 
-				$mt_ecom[ 'product:price:type' ] = $mt_ecom[ 'product:sale_price:type' ] = 'https://schema.org/SalePrice';
+				$mt_ecom[ 'product:price:type' ]          = 'https://schema.org/SalePrice';
+				$mt_ecom[ 'product:sale_price:type' ]     = 'https://schema.org/SalePrice';
+
+				if ( ! empty( $mt_ecom[ 'product:original_price:type' ] ) ) {
+
+					$mt_ecom[ 'product:original_price:type' ] = 'https://schema.org/StrikethroughPrice';
+				}
 
 				if ( method_exists( $product, 'get_sale_price' ) ) {
 
