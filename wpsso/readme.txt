@@ -10,9 +10,9 @@ Tags: schema, woocommerce, search results, optimize, meta tags
 Contributors: jsmoriss
 Requires PHP: 7.4.33
 Requires At Least: 6.0
-Tested Up To: 6.9
-WC Tested Up To: 10.5.0
-Stable Tag: 21.11.2
+Tested Up To: 6.9.4
+WC Tested Up To: 10.6.0
+Stable Tag: 21.12.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -276,6 +276,21 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 21.12.0 (2026/03/25)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Added an additional check to ignore an invalid YouTube video ID or URL.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* None.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v6.0.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
 **Version 21.11.2 (2025/12/25)**
 
 * **New Features**
@@ -335,6 +350,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 21.12.0 =
+
+(2026/03/25) Added an additional check to ignore an invalid YouTube video ID or URL.
 
 = 21.11.2 =
 
