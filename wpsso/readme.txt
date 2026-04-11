@@ -11,8 +11,8 @@ Contributors: jsmoriss
 Requires PHP: 7.4.33
 Requires At Least: 6.0
 Tested Up To: 6.9.4
-WC Tested Up To: 10.6.0
-Stable Tag: 21.12.0
+WC Tested Up To: 10.6.2
+Stable Tag: 21.13.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -276,6 +276,24 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 21.13.0 (2026/04/11)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Added new filters to include or exclude additional Schema image sizes (ie. not 1x1):
+		'wpsso_add_image_sizes_schema_4x3'
+		'wpsso_add_image_sizes_schema_16x9'
+		'wpsso_add_image_sizes_schema_thumb'
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v6.0.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
 **Version 21.12.0 (2026/03/25)**
 
 * **New Features**
@@ -350,6 +368,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 21.13.0 =
+
+(2026/04/11) Added new filters to include or exclude additional Schema image sizes (ie. not 1x1).
 
 = 21.12.0 =
 

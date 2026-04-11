@@ -107,7 +107,7 @@ if ( ! class_exists( 'WpssoStdAdminAdvanced' ) ) {
 				$form->get_no_td_checkbox( 'plugin_page_tags' ) .
 				WpssoAdmin::get_option_site_use( 'plugin_page_tags', $form, $args[ 'network' ] );
 
-			$table_rows[ 'plugin_new_user_is_person' ] = '' .
+			$table_rows[ 'plugin_new_user_is_person' ] = $form->get_tr_hide( $in_view = 'basic', 'plugin_new_user_is_person' ) .
 				$form->get_th_html( _x( 'Add Person Role for New Users', 'option label', 'wpsso' ),
 					$css_class = '', $css_id = 'plugin_new_user_is_person' ) .
 				$form->get_no_td_checkbox( 'plugin_new_user_is_person' ) .
@@ -122,16 +122,18 @@ if ( ! class_exists( 'WpssoStdAdminAdvanced' ) ) {
 			$table_rows[ 'plugin_inherit_images' ] = '' .
 				$form->get_th_html( _x( 'Inherit Custom Images', 'option label', 'wpsso' ),
 					$css_class = '', $css_id = 'plugin_inherit_images' ) .
-				$form->get_no_td_checkbox( 'plugin_inherit_images', _x( '(recommended)', 'option comment', 'wpsso' ) ) .
+				$form->get_no_td_checkbox( 'plugin_inherit_images',
+					_x( '(recommended)', 'option comment', 'wpsso' ) ) .
 				WpssoAdmin::get_option_site_use( 'plugin_inherit_featured', $form, $args[ 'network' ] );
 
 			$table_rows[ 'plugin_attached_images' ] = '' .
 				$form->get_th_html( _x( 'Consider Attached Images', 'option label', 'wpsso' ),
 					$css_class = '', $css_id = 'plugin_attached_images' ) .
-				$form->get_no_td_checkbox( 'plugin_attached_images', _x( '(recommended for WooCommerce product gallery images)', 'option comment', 'wpsso' ) ) .
+				$form->get_no_td_checkbox( 'plugin_attached_images',
+					_x( '(recommended for WooCommerce product gallery images)', 'option comment', 'wpsso' ) ) .
 				WpssoAdmin::get_option_site_use( 'plugin_attached_images', $form, $args[ 'network' ] );
 
-			$table_rows[ 'plugin_content_images' ] = '' .
+			$table_rows[ 'plugin_content_images' ] = $form->get_tr_hide( $in_view = 'basic', 'plugin_content_images' ) .
 				$form->get_th_html( _x( 'Consider Content Images', 'option label', 'wpsso' ),
 					$css_class = '', $css_id = 'plugin_content_images' ) .
 				$form->get_no_td_checkbox( 'plugin_content_images' ) .
@@ -140,13 +142,15 @@ if ( ! class_exists( 'WpssoStdAdminAdvanced' ) ) {
 			$table_rows[ 'plugin_check_img_dims' ] = '' .
 				$form->get_th_html( _x( 'Image Dimension Checks', 'option label', 'wpsso' ),
 					$css_class = '', $css_id = 'plugin_check_img_dims' ) .
-				$form->get_no_td_checkbox( 'plugin_check_img_dims', _x( '(recommended)', 'option comment', 'wpsso' ) ) .
+				$form->get_no_td_checkbox( 'plugin_check_img_dims',
+					_x( '(recommended)', 'option comment', 'wpsso' ) ) .
 				WpssoAdmin::get_option_site_use( 'plugin_check_img_dims', $form, $args[ 'network' ] );
 
-			$table_rows[ 'plugin_prevent_thumb_conflicts' ] = $form->get_tr_hide( $in_view = 'basic', 'plugin_prevent_thumb_conflicts' ) .
+			$table_rows[ 'plugin_prevent_thumb_conflicts' ] = '' .
 				$form->get_th_html( _x( 'Prevent Thumbnail Conflicts', 'option label', 'wpsso' ),
 					$css_class = '', $css_id = 'plugin_prevent_thumb_conflicts' ) .
-				$form->get_no_td_checkbox( 'plugin_prevent_thumb_conflicts', _x( '(recommended)', 'option comment', 'wpsso' ) ) .
+				$form->get_no_td_checkbox( 'plugin_prevent_thumb_conflicts',
+					_x( '(recommended)', 'option comment', 'wpsso' ) ) .
 				WpssoAdmin::get_option_site_use( 'plugin_prevent_thumb_conflicts', $form, $args[ 'network' ] );
 
 			$table_rows[ 'plugin_upscale_images' ] = '' .
@@ -434,25 +438,34 @@ if ( ! class_exists( 'WpssoStdAdminAdvanced' ) ) {
 					$css_class = '', $css_id = 'pin_img_size' ) .
 				'<td class="blank">' . $form->get_no_input_image_dimensions( 'pin_img', $pin_img_disabled ) . $pin_img_msg . '</td>';
 
-			$table_rows[ 'schema_01x01_img_size' ] = '' .
+			$table_rows[ 'schema_01_01_img_size' ] = '' .
 				$form->get_th_html( _x( 'Schema 1:1 (Google Rich Results)', 'option label', 'wpsso' ),
 					$css_class = '', $css_id = 'schema_1x1_img_size' ) .
 				'<td class="blank">' . $form->get_no_input_image_dimensions( 'schema_1x1_img' ) . '</td>';
 
-			$table_rows[ 'schema_04x03_img_size' ] = '' .
-				$form->get_th_html( _x( 'Schema 4:3 (Google Rich Results)', 'option label', 'wpsso' ),
-					$css_class = '', $css_id = 'schema_4x3_img_size' ) .
-				'<td class="blank">' . $form->get_no_input_image_dimensions( 'schema_4x3_img' ) . '</td>';
+			if ( apply_filters( 'wpsso_add_image_sizes_schema_4x3', true ) ) {
 
-			$table_rows[ 'schema_16x09_img_size' ] = '' .
-				$form->get_th_html( _x( 'Schema 16:9 (Google Rich Results)', 'option label', 'wpsso' ),
-					$css_class = '', $css_id = 'schema_16x9_img_size' ) .
-				'<td class="blank">' . $form->get_no_input_image_dimensions( 'schema_16x9_img' ) . '</td>';
+				$table_rows[ 'schema_04_03_img_size' ] = '' .
+					$form->get_th_html( _x( 'Schema 4:3 (Google Rich Results)', 'option label', 'wpsso' ),
+						$css_class = '', $css_id = 'schema_4x3_img_size' ) .
+					'<td class="blank">' . $form->get_no_input_image_dimensions( 'schema_4x3_img' ) . '</td>';
+			}
 
-			$table_rows[ 'schema_thumb_img_size' ] = '' .
-				$form->get_th_html( _x( 'Schema Thumbnail', 'option label', 'wpsso' ),
-					$css_class = '', $css_id = 'schema_thumb_img_size' ) .
-				'<td class="blank">' . $form->get_no_input_image_dimensions( 'thumb_img' ) . '</td>';
+			if ( apply_filters( 'wpsso_add_image_sizes_schema_16x9', true ) ) {
+
+				$table_rows[ 'schema_16_09_img_size' ] = '' .
+					$form->get_th_html( _x( 'Schema 16:9 (Google Rich Results)', 'option label', 'wpsso' ),
+						$css_class = '', $css_id = 'schema_16x9_img_size' ) .
+					'<td class="blank">' . $form->get_no_input_image_dimensions( 'schema_16x9_img' ) . '</td>';
+			}
+
+			if ( apply_filters( 'wpsso_add_image_sizes_schema_thumb', true ) ) {
+
+				$table_rows[ 'schema_thumb_img_size' ] = '' .
+					$form->get_th_html( _x( 'Schema Thumbnail', 'option label', 'wpsso' ),
+						$css_class = '', $css_id = 'schema_thumb_img_size' ) .
+					'<td class="blank">' . $form->get_no_input_image_dimensions( 'thumb_img' ) . '</td>';
+			}
 
 			$table_rows[ 'tc_00_sum_img_size' ] = '' .
 				$form->get_th_html( _x( 'X (Twitter) Summary Card', 'option label', 'wpsso' ),
