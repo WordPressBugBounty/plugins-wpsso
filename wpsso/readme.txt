@@ -3,8 +3,8 @@ Plugin Name: WPSSO Core
 Plugin Slug: wpsso
 Text Domain: wpsso
 Domain Path: /languages
-License: GPLv3
-License URI: https://www.gnu.org/licenses/gpl.txt
+License: Nontransferable License for WordPress Site Address URL
+License URI: https://wpsso.com/wp-content/plugins/wpsso/license/premium.txt
 Assets URI: https://surniaulula.github.io/wpsso/assets/
 Tags: schema, woocommerce, search results, optimize, meta tags
 Contributors: jsmoriss
@@ -276,6 +276,21 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 21.13.3 (2026/04/27)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* Fixed `Call to a member function pro_feature_video_found_notice() on null` error in the WPSSO Core Standard version.
+* **Developer Notes**
+	* None.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v6.0.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
 **Version 21.13.2 (2026/04/20)**
 
 * **New Features**
@@ -325,6 +340,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 21.13.3 =
+
+(2026/04/27) Fixed `Call to a member function pro_feature_video_found_notice() on null` error in the WPSSO Core Standard version.
 
 = 21.13.2 =
 

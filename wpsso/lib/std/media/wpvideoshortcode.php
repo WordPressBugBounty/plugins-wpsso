@@ -71,22 +71,12 @@ if ( ! class_exists( 'WpssoStdMediaWpvideoshortcode' ) ) {
 
 				if ( $this->p->debug->enabled ) {
 
-					$this->p->debug->log( count( $all_matches ).' x <video/> WordPress video shortcode tag(s) found' );
+					$this->p->debug->log( 'WordPress shortcode video URL found but no video API modules' );
 				}
 
-				foreach ( $all_matches as $media ) {
+				if ( $this->p->notice->is_admin_pre_notices() ) {
 
-					$video_url = remove_query_arg( '_', $media[ 2 ] );	// Remove the instance id.
-
-					if ( $this->p->debug->enabled ) {
-
-						$this->p->debug->log( 'found video URL: ' . $video_url );
-					}
-
-					if ( $this->p->notice->is_admin_pre_notices() ) {
-
-						$this->p->msgs->pro_feature_video_found_notice( _x( 'WordPress shortcode', 'video service name', 'wpsso' ), $mod );
-					}
+					$this->p->msgs->pro_feature_video_found_notice( _x( 'WordPress shortcode', 'video service name', 'wpsso' ), $mod );
 				}
 
 			} elseif ( $this->p->debug->enabled ) {
