@@ -3,7 +3,7 @@ Plugin Name: WPSSO Core
 Plugin Slug: wpsso
 Text Domain: wpsso
 Domain Path: /languages
-License: Nontransferable License for WordPress Site Address URL
+License: GPLv3
 License URI: https://wpsso.com/wp-content/plugins/wpsso/license/premium.txt
 Assets URI: https://surniaulula.github.io/wpsso/assets/
 Tags: schema, woocommerce, search results, optimize, meta tags
@@ -12,7 +12,7 @@ Requires PHP: 7.4.33
 Requires At Least: 6.0
 Tested Up To: 6.9.4
 WC Tested Up To: 10.6.2
-Stable Tag: 21.13.2
+Stable Tag: 22.0.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -246,13 +246,7 @@ WPSSO Core and its add-ons can also run in combination with other SEO plugins to
 
 == Changelog ==
 
-<h3 class="top">Release Schedule</h3>
-
-<p>New versions of the plugin are released approximately every week (more or less). New features are added, tested, and released incrementally, instead of grouping them together in a major version release. When minor bugs fixes and/or code improvements are applied, new versions are also released. This release schedule keeps the code stable and reliable, at the cost of more frequent updates.</p>
-
-<p>See <a href="https://en.wikipedia.org/wiki/Release_early,_release_often">release early, release often (RERO) software development philosophy</a> on Wikipedia for more information on the benefits of smaller / more frequent releases.</p>
-
-<h3>Version Numbering</h3>
+<h3 class="top">Version Numbering</h3>
 
 Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
@@ -275,6 +269,34 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 <p><strong>WPSSO Core Standard edition users (ie. the plugin hosted on WordPress.org) have access to <a href="https://wordpress.org/plugins/wpsso/advanced/">the latest development version under the Advanced Options section</a>.</strong></p>
 
 <h3>Changelog / Release Notes</h3>
+
+**Version 22.0.0 (2026/05/01)**
+
+WPSSO Core can reduce its use of the WordPress transients cache (used by plugins and themes to store temporary data) for meta tags and Schema markup when a full webpage caching plugin or service is detected.
+
+* **New Features**
+	* Added a new "Cache Plugin or Service is Active" option under the SSO &gt; Advanced Settings &gt; Plugin Settings metabox &gt; Integration tab. If one of the following cache plugins is active, the new "Cache Plugin or Service is Active" option value will be enabled by default:
+		* Cache Enabler
+		* Comet Cache
+		* Hummingbird Cache
+		* LiteSpeed Cache
+		* Pagely Cache
+		* SiteGround Cache
+		* W3 Total Cache
+		* WP Engine Cache
+		* WP Fastest Cache
+		* WP Rocket Cache
+		* WP Super Cache
+* **Improvements**
+	* Changed the meta tags and Schema markup default cache expiration from 1 month to 1 week, and 1 hour if a caching plugin is detected.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Added a new `__return_half_hour_in_seconds()` function.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v6.0.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 **Version 21.13.3 (2026/04/27)**
 
@@ -340,6 +362,10 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 22.0.0 =
+
+(2026/05/01) Changed the meta tags and Schema markup default cache expiration from 1 month to 1 week, and 1 hour if a caching plugin is detected. Added a new "Cache Plugin or Service is Active" option.
 
 = 21.13.3 =
 

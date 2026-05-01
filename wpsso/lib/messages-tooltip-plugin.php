@@ -244,6 +244,12 @@ if ( ! class_exists( 'WpssoMessagesTooltipPlugin' ) ) {
 
 					break;
 
+				case 'tooltip-plugin_page_cache_active':	// Cache Plugin or Service is Active.
+
+					$text .= sprintf( __( '%1$s can reduce its use of the WordPress transients cache (used by plugins and themes to store temporary data) for meta tags and Schema markup when a full webpage caching plugin or service is active.', 'wpsso' ), $this->p_name ) . ' ';
+
+					break;
+
 				case 'tooltip-plugin_product_include_vat':	// Include VAT in Product Prices.
 
 					$text = __( 'Retrieve product prices from e-Commerce plugins with VAT included.', 'wpsso' ) . ' ';
