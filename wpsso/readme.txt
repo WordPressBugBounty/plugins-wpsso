@@ -10,9 +10,9 @@ Tags: schema, woocommerce, search results, optimize, meta tags
 Contributors: jsmoriss
 Requires PHP: 7.4.33
 Requires At Least: 6.0
-Tested Up To: 6.9.4
-WC Tested Up To: 10.6.2
-Stable Tag: 22.0.0
+Tested Up To: 7.0
+WC Tested Up To: 10.7.0
+Stable Tag: 22.1.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -270,6 +270,21 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 22.1.0 (2026/05/20)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* CSS update for new WordPress 7.0 styling.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* None.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v6.0.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
 **Version 22.0.0 (2026/05/01)**
 
 WPSSO Core can reduce its use of the WordPress transients cache (used by plugins and themes to store temporary data) for meta tags and Schema markup when a full webpage caching plugin or service is detected.
@@ -362,6 +377,10 @@ WPSSO Core can reduce its use of the WordPress transients cache (used by plugins
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 22.1.0 =
+
+(2026/05/20) CSS update for new WordPress 7.0 styling.
 
 = 22.0.0 =
 
