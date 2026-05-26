@@ -81,7 +81,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			 */
 			$json_ret = WpssoSchema::get_schema_type_context( $type_url );
 
-			WpssoSchema::add_data_itemprop_from_assoc( $json_ret, $book_opts, array(
+			WpssoSchema::add_data_itemprop_from_assoc( $json_ret, $book_opts, array(	// Returns the number of properties added.
 				'isbn'          => 'book_isbn',
 				'bookFormat'    => 'book_format',
 				'bookEdition'   => 'book_edition',
@@ -92,18 +92,21 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			 * The author type value should be either 'organization' or 'person'.
 			 */
 			if ( WpssoSchema::is_valid_key( $book_opts, 'book_author_type' ) ) {	// Not null, an empty string, or 'none'.
-
-				$author_type_url = $wpsso->schema->get_schema_type_url( $book_opts[ 'book_author_type' ] );
-
-				$json_ret[ 'author' ] = WpssoSchema::get_schema_type_context( $author_type_url );
-
-				WpssoSchema::add_data_itemprop_from_assoc( $json_ret[ 'author' ], $book_opts, array(
+				
+				/*
+				 * At a minimum, we need an author name.
+				 */
+				if ( WpssoSchema::add_data_itemprop_from_assoc( $json_ret[ 'author' ], $book_opts, array(	// Returns the number of properties added.
 					'name' => 'book_author_name',
-				) );
+				) ) ) {
+					$author_type_url = $wpsso->schema->get_schema_type_url( $book_opts[ 'book_author_type' ] );
+				
+					$json_ret[ 'author' ] = WpssoSchema::get_schema_type_context( $author_type_url );
 
-				if ( ! empty( $book_opts[ 'book_author_url' ] ) ) {
+					if ( ! empty( $book_opts[ 'book_author_url' ] ) ) {
 
-					$json_ret[ 'author' ][ 'sameAs' ][] = SucomUtil::esc_url_encode( $book_opts[ 'book_author_url' ] );
+						$json_ret[ 'author' ][ 'sameAs' ][] = SucomUtil::esc_url_encode( $book_opts[ 'book_author_url' ] );
+					}
 				}
 
 			} elseif ( $wpsso->debug->enabled ) {
@@ -284,7 +287,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * Add schema properties from the contact options.
 			 */
-			WpssoSchema::add_data_itemprop_from_assoc( $json_ret, $contact_opts, array(
+			WpssoSchema::add_data_itemprop_from_assoc( $json_ret, $contact_opts, array(	// Returns the number of properties added.
 				'url'           => 'contact_url',
 				'name'          => 'contact_name',
 				'alternateName' => 'contact_name_alt',
@@ -305,7 +308,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			 */
 			if ( $wpsso->schema->is_schema_type_child( $type_id, 'postal.address' ) ) {
 
-				WpssoSchema::add_data_itemprop_from_assoc( $json_ret, $contact_opts, array(
+				WpssoSchema::add_data_itemprop_from_assoc( $json_ret, $contact_opts, array(	// Returns the number of properties added.
 					'streetAddress'       => 'contact_street_address',
 					'postOfficeBoxNumber' => 'contact_po_box_number',
 					'addressLocality'     => 'contact_city',
@@ -3453,10 +3456,9 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			$wpsso =& Wpsso::get_instance();
 
 			$hours_rel          = isset( $opts[ $opt_prefix . '_rel' ] ) ? $opts[ $opt_prefix . '_rel' ] : '';
-			$business_weekdays  = $wpsso->cf[ 'form' ][ 'weekdays' ];
 			$opening_hours_spec = array();
 
-			foreach ( $business_weekdays as $day_name => $day_label ) {
+			foreach ( $wpsso->cf[ 'form' ][ 'weekdays' ] as $day_key => $day_label ) {
 
 				/*
 				 * Returns an empty array or an associative array of open => close hours, including a timezone offset.
@@ -3469,10 +3471,10 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 				 */
 				$open_close = self::get_open_close_pairs(
 					$opts,
-					$opt_prefix . '_day_' . $day_name . '_open',
+					$opt_prefix . '_day_' . $day_key . '_open',
 					$opt_prefix . '_midday_close',
 					$opt_prefix . '_midday_open',
-					$opt_prefix . '_day_' . $day_name . '_close',
+					$opt_prefix . '_day_' . $day_key . '_close',
 					$opt_prefix . '_timezone'
 				);
 
@@ -3483,7 +3485,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 						$weekday_spec = array(
 							'@context'  => 'https://schema.org',
 							'@type'     => 'OpeningHoursSpecification',
-							'dayOfWeek' => $day_label,
+							'dayOfWeek' => $wpsso->cf[ 'form' ][ 'day_of_week' ][ $day_key ],
 							'opens'     => $open,
 							'closes'    => $close,
 						);
@@ -3528,13 +3530,13 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			$is_valid_open_close = false;
 			$is_valid_midday     = false;
 
-			if ( ! empty( $opts[ $key_day_o ] ) && ! empty( $opts[ $key_day_c ] ) ) {
+			if ( isset( $opts[ $key_day_o ] ) && isset( $opts[ $key_day_c ] ) ) {
 
 				$is_valid_open_close = self::is_valid_open_close( $opts[ $key_day_o ], $opts[ $key_day_c ] );
 
-				if ( ! empty( $opts[ $key_midday_c ] ) && ! empty( $opts[ $key_midday_o ] ) ) {
+				if ( isset( $opts[ $key_midday_c ] ) && isset( $opts[ $key_midday_o ] ) ) {
 
-					$is_valid_midday = self::is_valid_midday( $opts[ $key_day_o ], $opts[ $key_midday_c ], $opts[ $key_midday_o ], $opts[ $key_day_c ] );
+					$is_valid_midday = self::is_valid_midday( $opts[ $key_midday_c ], $opts[ $key_midday_o ] );
 				}
 
 				if ( $is_valid_open_close ) {
@@ -3561,57 +3563,27 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 		private static function is_valid_open_close( $hm_o, $hm_c ) {
 
-			/*
-			 * Performa a quick sanitation before using strtotime().
-			 */
 			if ( empty( $hm_o ) || empty( $hm_c ) || 'none' === $hm_o || 'none' === $hm_c ) {
 
 				return false;
 			}
 
-			$hm_o_time = strtotime( $hm_o );
-			$hm_c_time = strtotime( $hm_c );
-
-			if ( $hm_o_time < $hm_c_time ) {
-
-				return true;
-			}
-
-			return false;
+			return true;
 		}
 
-		/*
-		 * Checks for 'none' and invalid times for midday close and open.
-		 */
-		public static function is_valid_midday( $hm_o, $hm_midday_c, $hm_midday_o, $hm_c ) {
-
-			/*
-			 * Performa a quick sanitation before using strtotime().
-			 */
-			if ( empty( $hm_o ) || empty( $hm_c ) || 'none' === $hm_o || 'none' === $hm_c ) {
-
-				return false;
-			}
+		public static function is_valid_midday( $hm_midday_c, $hm_midday_o ) {
 
 			if ( empty( $hm_midday_c ) || empty( $hm_midday_o ) || 'none' === $hm_midday_c || 'none' === $hm_midday_o ) {
 
 				return false;
 			}
 
-			$hm_o_time        = strtotime( $hm_o );
 			$hm_midday_c_time = strtotime( $hm_midday_c );
 			$hm_midday_o_time = strtotime( $hm_midday_o );
-			$hm_c_time        = strtotime( $hm_c );
 
-			if ( $hm_o_time < $hm_midday_c_time ) {
+			if ( $hm_midday_c_time < $hm_midday_o_time ) {
 
-				if ( $hm_midday_c_time < $hm_midday_o_time ) {
-
-					if ( $hm_midday_o_time < $hm_c_time ) {
-
-						return true;
-					}
-				}
+				return true;
 			}
 
 			return false;

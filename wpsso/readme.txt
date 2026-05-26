@@ -12,7 +12,7 @@ Requires PHP: 7.4.33
 Requires At Least: 6.0
 Tested Up To: 7.0
 WC Tested Up To: 10.7.0
-Stable Tag: 22.1.2
+Stable Tag: 22.1.3
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -270,6 +270,22 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 22.1.3 (2026/05/26)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* Fixed the "Opening Hours Information" check for opening time on one day and closing time the next day.
+	* Fixed "Public Holiday" day of week value to `https://schema.org/PublicHoliday` in Schema markup.
+* **Developer Notes**
+	* None.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v6.0.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
 **Version 22.1.2 (2026/05/23)**
 
 * **New Features**
@@ -344,70 +360,11 @@ WPSSO Core can reduce its use of the WordPress transients cache (used by plugins
 	* WordPress v6.0.
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
-**Version 21.13.3 (2026/04/27)**
-
-* **New Features**
-	* None.
-* **Improvements**
-	* None.
-* **Bugfixes**
-	* Fixed `Call to a member function pro_feature_video_found_notice() on null` error in the WPSSO Core Standard version.
-* **Developer Notes**
-	* None.
-* **Requires At Least**
-	* PHP v7.4.33.
-	* WordPress v6.0.
-	* WPSSO Update Manager v7.2.0 (for Premium edition).
-
-**Version 21.13.2 (2026/04/20)**
-
-* **New Features**
-	* None.
-* **Improvements**
-	* None.
-* **Bugfixes**
-	* None.
-* **Developer Notes**
-	* Fixed case statements followed by semicolon in `WpssoUtilUnits->get_mixed_type()`.
-* **Requires At Least**
-	* PHP v7.4.33.
-	* WordPress v6.0.
-	* WPSSO Update Manager v7.2.0 (for Premium edition).
-
-**Version 21.13.1 (2026/04/15)**
-
-* **New Features**
-	* None.
-* **Improvements**
-	* Changed the default "Review Comment Title" option value from 'Review by %%comment_author%% on %%comment_date%%' to 'Review by %%comment_author%%'
-* **Bugfixes**
-	* None.
-* **Developer Notes**
-	* Fixed `WpssoErrorException::__construct(): Implicitly marking parameter $previous as nullable is deprecated` warning for PHP v8.4.
-* **Requires At Least**
-	* PHP v7.4.33.
-	* WordPress v6.0.
-	* WPSSO Update Manager v7.2.0 (for Premium edition).
-
-**Version 21.13.0 (2026/04/11)**
-
-* **New Features**
-	* None.
-* **Improvements**
-	* None.
-* **Bugfixes**
-	* None.
-* **Developer Notes**
-	* Added new filters to include or exclude additional Schema image sizes (ie. not 1x1):
-		* 'wpsso_add_image_sizes_schema_4x3'
-		* 'wpsso_add_image_sizes_schema_16x9'
-		* 'wpsso_add_image_sizes_schema_thumb'
-* **Requires At Least**
-	* PHP v7.4.33.
-	* WordPress v6.0.
-	* WPSSO Update Manager v7.2.0 (for Premium edition).
-
 == Upgrade Notice ==
+
+= 22.1.3 =
+
+(2026/05/26) Fixed the "Opening Hours Information" check for opening time on one day and closing time the next day. Fixed "Public Holiday" day of week value to `https://schema.org/PublicHoliday` in Schema markup.
 
 = 22.1.2 =
 
@@ -424,20 +381,4 @@ WPSSO Core can reduce its use of the WordPress transients cache (used by plugins
 = 22.0.0 =
 
 (2026/05/01) Changed the meta tags and Schema markup default cache expiration from 1 month to 1 week, and 1 hour if a caching plugin is detected. Added a new "Cache Plugin or Service is Active" option.
-
-= 21.13.3 =
-
-(2026/04/27) Fixed `Call to a member function pro_feature_video_found_notice() on null` error in the WPSSO Core Standard version.
-
-= 21.13.2 =
-
-(2026/04/20) Fixed case statements followed by semicolon in `WpssoUtilUnits->get_mixed_type()`.
-
-= 21.13.1 =
-
-(2026/04/15) Changed the default "Review Comment Title" option value. Fixed `WpssoErrorException::__construct(): Implicitly marking parameter $previous as nullable is deprecated` warning for PHP v8.4.
-
-= 21.13.0 =
-
-(2026/04/11) Added new filters to include or exclude additional Schema image sizes (ie. not 1x1).
 
