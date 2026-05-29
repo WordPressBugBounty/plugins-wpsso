@@ -280,7 +280,7 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 
 						 	break;
 
-						case 'tooltip-meta-schema_book_pages':		// Number of Pages.
+						case 'tooltip-meta-schema_book_pages':		// Book Pages.
 
 							$text = __( 'The number of pages in the book.', 'wpsso' );
 
@@ -289,6 +289,12 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 						case 'tooltip-meta-schema_book_isbn':		// Book ISBN.
 
 							$text = __( 'The ISBN code (aka International Standard Book Number) of the book.', 'wpsso' );
+
+						 	break;
+
+						case 'tooltip-meta-schema_book_offers':		// Book Offers.
+
+							$text = __( 'One or more offers for the book, including the offer name, price and currency.', 'wpsso' );
 
 						 	break;
 

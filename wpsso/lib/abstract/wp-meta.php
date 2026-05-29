@@ -564,19 +564,31 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 					/*
 					 * Schema Book.
 					 */
-					'schema_book_author_type'      => 'none',				// Book Author Type.
-					'schema_book_author_name'      => '',					// Book Author Name.
-					'schema_book_author_url'       => '',					// Book Author URL.
-					'schema_book_pub_date'         => '',					// Book Published Date (Y-m-d).
-					'schema_book_pub_time'         => 'none',				// Book Published Time (H:i).
-					'schema_book_pub_timezone'     => $def_timezone,			// Book Published Timezone.
-					'schema_book_created_date'     => '',					// Book Created Date (Y-m-d).
-					'schema_book_created_time'     => 'none',				// Book Created Time (H:i).
-					'schema_book_created_timezone' => $def_timezone,			// Book Created Timezone.
-					'schema_book_edition'          => '',					// Book Edition.
-					'schema_book_format'           => $opts[ 'schema_def_book_format' ],	// Book Format.
-					'schema_book_pages'            => '',					// Number of Pages.
-					'schema_book_isbn'             => '',					// Book ISBN.
+					'schema_book_author_type'      => $opts[ 'schema_def_book_author_type' ],	// Book Author Type.
+					'schema_book_author_name'      => '',						// Book Author Name.
+					'schema_book_author_url'       => '',						// Book Author URL.
+					'schema_book_pub_date'         => '',						// Book Published Date (Y-m-d).
+					'schema_book_pub_time'         => 'none',					// Book Published Time (H:i).
+					'schema_book_pub_timezone'     => $def_timezone,				// Book Published Timezone.
+					'schema_book_created_date'     => '',						// Book Created Date (Y-m-d).
+					'schema_book_created_time'     => 'none',					// Book Created Time (H:i).
+					'schema_book_created_timezone' => $def_timezone,				// Book Created Timezone.
+					'schema_book_edition'          => '',						// Book Edition.
+					'schema_book_format'           => $opts[ 'schema_def_book_format' ],		// Book Format.
+					'schema_book_pages'            => '',						// Book Pages.
+					'schema_book_isbn'             => '',						// Book ISBN.
+					'schema_book_offer_name_0'     => '',
+					'schema_book_offer_name_1'     => '',
+					'schema_book_offer_name_2'     => '',
+					'schema_book_offer_price_0'    => '',
+					'schema_book_offer_price_1'    => '',
+					'schema_book_offer_price_2'    => '',
+					'schema_book_offer_currency_0' => $def_currency,
+					'schema_book_offer_currency_1' => $def_currency,
+					'schema_book_offer_currency_2' => $def_currency,
+					'schema_book_offer_avail_0'    => 'https://schema.org/InStock',
+					'schema_book_offer_avail_1'    => 'https://schema.org/InStock',
+					'schema_book_offer_avail_2'    => 'https://schema.org/InStock',
 
 					/*
 					 * Schema Book > Audiobook.
@@ -902,6 +914,18 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 					'schema_service_latitude'             => '',						// Service Latitude.
 					'schema_service_longitude'            => '',						// Service Longitude.
 					'schema_service_radius'               => '',						// Service Radius.
+					'schema_service_offer_name_0'         => '',
+					'schema_service_offer_name_1'         => '',
+					'schema_service_offer_name_2'         => '',
+					'schema_service_offer_price_0'        => '',
+					'schema_service_offer_price_1'        => '',
+					'schema_service_offer_price_2'        => '',
+					'schema_service_offer_currency_0'     => $def_currency,
+					'schema_service_offer_currency_1'     => $def_currency,
+					'schema_service_offer_currency_2'     => $def_currency,
+					'schema_service_offer_avail_0'        => 'https://schema.org/InStock',
+					'schema_service_offer_avail_1'        => 'https://schema.org/InStock',
+					'schema_service_offer_avail_2'        => 'https://schema.org/InStock',
 					'schema_service_offer_catalog_0'      => '',						// Offer Catalog Name.
 					'schema_service_offer_catalog_1'      => '',						// Offer Catalog Name.
 					'schema_service_offer_catalog_2'      => '',						// Offer Catalog Name.

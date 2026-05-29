@@ -11,8 +11,8 @@ Contributors: jsmoriss
 Requires PHP: 7.4.33
 Requires At Least: 6.0
 Tested Up To: 7.0
-WC Tested Up To: 10.7.0
-Stable Tag: 22.1.3
+WC Tested Up To: 10.8.1
+Stable Tag: 22.2.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -26,7 +26,7 @@ Present your content at its best for social sites and search results, no matter 
 
 <p><strong>The most comprehensive and accurate Schema markup plugin for WooCommerce products.</strong></p>
 
-<p>Supports over 500 different Schema types and sub-types (including Schema Event, Product Group, and the Service type for WooCommerce products).</p>
+<p>Supports over 500 different Schema types and sub-types (including WooCommerce offers for Schema Books, Events, Products, Product Groups, and Services).</p>
 
 <p><strong>Provides complete Schema markup and meta tags for:</strong></p>
 
@@ -127,6 +127,8 @@ Present your content at its best for social sites and search results, no matter 
 
 <p><strong>Supports additional WooCommerce product attributes:</strong></p>
 
+* Book Author Name
+* Book ISBN
 * Product Adult Type
 * Product Age Group
 * Product Availability
@@ -270,6 +272,38 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 22.2.0 (2026/05/29)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Added an offers property to the Schema Book markup.
+	* Added a new option under the SSO &gt; Advanced Settings &gt; Schema Defaults &gt; Book tab:
+		* Default Book Author Type
+	* Added new options under the SSO &gt; Advanced Settings &gt; Attributes and Metadata &gt; Product Attributes tab:
+		* Book Author Name Attribute
+		* Book ISBN Attribute
+	* Added new options in the Document SSO metabox &gt; Edit Schema &gt; Book Information section:
+		* Book Offers:
+			* Offer Name
+			* Offer Price
+			* Offer Currency
+			* Offer Availability
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Added new methods:
+		* `WpssoSchema::add_type_data_offers()`
+		* `WpssoSchema::add_type_opts_offers()`
+	* Refactored methods:
+		* `WpssoSchemaSingle::add_book_data()`
+		* `WpssoSchemaSingle::add_event_data()`
+		* `WpssoSchemaSingle::add_service_data()`
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v6.0.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
 **Version 22.1.3 (2026/05/26)**
 
 * **New Features**
@@ -361,6 +395,10 @@ WPSSO Core can reduce its use of the WordPress transients cache (used by plugins
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 22.2.0 =
+
+(2026/05/29) Added an offers property to the Schema Book markup. Added Schema Book related options in the Document SSO metabox and the SSO &gt; Advanced Settings page.
 
 = 22.1.3 =
 

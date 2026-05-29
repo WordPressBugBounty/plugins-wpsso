@@ -62,10 +62,16 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			}
 
 			/*
+			 * Add metadata defaults and custom values to the $book_opts array.
+			 *
+			 * Automatically renames 'schema_book_*' options from the Document SSO metabox to 'book_*'.
+			 */
+			WpssoSchema::add_type_opts_md_pad( $book_opts, $mod, array( 'book' => 'schema_book' ) );
+
+			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
-			list( $type_id, $type_url ) = self::get_type_info( $json_data, $book_opts,
-				$opt_key = 'book_type', $def_type_id, $list_el );
+			list( $type_id, $type_url ) = self::get_data_types( $json_data, $book_opts, $opt_key = 'book_type', $def_type_id, $list_el );
 
 			/*
 			 * Maybe remove values related to the WordPress post object.
@@ -101,7 +107,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 				) ) ) {
 					$author_type_url = $wpsso->schema->get_schema_type_url( $book_opts[ 'book_author_type' ] );
 				
-					$json_ret[ 'author' ] = WpssoSchema::get_schema_type_context( $author_type_url );
+					WpssoSchema::add_schema_type_context( $author_type_url, $json_ret[ 'author' ] );
 
 					if ( ! empty( $book_opts[ 'book_author_url' ] ) ) {
 
@@ -135,6 +141,11 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			}
 
 			/*
+			 * Add book offers.
+			 */
+			WpssoSchema::add_type_data_offers( $json_ret, $mod, $book_opts, $book_id, 'book' );
+
+			/*
 			 * Add or replace the json data.
 			 */
 			self::add_or_replace_data( $json_data, $json_ret, $list_el );
@@ -165,8 +176,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
-			list( $type_id, $type_url ) = self::get_type_info( $json_data, $type_opts = false,
-				$opt_key = false, $def_type_id = 'comment', $list_el );
+			list( $type_id, $type_url ) = self::get_data_types( $json_data, $type_opts = false, $opt_key = false, $def_type_id = 'comment', $list_el );
 
 			/*
 			 * Begin schema comment markup creation.
@@ -276,8 +286,8 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
-			list( $type_id, $type_url ) = self::get_type_info( $json_data, $contact_opts,
-				$opt_key = 'contact_schema_type', $def_type_id = 'contact.point', $list_el );
+			list( $type_id, $type_url ) = self::get_data_types( $json_data, $contact_opts, $opt_key = 'contact_schema_type',
+				$def_type_id = 'contact.point', $list_el );
 
 			/*
 			 * Begin schema contact markup creation.
@@ -399,87 +409,9 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			) );
 
 			/*
-			 * Add event offers.
-			 */
-			if ( $wpsso->debug->enabled ) {
-
-				$wpsso->debug->log( 'checking for custom event offers' );
-			}
-
-			$have_offers   = false;
-			$md_offers_max = SucomUtil::get_const( 'WPSSO_SCHEMA_METADATA_OFFERS_MAX' );
-			$canonical_url = $wpsso->util->get_canonical_url( $mod );
-
-			foreach ( range( 0, $md_offers_max - 1, 1 ) as $key_num ) {
-
-				$offer_opts = apply_filters( 'wpsso_get_event_offer_options', false, $mod, $event_id, $key_num );
-
-				if ( ! empty( $offer_opts ) ) {
-
-					if ( $wpsso->debug->enabled ) {
-
-						$wpsso->debug->log_arr( 'get_event_offer_options', $offer_opts );
-					}
-				}
-
-				if ( ! is_array( $offer_opts ) ) {
-
-					$offer_opts = array();
-
-					foreach ( array(
-						'offer_name'           => 'schema_event_offer_name',
-						'offer_url'            => 'schema_event_offer_url',
-						'offer_price'          => 'schema_event_offer_price',
-						'offer_price_currency' => 'schema_event_offer_currency',
-						'offer_availability'   => 'schema_event_offer_avail',
-					) as $opt_key => $md_pre ) {
-
-						$offer_opts[ $opt_key ] = $mod[ 'obj' ]->get_options( $mod[ 'id' ], $md_pre . '_' . $key_num );
-					}
-				}
-
-				/*
-				 * Must have at least an offer name and price.
-				 */
-				if ( isset( $offer_opts[ 'offer_name' ] ) && isset( $offer_opts[ 'offer_price' ] ) ) {
-
-					if ( ! isset( $event_opts[ 'offer_url' ] ) ) {
-
-						$offer_opts[ 'offer_url' ] = $canonical_url;
-					}
-
-					if ( ! isset( $offer_opts[ 'offer_valid_from_date' ] ) ) {
-
-						if ( ! empty( $event_opts[ 'event_offers_start_date_iso' ] ) ) {
-
-							$offer_opts[ 'offer_valid_from_date' ] = $event_opts[ 'event_offers_start_date_iso' ];
-						}
-					}
-
-					if ( ! isset( $offer_opts[ 'offer_valid_to_date' ] ) ) {
-
-						if ( ! empty( $event_opts[ 'event_offers_end_date_iso' ] ) ) {
-
-							$offer_opts[ 'offer_valid_to_date' ] = $event_opts[ 'event_offers_end_date_iso' ];
-						}
-					}
-
-					if ( false === $have_offers ) {
-
-						$have_offers = true;
-
-						$event_opts[ 'event_offers' ] = array();	// Clear offers returned by filter.
-					}
-
-					$event_opts[ 'event_offers' ][] = $offer_opts;
-				}
-			}
-
-			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
-			list( $type_id, $type_url ) = self::get_type_info( $json_data, $event_opts,
-				$opt_key = 'event_type', $def_type_id = 'event', $list_el );
+			list( $type_id, $type_url ) = self::get_data_types( $json_data, $event_opts, $opt_key = 'event_type', $def_type_id = 'event', $list_el );
 
 			/*
 			 * Begin schema event markup creation.
@@ -570,29 +502,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * Add event offers.
 			 */
-			if ( ! empty( $event_opts[ 'event_offers' ] ) && is_array( $event_opts[ 'event_offers' ] ) ) {
-
-				foreach ( $event_opts[ 'event_offers' ] as $event_offer ) {
-
-					if ( ! is_array( $event_offer ) ) {	// Just in case.
-
-						continue;
-					}
-
-					if ( false !== ( $offer = WpssoSchema::get_data_itemprop_from_assoc( $event_offer, array(
-						'name'          => 'offer_name',
-						'url'           => 'offer_url',
-						'price'         => 'offer_price',
-						'priceCurrency' => 'offer_price_currency',
-						'availability'  => 'offer_availability',	// In stock, Out of stock, Pre-order, etc.
-						'validFrom'     => 'offer_valid_from_date',
-						'validThrough'  => 'offer_valid_to_date',
-					) ) ) ) {
-
-						$json_ret[ 'offers' ][] = WpssoSchema::get_schema_type_context( 'https://schema.org/Offer', $offer );
-					}
-				}
-			}
+			WpssoSchema::add_type_data_offers( $json_ret, $mod, $event_opts, $event_id, 'event' );
 
 			/*
 			 * Filter the single event data.
@@ -656,8 +566,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
-			list( $type_id, $type_url ) = self::get_type_info( $json_data, $type_opts = false,
-				$opt_key = false, $def_type_id = 'image.object', $list_el );
+			list( $type_id, $type_url ) = self::get_data_types( $json_data, $type_opts = false, $opt_key = false, $def_type_id = 'image.object', $list_el );
 
 			/*
 			 * Begin schema image markup creation.
@@ -831,8 +740,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
-			list( $type_id, $type_url ) = self::get_type_info( $json_data, $job_opts,
-				$opt_key = 'job_type', $def_type_id = 'job.posting', $list_el );
+			list( $type_id, $type_url ) = self::get_data_types( $json_data, $job_opts, $opt_key = 'job_type', $def_type_id = 'job.posting', $list_el );
 
 			/*
 			 * Begin schema job markup creation.
@@ -1210,8 +1118,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
-			list( $type_id, $type_url ) = self::get_type_info( $json_data, $org_opts,
-				$opt_key = 'org_schema_type', $def_type_id = 'organization', $list_el );
+			list( $type_id, $type_url ) = self::get_data_types( $json_data, $org_opts, $opt_key = 'org_schema_type', $def_type_id = 'organization', $list_el );
 
 			/*
 			 * Begin schema organization markup creation. Preserve the @id value if one is available.
@@ -1632,8 +1539,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
-			list( $type_id, $type_url ) = self::get_type_info( $json_data, $person_opts,
-				$opt_key = 'person_type', $def_type_id = 'person', $list_el );
+			list( $type_id, $type_url ) = self::get_data_types( $json_data, $person_opts, $opt_key = 'person_type', $def_type_id = 'person', $list_el );
 
 			/*
 			 * Begin schema person markup creation.
@@ -1779,8 +1685,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
-			list( $type_id, $type_url ) = self::get_type_info( $json_data, $place_opts,
-				$opt_key = 'place_schema_type', $def_type_id = 'place', $list_el );
+			list( $type_id, $type_url ) = self::get_data_types( $json_data, $place_opts, $opt_key = 'place_schema_type', $def_type_id = 'place', $list_el );
 
 			/*
 			 * Begin schema place markup creation. Preserve the @id value if one is available.
@@ -1986,9 +1891,9 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 		}
 
 		/*
-		 * See WpssoSchemaSingle::get_offer_data().
+		 * See WpssoSchemaSingle::get_offer_data_mt().
 		 */
-		public static function add_offer_data( &$json_data, array $mod, array $mt_single, $def_type_id = 'offer', $list_el = true ) {
+		public static function add_offer_data_mt( &$json_data, array $mod, array $mt_single, $def_type_id = 'offer', $list_el = true ) {
 
 			$wpsso =& Wpsso::get_instance();
 
@@ -2008,7 +1913,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
-			list( $type_id, $type_url ) = self::get_type_info( $json_data, $type_opts = false, $opt_key = false, $def_type_id, $list_el );
+			list( $type_id, $type_url ) = self::get_data_types( $json_data, $type_opts = false, $opt_key = false, $def_type_id, $list_el );
 
 			/*
 			 * Begin schema product markup creation.
@@ -2288,7 +2193,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 		 *
 		 * See WpssoJsonTypeProductGroup->filter_json_data_https_schema_org_productgroup().
 		 */
-		public static function add_product_group_data( &$json_data, array $mod, array $mt_single, $def_type_id = 'product.group', $list_el = true ) {
+		public static function add_product_group_data_mt( &$json_data, array $mod, array $mt_single, $def_type_id = 'product.group', $list_el = true ) {
 
 			$wpsso =& Wpsso::get_instance();
 
@@ -2313,8 +2218,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
-			list( $type_id, $type_url ) = self::get_type_info( $json_data, $type_opts = false,
-				$opt_key = false, $def_type_id, $list_el );
+			list( $type_id, $type_url ) = self::get_data_types( $json_data, $type_opts = false, $opt_key = false, $def_type_id, $list_el );
 
 			/*
 			 * Begin schema product markup creation.
@@ -2438,10 +2342,10 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 		}
 
 		/*
-		 * See WpssoSchemaSingle::get_product_data().
+		 * See WpssoSchemaSingle::get_product_data_mt().
 		 * See WpssoJsonTypeProduct->filter_json_data_https_schema_org_product().
 		 */
-		public static function add_product_data( &$json_data, array $mod, array $mt_single, $def_type_id = 'product', $list_el = true ) {
+		public static function add_product_data_mt( &$json_data, array $mod, array $mt_single, $def_type_id = 'product', $list_el = true ) {
 
 			$wpsso =& Wpsso::get_instance();
 
@@ -2453,8 +2357,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
-			list( $type_id, $type_url ) = self::get_type_info( $json_data, $type_opts = false,
-				$opt_key = false, $def_type_id, $list_el );
+			list( $type_id, $type_url ) = self::get_data_types( $json_data, $type_opts = false, $opt_key = false, $def_type_id, $list_el );
 
 			/*
 			 * Begin schema product markup creation.
@@ -2660,7 +2563,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 				if ( empty( $mt_single[ 'product:offers' ] ) ) {
 
-					$json_ret[ 'offers' ] = self::get_offer_data( $mod, $mt_single, $def_type_id = 'offer' );
+					$json_ret[ 'offers' ] = self::get_offer_data_mt( $mod, $mt_single, $def_type_id = 'offer' );
 
 				} elseif ( is_array( $mt_single[ 'product:offers' ] ) ) {
 
@@ -2759,87 +2662,9 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			SucomUtil::add_multi_values( $service_opts, 'service_award', 'service_awards' );
 
 			/*
-			 * Add service offers.
-			 */
-			if ( $wpsso->debug->enabled ) {
-
-				$wpsso->debug->log( 'checking for custom service offers' );
-			}
-
-			$have_offers   = false;
-			$md_offers_max = SucomUtil::get_const( 'WPSSO_SCHEMA_METADATA_OFFERS_MAX' );
-			$canonical_url = $wpsso->util->get_canonical_url( $mod );
-
-			foreach ( range( 0, $md_offers_max - 1, 1 ) as $key_num ) {
-
-				$offer_opts = apply_filters( 'wpsso_get_service_offer_options', false, $mod, $service_id, $key_num );
-
-				if ( ! empty( $offer_opts ) ) {
-
-					if ( $wpsso->debug->enabled ) {
-
-						$wpsso->debug->log_arr( 'get_service_offer_options', $offer_opts );
-					}
-				}
-
-				if ( ! is_array( $offer_opts ) ) {
-
-					$offer_opts = array();
-
-					foreach ( array(
-						'offer_name'           => 'schema_service_offer_name',
-						'offer_url'            => 'schema_service_offer_url',
-						'offer_price'          => 'schema_service_offer_price',
-						'offer_price_currency' => 'schema_service_offer_currency',
-						'offer_availability'   => 'schema_service_offer_avail',
-					) as $opt_key => $md_pre ) {
-
-						$offer_opts[ $opt_key ] = $mod[ 'obj' ]->get_options( $mod[ 'id' ], $md_pre . '_' . $key_num );
-					}
-				}
-
-				/*
-				 * Must have at least an offer name and price.
-				 */
-				if ( isset( $offer_opts[ 'offer_name' ] ) && isset( $offer_opts[ 'offer_price' ] ) ) {
-
-					if ( ! isset( $service_opts[ 'offer_url' ] ) ) {
-
-						$offer_opts[ 'offer_url' ] = $canonical_url;
-					}
-
-					if ( ! isset( $offer_opts[ 'offer_valid_from_date' ] ) ) {
-
-						if ( ! empty( $service_opts[ 'service_offers_start_date_iso' ] ) ) {
-
-							$offer_opts[ 'offer_valid_from_date' ] = $service_opts[ 'service_offers_start_date_iso' ];
-						}
-					}
-
-					if ( ! isset( $offer_opts[ 'offer_valid_to_date' ] ) ) {
-
-						if ( ! empty( $service_opts[ 'service_offers_end_date_iso' ] ) ) {
-
-							$offer_opts[ 'offer_valid_to_date' ] = $service_opts[ 'service_offers_end_date_iso' ];
-						}
-					}
-
-					if ( false === $have_offers ) {
-
-						$have_offers = true;
-
-						$service_opts[ 'service_offers' ] = array();	// Clear offers returned by filter.
-					}
-
-					$service_opts[ 'service_offers' ][] = $offer_opts;
-				}
-			}
-
-			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
-			list( $type_id, $type_url ) = self::get_type_info( $json_data, $service_opts,
-				$opt_key = 'service_schema_type', $def_type_id = 'service', $list_el );
+			list( $type_id, $type_url ) = self::get_data_types( $json_data, $service_opts, $opt_key = 'service_schema_type', $def_type_id = 'service', $list_el );
 
 			/*
 			 * Begin schema service markup creation.
@@ -2902,32 +2727,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * Add service offers.
 			 */
-			if ( ! empty( $service_opts[ 'service_offers' ] ) && is_array( $service_opts[ 'service_offers' ] ) ) {
-
-				foreach ( $service_opts[ 'service_offers' ] as $service_offer ) {
-
-					if ( ! is_array( $service_offer ) ) {	// Just in case.
-
-						continue;
-					}
-
-					if ( false !== ( $offer = WpssoSchema::get_data_itemprop_from_assoc( $service_offer, array(
-						'name'          => 'offer_name',
-						'url'           => 'offer_url',
-						'price'         => 'offer_price',
-						'priceCurrency' => 'offer_price_currency',
-						'availability'  => 'offer_availability',	// In stock, Out of stock, Pre-order, etc.
-						'validFrom'     => 'offer_valid_from_date',
-						'validThrough'  => 'offer_valid_to_date',
-					) ) ) ) {
-
-						/*
-						 * Add the offer.
-						 */
-						$json_ret[ 'offers' ][] = WpssoSchema::get_schema_type_context( 'https://schema.org/Offer', $offer );
-					}
-				}
-			}
+			WpssoSchema::add_type_data_offers( $json_ret, $mod, $service_opts, $service_id, 'service' );
 
 			/*
 			 * See https://schema.org/hasOfferCatalog.
@@ -3013,8 +2813,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
-			list( $type_id, $type_url ) = self::get_type_info( $json_data, $type_opts = false,
-				$opt_key = false, $def_type_id = 'video.object', $list_el );
+			list( $type_id, $type_url ) = self::get_data_types( $json_data, $type_opts = false, $opt_key = false, $def_type_id = 'video.object', $list_el );
 
 			/*
 			 * Begin schema video markup creation.
@@ -3076,10 +2875,10 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 		/*
 		 * See WpssoSchema::add_offers_aggregate_data_mt().
 		 * See WpssoSchema::add_offers_data_mt().
-		 * See WpssoSchemaSingle::add_product_data().
+		 * See WpssoSchemaSingle::add_product_data_mt().
 		 * See WpssoJsonTypeSoftwareApplication->filter_json_data_https_schema_org_softwareapplication().
 		 */
-		public static function get_offer_data( array $mod, array $mt_single, $def_type_id = 'offer' ) {
+		public static function get_offer_data_mt( array $mod, array $mt_single, $def_type_id = 'offer' ) {
 
 			$wpsso =& Wpsso::get_instance();
 
@@ -3090,7 +2889,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 			$json_data = array();
 
-			self::add_offer_data( $json_data, $mod, $mt_single, $def_type_id = 'offer', $list_el = false );
+			self::add_offer_data_mt( $json_data, $mod, $mt_single, $def_type_id = 'offer', $list_el = false );
 
 			return $json_data;
 		}
@@ -3098,7 +2897,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 		/*
 		 * See WpssoSchema::add_variants_data_mt().
 		 */
-		public static function get_product_data( array $mod, $mt_single, $def_type_id = 'product' ) {
+		public static function get_product_data_mt( array $mod, $mt_single, $def_type_id = 'product' ) {
 
 			$wpsso =& Wpsso::get_instance();
 
@@ -3109,7 +2908,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 			$json_data = array();
 
-			self::add_product_data( $json_data, $mod, $mt_single, $def_type_id = 'product', $list_el = false );
+			self::add_product_data_mt( $json_data, $mod, $mt_single, $def_type_id = 'product', $list_el = false );
 
 			return $json_data;
 		}
@@ -3571,7 +3370,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			return true;
 		}
 
-		public static function is_valid_midday( $hm_midday_c, $hm_midday_o ) {
+		private static function is_valid_midday( $hm_midday_c, $hm_midday_o ) {
 
 			if ( empty( $hm_midday_c ) || empty( $hm_midday_o ) || 'none' === $hm_midday_c || 'none' === $hm_midday_o ) {
 
@@ -3592,7 +3391,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 		/*
 		 * If not adding a list element, then get the existing schema type url (if one exists).
 		 */
-		private static function get_type_info( $json_data, $type_opts, $opt_key, $def_type_id, $list_el = false ) {
+		private static function get_data_types( $json_data, $type_opts, $opt_key, $def_type_id, $list_el = false ) {
 
 			$wpsso =& Wpsso::get_instance();
 

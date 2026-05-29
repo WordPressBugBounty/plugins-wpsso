@@ -3,11 +3,11 @@
 <table>
 <tr><th align="right" valign="top" nowrap>Plugin Name</th><td>WPSSO Core</td></tr>
 <tr><th align="right" valign="top" nowrap>Summary</th><td>Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.</td></tr>
-<tr><th align="right" valign="top" nowrap>Stable Version</th><td>22.1.3</td></tr>
+<tr><th align="right" valign="top" nowrap>Stable Version</th><td>22.2.0</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires PHP</th><td>7.4.33 or newer</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires WordPress</th><td>6.0 or newer</td></tr>
 <tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>7.0</td></tr>
-<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>10.7.0</td></tr>
+<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>10.8.1</td></tr>
 <tr><th align="right" valign="top" nowrap>Contributors</th><td>jsmoriss</td></tr>
 <tr><th align="right" valign="top" nowrap>License</th><td><a href="https://wpsso.com/wp-content/plugins/wpsso/license/premium.txt">GPLv3</a></td></tr>
 <tr><th align="right" valign="top" nowrap>Tags / Keywords</th><td>schema, woocommerce, search results, optimize, meta tags</td></tr>
@@ -23,7 +23,7 @@
 
 <p><strong>The most comprehensive and accurate Schema markup plugin for WooCommerce products.</strong></p>
 
-<p>Supports over 500 different Schema types and sub-types (including Schema Event, Product Group, and the Service type for WooCommerce products).</p>
+<p>Supports over 500 different Schema types and sub-types (including WooCommerce offers for Schema Books, Events, Products, Product Groups, and Services).</p>
 
 <p><strong>Provides complete Schema markup and meta tags for:</strong></p>
 
@@ -131,6 +131,8 @@
 <p><strong>Supports additional WooCommerce product attributes:</strong></p>
 
 <ul>
+<li>Book Author Name</li>
+<li>Book ISBN</li>
 <li>Product Adult Type</li>
 <li>Product Age Group</li>
 <li>Product Availability</li>

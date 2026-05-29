@@ -1337,6 +1337,11 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 			return $children;
 		}
 
+		public static function add_schema_type_context( $type_url, &$json_data = array() ) {
+
+			$json_data = self::get_schema_type_context( $type_url, $json_data );
+		}
+
 		public static function get_schema_type_context( $type_url, $json_data = array() ) {
 
 			if ( preg_match( '/^(.+:\/\/.+)\/([^\/]+)$/', $type_url, $match ) ) {
@@ -2552,9 +2557,9 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 						'downloadUrl'          => 'schema_review_item_software_app_dl_url',
 					) );
 
-					$metadata_offers_max = SucomUtil::get_const( 'WPSSO_SCHEMA_METADATA_OFFERS_MAX' );
+					$md_offers_max = SucomUtil::get_const( 'WPSSO_SCHEMA_METADATA_OFFERS_MAX' );
 
-					foreach ( range( 0, $metadata_offers_max - 1, 1 ) as $key_num ) {
+					foreach ( range( 0, $md_offers_max - 1, 1 ) as $key_num ) {
 
 						$offer_opts = SucomUtil::preg_grep_keys( '/^schema_review_item_software_app_(offer_.*)_' . $key_num. '$/',
 							$md_opts, $invert = false, $replace = '$1' );
@@ -2642,9 +2647,9 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 					$json_data[ 'brand' ] = self::get_schema_type_context( 'https://schema.org/Brand', $single_brand );
 				}
 
-				$metadata_offers_max = SucomUtil::get_const( 'WPSSO_SCHEMA_METADATA_OFFERS_MAX' );
+				$md_offers_max = SucomUtil::get_const( 'WPSSO_SCHEMA_METADATA_OFFERS_MAX' );
 
-				foreach ( range( 0, $metadata_offers_max - 1, 1 ) as $key_num ) {
+				foreach ( range( 0, $md_offers_max - 1, 1 ) as $key_num ) {
 
 					$offer_opts = SucomUtil::preg_grep_keys( '/^schema_review_item_product_(offer_.*)_' . $key_num. '$/',
 						$md_opts, $invert = false, $replace = '$1' );
@@ -3015,7 +3020,7 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 					continue;
 				}
 
-				$single_offer = WpssoSchemaSingle::get_offer_data( $mod, $mt_offer, $def_type_id = 'offer' );
+				$single_offer = WpssoSchemaSingle::get_offer_data_mt( $mod, $mt_offer, $def_type_id = 'offer' );
 
 				if ( empty( $single_offer[ 'priceCurrency' ] ) ) {	// Just in case.
 
@@ -3159,7 +3164,7 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 					continue;
 				}
 
-				$single_offer = WpssoSchemaSingle::get_offer_data( $mod, $mt_offer, $def_type_id = 'offer' );
+				$single_offer = WpssoSchemaSingle::get_offer_data_mt( $mod, $mt_offer, $def_type_id = 'offer' );
 
 				if ( false === $single_offer ) {
 
@@ -3427,7 +3432,7 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 		}
 
 		/*
-		 * See WpssoSchemaSingle->add_product_group_data().
+		 * See WpssoSchemaSingle->add_product_group_data_mt().
 		 */
 		public static function add_variants_data_mt( &$json_data, array $mt_variants ) {
 
@@ -3467,7 +3472,7 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 					continue;
 				}
 
-				$single_variant = WpssoSchemaSingle::get_product_data( $mod, $mt_variant, $def_type_id = 'product' );
+				$single_variant = WpssoSchemaSingle::get_product_data_mt( $mod, $mt_variant, $def_type_id = 'product' );
 
 				if ( false === $single_variant ) {
 
@@ -3588,6 +3593,137 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 					} else $type_opts = array_merge( $md_defs, $md_opts );
 				}
 			}
+		}
+
+		/*
+		 * Since WPSSO Core v22.2.0.
+		 *
+		 * See WpssoSchemaSingle::add_book_data().
+		 * See WpssoSchemaSingle::add_event_data().
+		 * See WpssoSchemaSingle::add_service_data().
+		 */
+		public static function add_type_data_offers( &$json_data, array $mod, $type_opts, $type_id, $type ) {
+
+			$wpsso =& Wpsso::get_instance();
+			
+			if ( $wpsso->debug->enabled ) {
+
+				$wpsso->debug->mark();
+			}
+
+			self::add_type_opts_offers( $type_opts, $mod, $type_id, $type );
+
+			if ( ! empty( $type_opts[ $type . '_offers' ] ) && is_array( $type_opts[ $type . '_offers' ] ) ) {
+
+				foreach ( $type_opts[ $type . '_offers' ] as $offer ) {
+
+					if ( ! is_array( $offer ) ) {	// Just in case.
+
+						continue;
+					}
+
+					if ( false !== ( $offer = self::get_data_itemprop_from_assoc( $offer, array(
+						'name'          => 'offer_name',
+						'url'           => 'offer_url',
+						'price'         => 'offer_price',
+						'priceCurrency' => 'offer_currency',
+						'availability'  => 'offer_avail',	// In stock, Out of stock, Pre-order, etc.
+						'validFrom'     => 'offer_start_date',
+						'validThrough'  => 'offer_end_date',
+					) ) ) ) {
+
+						/*
+						 * Add the offer.
+						 */
+						$json_data[ 'offers' ][] = self::get_schema_type_context( 'https://schema.org/Offer', $offer );
+					}
+				}
+			}
+		}
+
+		/*
+		 * Since WPSSO Core v22.2.0.
+		 */
+		public static function add_type_opts_offers( &$type_opts, array $mod, $type_id, $type ) {
+			
+			$wpsso =& Wpsso::get_instance();
+			
+			if ( $wpsso->debug->enabled ) {
+
+				$wpsso->debug->log( 'checking for custom ' . $type . ' offers' );
+			}
+
+			$type          = SucomUtil::sanitize_key( $type );	// Just in case.
+			$md_offers_max = SucomUtil::get_const( 'WPSSO_SCHEMA_METADATA_OFFERS_MAX' );
+			$canonical_url = $wpsso->util->get_canonical_url( $mod );
+			$offers_count  = 0;
+
+			foreach ( range( 0, $md_offers_max - 1, 1 ) as $key_num ) {
+
+				$offer_opts = apply_filters( 'wpsso_get_' . $type . '_offer_options', false, $mod, $type_id, $key_num );
+
+				if ( ! empty( $offer_opts ) ) {
+
+					if ( $wpsso->debug->enabled ) {
+
+						$wpsso->debug->log_arr( 'get_' . $type . '_offer_options #'. $key_num, $offer_opts );
+					}
+				}
+
+				if ( ! is_array( $offer_opts ) ) {
+
+					$offer_opts = array();
+
+					foreach ( array(
+						'offer_name'     => 'schema_' . $type . '_offer_name',
+						'offer_url'      => 'schema_' . $type . '_offer_url',
+						'offer_price'    => 'schema_' . $type . '_offer_price',
+						'offer_currency' => 'schema_' . $type . '_offer_currency',
+						'offer_avail'    => 'schema_' . $type . '_offer_avail',
+					) as $opt_key => $md_pre ) {
+
+						$offer_opts[ $opt_key ] = $mod[ 'obj' ]->get_options( $mod[ 'id' ], $md_pre . '_' . $key_num );
+					}
+				}
+
+				/*
+				 * Must have at least an offer name and price.
+				 */
+				if ( isset( $offer_opts[ 'offer_name' ] ) && isset( $offer_opts[ 'offer_price' ] ) ) {
+
+					if ( ! isset( $type_opts[ 'offer_url' ] ) ) {
+
+						$offer_opts[ 'offer_url' ] = $canonical_url;
+					}
+
+					if ( ! isset( $offer_opts[ 'offer_start_date' ] ) ) {
+
+						if ( ! empty( $type_opts[ $type . '_offers_start_date_iso' ] ) ) {
+
+							$offer_opts[ 'offer_start_date' ] = $type_opts[ $type . '_offers_start_date_iso' ];
+						}
+					}
+
+					if ( ! isset( $offer_opts[ 'offer_end_date' ] ) ) {
+
+						if ( ! empty( $type_opts[ $type . '_offers_end_date_iso' ] ) ) {
+
+							$offer_opts[ 'offer_end_date' ] = $type_opts[ $type . '_offers_end_date_iso' ];
+						}
+					}
+
+					if ( 0 === $offers_count ) {
+
+						$type_opts[ $type . '_offers' ] = array();	// Clear offers returned by filter.
+					}
+
+					$offers_count++;
+
+					$type_opts[ $type . '_offers' ][] = $offer_opts;
+				}
+			}
+
+			return $offers_count;
 		}
 
 		/*
@@ -3885,6 +4021,8 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 		/*
 		 * Returns the number of Schema properties added to $json_data.
 		 *
+		 * $json_data can be null, and will remain null unless an element is added, in which case it will become an array.
+		 *
 		 * Example usage:
 		 *
 		 *	WpssoSchema::add_data_itemprop_from_assoc( $json_ret, $mt_og, array(
@@ -3902,7 +4040,7 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 		 *	) );
 		 *
 		 */
-		public static function add_data_itemprop_from_assoc( array &$json_data, array $assoc, array $key_map, $overwrite = true ) {
+		public static function add_data_itemprop_from_assoc( &$json_data, array $assoc, array $key_map, $overwrite = true ) {
 
 			$wpsso =& Wpsso::get_instance();
 
@@ -3920,6 +4058,8 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 				if ( ! $is_assoc ) $prop_name = $assoc_key;
 
 				if ( self::is_valid_key( $assoc, $assoc_key ) ) {	// Not null, an empty string, or 'none'.
+					
+					if ( ! is_array( $json_data ) ) $json_data = array();
 
 					if ( isset( $json_data[ $prop_name ] ) && empty( $overwrite ) ) {
 
@@ -3961,8 +4101,8 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 		 * See WpssoSchema::add_item_reviewed_data().
 		 * See WpssoSchema::add_data_itemprop_from_assoc().
 		 * WpssoSchemaSingle::add_book_data().
-		 * WpssoSchemaSingle::add_offer_data().
-		 * WpssoSchemaSingle::add_product_data().
+		 * WpssoSchemaSingle::add_offer_data_mt().
+		 * WpssoSchemaSingle::add_product_data_mt().
 		 */
 		public static function is_valid_key( $assoc, $key ) {
 
@@ -4142,7 +4282,7 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 		 *
 		 * See WpssoJsonTypeCreativeWork->filter_json_data_https_schema_org_creativework().
 		 * See WpssoSchema::add_itemlist_data().
-		 * See WpssoSchemaSingle::add_product_data().
+		 * See WpssoSchemaSingle::add_product_data_mt().
 		 */
 		public static function check_required_props( &$json_data, array $mod, $prop_names = array( 'image' ), $type_id = null ) {
 
