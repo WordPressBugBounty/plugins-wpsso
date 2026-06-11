@@ -21,8 +21,8 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			),
 			'plugin' => array(
 				'wpsso' => array(			// Plugin acronym.
-					'version'     => '22.2.1',	// Plugin version.
-					'opt_version' => '1046',	// Increment when changing default option values.
+					'version'     => '22.3.0',	// Plugin version.
+					'opt_version' => '1048',	// Increment when changing default option values.
 					'short'       => 'WPSSO Core',	// Short plugin name.
 					'name'        => 'WPSSO Core',
 					'desc'        => 'Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.',
@@ -2240,17 +2240,33 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				 * values into numbered options.
 				 */
 				'md_keys_multi' => array(
-					'org_award'         => true,				// Organization Awards.
-					'org_contact_id'    => true,				// Organization Contact Points.
-					'org_offer_catalog' => array(				// Offer Catalog Name.
+					'contact_sameas_url'      => true,
+					'contact_service_area_id' => true,
+					'org_award'               => true,			// Organization Awards.
+					'org_contact_id'          => true,			// Organization Contact Points.
+					'org_offer_catalog'       => array(			// Offer Catalog Name.
 						'org_offer_catalog_text',			// Offer Catalog Description.
 						'org_offer_catalog_url',			// Offer Catalog URL.
 					),
+					'org_service_area_id'  => true,
+					'place_sameas_url'     => true,
 					'product_award'        => true,				// Product Awards.
 					'product_size_group'   => true,				// Product Size Group.
 					'schema_addl_type_url' => true,				// Microdata Type URLs.
 					'schema_award'         => true,				// Creative Work Awards.
+					'schema_book_offer'    => array(
+						'schema_book_offer_name',
+						'schema_book_offer_price',
+						'schema_book_offer_currency',
+						'schema_book_offer_avail',
+					),
 					'schema_citation'      => true,				// Reference Citations.
+					'schema_event_offer'    => array(
+						'schema_event_offer_name',
+						'schema_event_offer_price',
+						'schema_event_offer_currency',
+						'schema_event_offer_avail',
+					),
 					'schema_howto_step'    => array(			// How-To Name.
 						'schema_howto_step_section',			// How-To Step or Section.
 						'schema_howto_step_text',			// How-To Step Description.
@@ -2273,12 +2289,31 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					),
 					'schema_review_item_cw_movie_actor_person_name'    => true,
 					'schema_review_item_cw_movie_director_person_name' => true,
-					'schema_sameas_url'                                => true,	// Same-As URLs.
-					'schema_service_award'         => true,				// Service Awards.
+					'schema_review_item_product_offer'                 => array(
+						'schema_review_item_product_offer_name',
+						'schema_review_item_product_offer_price',
+						'schema_review_item_product_offer_currency',
+						'schema_review_item_product_offer_avail',
+					),
+					'schema_review_item_software_app_offer' => array(
+						'schema_review_item_software_app_offer_name',
+						'schema_review_item_software_app_offer_price',
+						'schema_review_item_software_app_offer_currency',
+						'schema_review_item_software_app_offer_avail',
+					),
+					'schema_sameas_url'    => true,					// Same-As URLs.
+					'schema_service_award' => true,					// Service Awards.
+					'schema_service_offer' => array(
+						'schema_service_offer_name',
+						'schema_service_offer_price',
+						'schema_service_offer_currency',
+						'schema_service_offer_avail',
+					),
 					'schema_service_offer_catalog' => array(			// Offer Catalog Name.
 						'schema_service_offer_catalog_text',			// Offer Catalog Description.
 						'schema_service_offer_catalog_url',			// Offer Catalog URL.
 					),
+					'schema_service_area_id'               => true,
 					'schema_webpage_reviewed_by_org_id'    => true,
 					'schema_webpage_reviewed_by_person_id' => true,
 				),
@@ -3162,13 +3197,6 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				'place_is_defaults' => array(
 					'schema_def_event_location_id' => 'Default Event Venue',
 					'schema_def_job_location_id'   => 'Default Job Location',
-				),
-
-				/*
-				 * GeoShape type.
-				 */
-				'geo_shape' => array(
-					'circle' => 'Circular',
 				),
 
 				/*
@@ -4356,7 +4384,10 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 								'engine.specification'            => 'https://schema.org/EngineSpecification',
 								'exchange.rate.specification'     => 'https://schema.org/ExchangeRateSpecification',
 								'geo.coordinates'                 => 'https://schema.org/GeoCoordinates',
-								'geo.shape'                       => 'https://schema.org/GeoShape',
+								'geo.shape'                       => array(
+									'geo.circle' => 'https://schema.org/GeoCircle',
+									'geo.shape'  => 'https://schema.org/GeoShape',
+								),
 								'interaction.counter'             => 'https://schema.org/InteractionCounter',
 								'monetary.amount'                 => 'https://schema.org/MonetaryAmount',
 								'nutrition.information'           => 'https://schema.org/NutritionInformation',
@@ -5173,6 +5204,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			 * Schema limits.
 			 */
 			$var_const[ 'WPSSO_SCHEMA_ADDL_TYPE_URL_MAX' ]       = 8;
+			$var_const[ 'WPSSO_SCHEMA_ADMIN_AREAS_MAX' ]         = 5;
 			$var_const[ 'WPSSO_SCHEMA_AWARDS_MAX' ]              = 5;
 			$var_const[ 'WPSSO_SCHEMA_CITATIONS_MAX' ]           = 5;
 			$var_const[ 'WPSSO_SCHEMA_COMMENTS_MAX' ]            = 50;		// Maximum number of comments when "Break comments into pages" is unchecked.
@@ -5189,7 +5221,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			$var_const[ 'WPSSO_SCHEMA_RECIPE_INGREDIENTS_MAX' ]  = 40;
 			$var_const[ 'WPSSO_SCHEMA_RECIPE_INSTRUCTIONS_MAX' ] = 40;
 			$var_const[ 'WPSSO_SCHEMA_REVIEWS_MAX' ]             = 100;
-			$var_const[ 'WPSSO_SCHEMA_SAMEAS_URL_MAX' ]          = 5;
+			$var_const[ 'WPSSO_SCHEMA_SAMEAS_URLS_MAX' ]         = 5;
 			$var_const[ 'WPSSO_SCHEMA_WEBPAGE_REVIEWED_BY_MAX' ] = 5;
 
 			/*

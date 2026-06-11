@@ -74,11 +74,12 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 			$def_schema_desc      = $this->p->page->get_description( $mod, $md_key = 'seo_desc', $max_len = 'schema_desc' );
 			$schema_lang_disabled = $this->p->avail[ 'lang' ][ 'any' ] ? true : false;
 			$addl_type_url_max    = SucomUtil::get_const( 'WPSSO_SCHEMA_ADDL_TYPE_URL_MAX', 5 );
-			$sameas_url_max       = SucomUtil::get_const( 'WPSSO_SCHEMA_SAMEAS_URL_MAX', 5 );
+			$sameas_url_max       = SucomUtil::get_const( 'WPSSO_SCHEMA_SAMEAS_URLS_MAX', 5 );
 			$input_limits         = WpssoConfig::get_input_limits();	// Uses a local cache.
 
 			$args = array(
 				'select' => array(
+					'admin_area'       => $this->p->util->get_form_cache( 'admin_area_names', $add_none = true ),
 					'contact'          => $this->p->util->get_form_cache( 'contact_names', $add_none = true ),
 					'google_prod_cats' => $this->p->util->get_google_product_categories(),
 					'mrp'              => $this->p->util->get_form_cache( 'mrp_names', $add_none = true ),
@@ -949,7 +950,7 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 			$metadata_offers_max = SucomUtil::get_const( 'WPSSO_SCHEMA_METADATA_OFFERS_MAX', 5 );
 			$movie_actors_max    = SucomUtil::get_const( 'WPSSO_SCHEMA_MOVIE_ACTORS_MAX', 15 );
 			$movie_directors_max = SucomUtil::get_const( 'WPSSO_SCHEMA_MOVIE_DIRECTORS_MAX', 5 );
-			$sameas_url_max      = SucomUtil::get_const( 'WPSSO_SCHEMA_SAMEAS_URL_MAX', 5 );
+			$sameas_url_max      = SucomUtil::get_const( 'WPSSO_SCHEMA_SAMEAS_URLS_MAX', 5 );
 
 			$form_rows = array(
 				'subsection_schema_review' => array(
@@ -1624,20 +1625,6 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 					'tooltip'  => 'meta-schema_event_previous',
 					'content'  => $form->get_date_time_timezone( 'schema_event_previous' ),
 				),
-				'schema_event_offers_start' => array(
-					'tr_class' => $args[ 'tr_class_schema' ][ 'event' ],
-					'th_class' => 'medium',
-					'label'    => _x( 'Event Offers Start', 'option label', 'wpsso' ),
-					'tooltip'  => 'meta-schema_event_offers_start',
-					'content'  => $form->get_date_time_timezone( 'schema_event_offers_start' ),
-				),
-				'schema_event_offers_end' => array(
-					'tr_class' => $args[ 'tr_class_schema' ][ 'event' ],
-					'th_class' => 'medium',
-					'label'    => _x( 'Event Offers End', 'option label', 'wpsso' ),
-					'tooltip'  => 'meta-schema_event_offers_end',
-					'content'  => $form->get_date_time_timezone( 'schema_event_offers_end' ),
-				),
 				'schema_event_offers' => array(
 					'tr_class' => $args[ 'tr_class_schema' ][ 'event' ],
 					'th_class' => 'medium',
@@ -1671,6 +1658,20 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 							'select_default' => 'https://schema.org/InStock',
 						),
 					), $css_class = 'single_line', $css_id = 'schema_event_offer', $metadata_offers_max, $show_first = 2 ),
+				),
+				'schema_event_offers_start' => array(
+					'tr_class' => $args[ 'tr_class_schema' ][ 'event' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Event Offers Start', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_event_offers_start',
+					'content'  => $form->get_date_time_timezone( 'schema_event_offers_start' ),
+				),
+				'schema_event_offers_end' => array(
+					'tr_class' => $args[ 'tr_class_schema' ][ 'event' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Event Offers End', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_event_offers_end',
+					'content'  => $form->get_date_time_timezone( 'schema_event_offers_end' ),
 				),
 			);
 
@@ -2197,17 +2198,12 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 		public function filter_mb_sso_edit_schema_service_rows( $table_rows, $form, $head_info, $mod, $args ) {
 
 			$currencies          = SucomUtil::get_currencies_abbrev();
+			$admin_area_max      = SucomUtil::get_const( 'WPSSO_SCHEMA_ADMIN_AREAS_MAX', 5 );
 			$awards_max          = SucomUtil::get_const( 'WPSSO_SCHEMA_AWARDS_MAX', 5 );
 			$metadata_offers_max = SucomUtil::get_const( 'WPSSO_SCHEMA_METADATA_OFFERS_MAX', 5 );
 			$offer_catalogs_max  = SucomUtil::get_const( 'WPSSO_SCHEMA_OFFER_CATALOGS_MAX', 5 );
 
 			$form_rows = array(
-				'subsection_schema_service' => array(
-					'tr_class' => $args[ 'tr_class_schema' ][ 'service' ],
-					'td_class' => 'subsection',
-					'header'   => 'h5',
-					'label'    => _x( 'Service Information', 'metabox title', 'wpsso' )
-				),
 				'schema_service_prov_org_id' => array(
 					'tr_class' => $args[ 'tr_class_schema' ][ 'service' ],
 					'th_class' => 'medium',
@@ -2236,43 +2232,11 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 					'content'  => $form->get_input_multi( 'schema_service_award', $css_class = 'wide', $css_id = '',
 						$awards_max, $show_first = 1),
 				),
-				'schema_service_latitude' => array(
+				'subsection_schema_service_offers' => array(
 					'tr_class' => $args[ 'tr_class_schema' ][ 'service' ],
-					'th_class' => 'medium',
-					'label'    => _x( 'Service Latitude', 'option label', 'wpsso' ),
-					'tooltip'  => 'meta-schema_service_latitude',
-					'content'  => $form->get_input( 'schema_service_latitude', $css_class = 'latitude' ) . ' ' .
-						_x( 'decimal degrees', 'option comment', 'wpsso' ),
-				),
-				'schema_service_longitude' => array(
-					'tr_class' => $args[ 'tr_class_schema' ][ 'service' ],
-					'th_class' => 'medium',
-					'label'    => _x( 'Service Longitude', 'option label', 'wpsso' ),
-					'tooltip'  => 'meta-schema_service_longitude',
-					'content'  => $form->get_input( 'schema_service_longitude', $css_class = 'longitude' ) . ' ' .
-						_x( 'decimal degrees', 'option comment', 'wpsso' ),
-				),
-				'schema_service_radius' => array(
-					'tr_class' => $args[ 'tr_class_schema' ][ 'service' ],
-					'th_class' => 'medium',
-					'label'    => _x( 'Service Radius', 'option label', 'wpsso' ),
-					'tooltip'  => 'meta-schema_service_radius',
-					'content'  => $form->get_input( 'schema_service_radius', $css_class = 'short' ) . ' ' .
-						_x( 'meters from coordinates', 'option comment', 'wpsso' ),
-				),
-				'schema_service_offers_start' => array(
-					'tr_class' => $args[ 'tr_class_schema' ][ 'service' ],
-					'th_class' => 'medium',
-					'label'    => _x( 'Service Offers Start', 'option label', 'wpsso' ),
-					'tooltip'  => 'meta-schema_service_offers_start',
-					'content'  => $form->get_date_time_timezone( 'schema_service_offers_start' ),
-				),
-				'schema_service_offers_end' => array(
-					'tr_class' => $args[ 'tr_class_schema' ][ 'service' ],
-					'th_class' => 'medium',
-					'label'    => _x( 'Service Offers End', 'option label', 'wpsso' ),
-					'tooltip'  => 'meta-schema_service_offers_end',
-					'content'  => $form->get_date_time_timezone( 'schema_service_offers_end' ),
+					'td_class' => 'subsection',
+					'header'   => 'h5',
+					'label'    => _x( 'Service Offers Information', 'metabox title', 'wpsso' )
 				),
 				'schema_service_offers' => array(
 					'tr_class' => $args[ 'tr_class_schema' ][ 'service' ],
@@ -2308,6 +2272,20 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 						),
 					), $css_class = 'single_line', $css_id = 'schema_service_offer', $metadata_offers_max, $show_first = 2 ),
 				),
+				'schema_service_offers_start' => array(
+					'tr_class' => $args[ 'tr_class_schema' ][ 'service' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Service Offers Start', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_service_offers_start',
+					'content'  => $form->get_date_time_timezone( 'schema_service_offers_start' ),
+				),
+				'schema_service_offers_end' => array(
+					'tr_class' => $args[ 'tr_class_schema' ][ 'service' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Service Offers End', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_service_offers_end',
+					'content'  => $form->get_date_time_timezone( 'schema_service_offers_end' ),
+				),
 				'schema_service_offer_catalogs' => array(
 					'tr_class' => $args[ 'tr_class_schema' ][ 'service' ],
 					'th_class' => 'medium',
@@ -2330,6 +2308,46 @@ if ( ! class_exists( 'WpssoEditSchema' ) ) {
 							'input_class' => 'wide offer_catalog_url',
 						),
 					), $css_class = '', $css_id = 'schema_service_offer_catalogs', $offer_catalogs_max, $show_first = 1 ),
+				),
+				'subsection_schema_service_area' => array(
+					'tr_class' => $args[ 'tr_class_schema' ][ 'service' ],
+					'td_class' => 'subsection',
+					'header'   => 'h5',
+					'label'    => _x( 'Service Area Information', 'metabox title', 'wpsso' )
+				),
+				'schema_service_latitude' => array(
+					'tr_class' => $args[ 'tr_class_schema' ][ 'service' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Service Latitude', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_service_latitude',
+					'content'  => $form->get_input( 'schema_service_latitude', $css_class = 'latitude' ) . ' ' .
+						_x( 'decimal degrees', 'option comment', 'wpsso' ),
+				),
+				'schema_service_longitude' => array(
+					'tr_class' => $args[ 'tr_class_schema' ][ 'service' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Service Longitude', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_service_longitude',
+					'content'  => $form->get_input( 'schema_service_longitude', $css_class = 'longitude' ) . ' ' .
+						_x( 'decimal degrees', 'option comment', 'wpsso' ),
+				),
+				'schema_service_radius' => array(
+					'tr_class' => $args[ 'tr_class_schema' ][ 'service' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Service Radius', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_service_radius',
+					'content'  => $form->get_input( 'schema_service_radius', $css_class = 'short' ) . ' ' .
+						_x( 'meters from coordinates', 'option comment', 'wpsso' ),
+				),
+				'schema_service_area_id' => array(
+					'tr_class' => $args[ 'tr_class_schema' ][ 'service' ],
+					'th_class' => 'medium',
+					'label'    => _x( 'Service Areas', 'option label', 'wpsso' ),
+					'tooltip'  => 'meta-schema_service_area_id',
+					'content'  => $form->get_select_multi( 'schema_service_area_id', $args[ 'select' ][ 'admin_area' ],
+						$css_class = 'wide', $css_id = '', $is_assoc = true, $admin_area_max, $show_first = 1,
+							$is_disabled = false, $event_names = array( 'on_focus_load_json' ),
+								$event_args = array( 'json_var' => 'admin_area_names' ) ),
 				),
 			);
 

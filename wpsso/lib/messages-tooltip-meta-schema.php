@@ -102,7 +102,7 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 
 					$text = __( 'Additional webpage reference URL(s) that unambiguously indicates the content\'s identity.', 'wpsso' ) . ' ';
 
-					$text .= __( 'For example, the URL for the content subject\'s Wikipedia page, Wikidata entry, IMDB page, official website, etc.', 'wpsso' );
+					$text .= __( 'For example, the URL for the content subject\'s Wikipedia page, Wikidata entry, IMDB page, official website, etc.', 'wpsso' ) . ' ';
 
 					if ( ! empty( $tp_frags[ 'filter' ] ) ) {	// Just in case.
 
@@ -402,6 +402,12 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 
 						 	break;
 
+						case 'tooltip-meta-schema_event_offers':	// Event Offers.
+
+							$text = __( 'One or more offers for the event, including the offer name, price and currency.', 'wpsso' );
+
+						 	break;
+
 						case 'tooltip-meta-schema_event_offers_start':	// Event Offers Start.
 
 							$text = __( 'The date and time when tickets go on sale.', 'wpsso' );
@@ -411,12 +417,6 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 						case 'tooltip-meta-schema_event_offers_end':	// Event Offers End.
 
 							$text = __( 'The date and time when tickets are no longer on sale.', 'wpsso' );
-
-						 	break;
-
-						case 'tooltip-meta-schema_event_offers':	// Event Offers.
-
-							$text = __( 'One or more offers for the event, including the offer name, price and currency.', 'wpsso' );
 
 						 	break;
 
@@ -595,8 +595,6 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 
 					$text = __( 'Select an organization for the Schema Organization markup.', 'wpsso' );
 
-					$text .= $this->maybe_ext_required( 'opm' );
-
 				 	break;
 
 				case 'tooltip-meta-schema_person_id':
@@ -612,8 +610,6 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 				case 'tooltip-meta-schema_place_id':
 
 					$text = __( 'Select a place for the Schema Place markup, or enter custom place information below.', 'wpsso' );
-
-					$text .= $this->maybe_ext_required( 'opm' );
 
 					break;
 
@@ -998,6 +994,30 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 
 							break;
 
+						case 'tooltip-meta-schema_service_offers':	// Service Offers.
+
+							$text = __( 'One or more offers for the service, including the offer name, price and currency.', 'wpsso' );
+
+						 	break;
+
+						case 'tooltip-meta-schema_service_offers_start':	// Service Offers Start.
+
+							$text = __( 'The date and time when tickets go on sale.', 'wpsso' );
+
+						 	break;
+
+						case 'tooltip-meta-schema_service_offers_end':	// Service Offers End.
+
+							$text = __( 'The date and time when tickets are no longer on sale.', 'wpsso' );
+
+						 	break;
+
+						case 'tooltip-meta-schema_service_offer_catalogs':	// Offer Catalogs.
+
+							$text = __( 'A list of offer catalogs for this service, including the catalog name, description and URL.', 'wpsso' );
+
+						 	break;
+
 						case 'tooltip-meta-schema_service_latitude':	// Service Latitude.
 
 							$text = __( 'The numeric decimal degrees latitude for this service.', 'wpsso' ) . ' ';
@@ -1020,29 +1040,13 @@ if ( ! class_exists( 'WpssoMessagesTooltipMetaSchema' ) ) {
 
 							break;
 
-						case 'tooltip-meta-schema_service_offers_start':	// Service Offers Start.
+						case 'tooltip-meta-schema_service_area_id':	// Service Areas.
 
-							$text = __( 'The date and time when tickets go on sale.', 'wpsso' );
+							$text = __( 'An administrative area where a service is provided (ie. a school district, city, state/province, or country).', 'wpsso' ) . ' ';
 
-						 	break;
+							$text .= __( 'One or more places, matching the Schema AdministrativeArea type or its sub-types, can be selected as a service area.', 'wpsso' ) . ' ';
 
-						case 'tooltip-meta-schema_service_offers_end':	// Service Offers End.
-
-							$text = __( 'The date and time when tickets are no longer on sale.', 'wpsso' );
-
-						 	break;
-
-						case 'tooltip-meta-schema_service_offers':	// Service Offers.
-
-							$text = __( 'One or more offers for the service, including the offer name, price and currency.', 'wpsso' );
-
-						 	break;
-
-						case 'tooltip-meta-schema_service_offer_catalogs':	// Offer Catalogs.
-
-							$text = __( 'A list of offer catalogs for this service, including the catalog name, description and URL.', 'wpsso' );
-
-						 	break;
+							break;
 
 					}	// End of 'tooltip-meta-schema_service' switch.
 

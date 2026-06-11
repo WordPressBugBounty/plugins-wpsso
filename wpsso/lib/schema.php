@@ -2433,7 +2433,7 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 				'description' => 'schema_review_item_desc',
 			) );
 
-			foreach ( SucomUtil::preg_grep_keys( '/^schema_review_item_sameas_url_[0-9]+$/', $md_opts ) as $url ) {
+			foreach ( SucomUtil::get_multi_values( $md_opts, 'schema_review_item_sameas_url' ) as $url ) {
 
 				$json_data[ 'sameAs' ][] = SucomUtil::esc_url_encode( $url );
 			}
@@ -2597,18 +2597,18 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 				 * Property:
 				 *	address as https://schema.org/PostalAddress
 				 */
-				$postal_address = array();
+				if ( ! empty( $md_opts[ 'schema_review_item_place_street_address' ] ) ) {
 
-				if ( self::add_data_itemprop_from_assoc( $postal_address, $md_opts, array(
-					'streetAddress'       => 'schema_review_item_place_street_address',
-					'postOfficeBoxNumber' => 'schema_review_item_place_po_box_number',
-					'addressLocality'     => 'schema_review_item_place_city',
-					'addressRegion'       => 'schema_review_item_place_region',
-					'postalCode'          => 'schema_review_item_place_postal_code',
-					'addressCountry'      => 'schema_review_item_place_country',	// Alpha2 country code.
-				) ) ) {
-
-					$json_data[ 'address' ] = self::get_schema_type_context( 'https://schema.org/PostalAddress', $postal_address );
+					$json_data[ 'address' ] = self::get_schema_type_context( 'https://schema.org/PostalAddress',
+						self::get_data_itemprop_from_assoc( $md_opts, array(
+							'streetAddress'       => 'schema_review_item_place_street_address',
+							'postOfficeBoxNumber' => 'schema_review_item_place_po_box_number',
+							'addressLocality'     => 'schema_review_item_place_city',
+							'addressRegion'       => 'schema_review_item_place_region',
+							'postalCode'          => 'schema_review_item_place_postal_code',
+							'addressCountry'      => 'schema_review_item_place_country',	// Alpha2 country code.
+						) )
+					);
 				}
 
 				if ( $wpsso->schema->is_schema_type_child( $type_id, 'local.business' ) ) {
@@ -3419,14 +3419,9 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 
 			if ( ! empty( $prop_name ) && ! empty( $assoc_key ) ) {
 
-				foreach ( SucomUtil::preg_grep_keys( '/^' . $assoc_key .'_[0-9]+$/', $assoc ) as $value ) {
+				foreach ( SucomUtil::get_multi_values( $assoc, $assoc_key ) as $value ) {
 
-					if ( ! empty( $value ) ) {
-
-						$json_data[ $prop_name ][] = self::get_schema_type_context( 'https://schema.org/Person', array(
-							'name' => $value,
-						) );
-					}
+					$json_data[ $prop_name ][] = self::get_schema_type_context( 'https://schema.org/Person', array( 'name' => $value ) );
 				}
 			}
 		}
@@ -3596,13 +3591,44 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 		}
 
 		/*
+		 * Since WPSSO Core v22.3.0.
+		 */
+		public static function add_type_data_areaserved( &$json_data, array $mod, $type_opts, $type_id, $opt_pre ) {
+			
+			$wpsso =& Wpsso::get_instance();
+
+			if ( $wpsso->debug->enabled ) {
+
+				$wpsso->debug->mark();
+			}
+
+			if ( ! empty( $type_opts[ $opt_pre . '_latitude' ] ) &&
+				! empty( $type_opts[ $opt_pre . '_longitude' ] ) &&
+					! empty( $type_opts[ $opt_pre . '_radius' ] ) ) {
+
+				$json_data[ 'areaServed' ][] = WpssoSchema::get_schema_type_context( 'https://schema.org/GeoCircle', array(
+					'geoMidpoint' => WpssoSchema::get_schema_type_context( 'https://schema.org/GeoCoordinates', array(
+						'latitude'  => $type_opts[ $opt_pre . '_latitude' ],
+						'longitude' => $type_opts[ $opt_pre . '_longitude' ],
+					) ),
+					'geoRadius' => $type_opts[ $opt_pre . '_radius' ],
+				) );
+			}
+
+			foreach ( SucomUtil::get_multi_values( $type_opts, $opt_pre . '_area_id' ) as $id ) {	// Uses is_valid_option_value().
+
+				WpssoSchemaSingle::add_place_data( $json_data[ 'areaServed' ], $mod, $id, $list_el = true );
+			}
+		}
+
+		/*
 		 * Since WPSSO Core v22.2.0.
 		 *
 		 * See WpssoSchemaSingle::add_book_data().
 		 * See WpssoSchemaSingle::add_event_data().
 		 * See WpssoSchemaSingle::add_service_data().
 		 */
-		public static function add_type_data_offers( &$json_data, array $mod, $type_opts, $type_id, $type ) {
+		public static function add_type_data_offers( &$json_data, array $mod, $type_opts, $type_id, $opt_pre ) {
 
 			$wpsso =& Wpsso::get_instance();
 			
@@ -3611,11 +3637,11 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 				$wpsso->debug->mark();
 			}
 
-			self::add_type_opts_offers( $type_opts, $mod, $type_id, $type );
+			self::add_type_opts_offers( $type_opts, $mod, $type_id, $opt_pre );
 
-			if ( ! empty( $type_opts[ $type . '_offers' ] ) && is_array( $type_opts[ $type . '_offers' ] ) ) {
+			if ( ! empty( $type_opts[ $opt_pre . '_offers' ] ) && is_array( $type_opts[ $opt_pre . '_offers' ] ) ) {
 
-				foreach ( $type_opts[ $type . '_offers' ] as $offer ) {
+				foreach ( $type_opts[ $opt_pre . '_offers' ] as $offer ) {
 
 					if ( ! is_array( $offer ) ) {	// Just in case.
 
@@ -3638,6 +3664,32 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 						$json_data[ 'offers' ][] = self::get_schema_type_context( 'https://schema.org/Offer', $offer );
 					}
 				}
+			}
+		}
+
+		/*
+		 * Since WPSSO Core v22.3.0.
+		 */
+		public static function add_type_data_sameas( &$json_data, array $mod, $type_opts, $type_id, $opt_pre ) {
+
+			$wpsso =& Wpsso::get_instance();
+
+			if ( $wpsso->debug->enabled ) {
+
+				$wpsso->debug->mark();
+			}
+
+			if ( ! empty( $type_opts[ $opt_pre . '_sameas' ] ) && is_array( $type_opts[ $opt_pre . '_sameas' ] ) ) {	// Just in case.
+
+				foreach ( $type_opts[ $opt_pre . '_sameas' ] as $url ) {
+
+					$json_data[ 'sameAs' ][] = SucomUtil::esc_url_encode( $url );
+				}
+
+				/*
+				 * Sanitize the sameAs array - make sure URLs are valid and remove any duplicates.
+				 */
+				self::check_prop_value_sameas( $json_data );
 			}
 		}
 

@@ -320,6 +320,11 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			) );
 
 			/*
+			 * Area served property.
+			 */
+			WpssoSchema::add_type_data_areaserved( $json_ret, $mod, $contact_opts, $contact_id, 'contact_service' );
+
+			/*
 			 * Property:
 			 *	hoursAvailable as https://schema.org/OpeningHoursSpecification
 			 */
@@ -333,15 +338,23 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			 */
 			if ( $wpsso->schema->is_schema_type_child( $type_id, 'postal.address' ) ) {
 
-				WpssoSchema::add_data_itemprop_from_assoc( $json_ret, $contact_opts, array(	// Returns the number of properties added.
-					'streetAddress'       => 'contact_street_address',
-					'postOfficeBoxNumber' => 'contact_po_box_number',
-					'addressLocality'     => 'contact_city',
-					'addressRegion'       => 'contact_region',
-					'postalCode'          => 'contact_postal_code',
-					'addressCountry'      => 'contact_country',	// Alpha2 country code.
-				) );
+				if ( ! empty( $contact_opts[ 'contact_street_address' ] ) ) {	// Just in case.
+
+					WpssoSchema::add_data_itemprop_from_assoc( $json_ret, $contact_opts, array(	// Returns the number of properties added.
+						'streetAddress'       => 'contact_street_address',
+						'postOfficeBoxNumber' => 'contact_po_box_number',
+						'addressLocality'     => 'contact_city',
+						'addressRegion'       => 'contact_region',
+						'postalCode'          => 'contact_postal_code',
+						'addressCountry'      => 'contact_country',	// Alpha2 country code.
+					) );
+				}
 			}
+
+			/*
+			 * SameAs property (ie. Knowledge Graph).
+			 */
+			WpssoSchema::add_type_data_sameas( $json_ret, $mod, $contact_opts, $contact_id, 'contact' );
 
 			/*
 			 * Update the @id string with the $json_ret[ 'url' ], $type_id and $contact_id.
@@ -470,15 +483,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 				'event_fund_person_id'      => 'funder',
 			) as $opt_pre => $prop_name ) {
 
-				foreach ( SucomUtil::preg_grep_keys( '/^' . $opt_pre . '(_[0-9]+)?$/', $event_opts ) as $opt_key => $id ) {
-
-					/*
-					 * Check that the option value is not true, false, null, empty string, or 'none'.
-					 */
-					if ( ! SucomUtil::is_valid_option_value( $id ) ) {
-
-						continue;
-					}
+				foreach ( SucomUtil::get_multi_values( $event_opts, $opt_pre ) as $id ) {	// Uses is_valid_option_value().
 
 					switch ( $opt_pre ) {
 
@@ -811,15 +816,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 				'job_location_id'   => 'jobLocation',
 			) as $opt_pre => $prop_name ) {
 
-				foreach ( SucomUtil::preg_grep_keys( '/^' . $opt_pre . '(_[0-9]+)?$/', $job_opts ) as $opt_key => $id ) {
-
-					/*
-					 * Check that the option value is not true, false, null, empty string, or 'none'.
-					 */
-					if ( ! SucomUtil::is_valid_option_value( $id ) ) {
-
-						continue;
-					}
+				foreach ( SucomUtil::get_multi_values( $job_opts, $opt_pre ) as $id ) {	// Uses is_valid_option_value().
 
 					switch ( $opt_pre ) {
 
@@ -1123,12 +1120,6 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			}
 
 			/*
-			 * Combine multiple options with a common prefix to an array of values.
-			 */
-			SucomUtil::add_multi_values( $org_opts, 'org_award', 'org_awards' );
-			SucomUtil::add_multi_values( $org_opts, 'org_contact_id', 'org_contact_ids' );
-
-			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
 			list( $type_id, $type_url ) = self::get_data_types( $json_data, $org_opts, $opt_key = 'org_schema_type', $def_type_id = 'organization', $list_el );
@@ -1158,6 +1149,8 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * Add schema properties from the organization options.
 			 */
+			SucomUtil::add_multi_values( $org_opts, 'org_award', 'org_awards' );
+
 			WpssoSchema::add_data_itemprop_from_assoc( $json_ret, $org_opts, array(
 				'url'                            => 'org_url',
 				'name'                           => 'org_name',
@@ -1177,10 +1170,15 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * See https://schema.org/contactPoint.
 			 */
-			foreach ( $org_opts[ 'org_contact_ids' ] as $contact_id ) {
+			foreach ( SucomUtil::get_multi_values( $org_opts, 'org_contact_id' ) as $contact_id ) {
 
 				self::add_contact_data( $json_ret[ 'contactPoint' ], $mod, $contact_id, $contact_list_el = true );
 			}
+
+			/*
+			 * Area served property.
+			 */
+			WpssoSchema::add_type_data_areaserved( $json_ret, $mod, $org_opts, $org_id, 'org_service' );
 
 			/*
 			 * See https://schema.org/hasOfferCatalog.
@@ -1346,10 +1344,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 				if ( isset( $org_opts[ 'org_place_id' ] ) ) {
 
-					/*
-					 * Check that the option value is not true, false, null, empty string, or 'none'.
-					 */
-					if ( SucomUtil::is_valid_option_value( $org_opts[ 'org_place_id' ] ) ) {
+					if ( SucomUtil::is_valid_option_value( $org_opts[ 'org_place_id' ] ) ) {	// Not true, false, null, empty string, or 'none'.
 
 						self::add_place_data( $json_ret[ 'location' ], $mod, $org_opts[ 'org_place_id' ], $place_list_el = false );
 					}
@@ -1357,29 +1352,9 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			}
 
 			/*
-			 * Google's knowledge graph.
+			 * SameAs property (ie. Knowledge Graph).
 			 */
-			$org_opts[ 'org_sameas' ] = isset( $org_opts[ 'org_sameas' ] ) ? $org_opts[ 'org_sameas' ] : array();
-
-			if ( $wpsso->debug->enabled ) {
-
-				$wpsso->debug->log( 'applying filters "wpsso_json_data_single_organization_sameas"' );
-			}
-
-			$org_opts[ 'org_sameas' ] = apply_filters( 'wpsso_json_data_single_organization_sameas', $org_opts[ 'org_sameas' ], $mod, $org_id );
-
-			if ( ! empty( $org_opts[ 'org_sameas' ] ) && is_array( $org_opts[ 'org_sameas' ] ) ) {	// Just in case.
-
-				foreach ( $org_opts[ 'org_sameas' ] as $url ) {
-
-					if ( ! empty( $url ) ) {	// Just in case.
-
-						$json_ret[ 'sameAs' ][] = SucomUtil::esc_url_encode( $url );
-					}
-				}
-
-				WpssoSchema::check_prop_value_sameas( $json_ret );
-			}
+			WpssoSchema::add_type_data_sameas( $json_ret, $mod, $org_opts, $org_id, 'org' );
 
 			/*
 			 * Filter the single organization data.
@@ -1593,29 +1568,9 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			}
 
 			/*
-			 * Google's knowledge graph.
+			 * SameAs property (ie. Knowledge Graph).
 			 */
-			$person_opts[ 'person_sameas' ] = isset( $person_opts[ 'person_sameas' ] ) ? $person_opts[ 'person_sameas' ] : array();
-
-			if ( $wpsso->debug->enabled ) {
-
-				$wpsso->debug->log( 'applying filters "wpsso_json_data_single_person_sameas"' );
-			}
-
-			$person_opts[ 'person_sameas' ] = apply_filters( 'wpsso_json_data_single_person_sameas', $person_opts[ 'person_sameas' ], $mod, $person_id );
-
-			if ( ! empty( $person_opts[ 'person_sameas' ] ) && is_array( $person_opts[ 'person_sameas' ] ) ) {	// Just in case.
-
-				foreach ( $person_opts[ 'person_sameas' ] as $url ) {
-
-					if ( ! empty( $url ) ) {	// Just in case.
-
-						$json_ret[ 'sameAs' ][] = SucomUtil::esc_url_encode( $url );
-					}
-				}
-
-				WpssoSchema::check_prop_value_sameas( $json_ret );
-			}
+			WpssoSchema::add_type_data_sameas( $json_ret, $mod, $person_opts, $person_id, 'person' );
 
 			/*
 			 * Filter the single person data.
@@ -1754,19 +1709,19 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			 * Property:
 			 *	address as https://schema.org/PostalAddress
 			 */
-			$postal_address = array();
+			if ( ! empty( $place_opts[ 'place_street_address' ] ) ) {
 
-			if ( WpssoSchema::add_data_itemprop_from_assoc( $postal_address, $place_opts, array(
-				'name'                => 'place_name',
-				'streetAddress'       => 'place_street_address',
-				'postOfficeBoxNumber' => 'place_po_box_number',
-				'addressLocality'     => 'place_city',
-				'addressRegion'       => 'place_region',
-				'postalCode'          => 'place_postal_code',
-				'addressCountry'      => 'place_country',	// Alpha2 country code.
-			) ) ) {
-
-				$json_ret[ 'address' ] = WpssoSchema::get_schema_type_context( 'https://schema.org/PostalAddress', $postal_address );
+				$json_ret[ 'address' ] = WpssoSchema::get_schema_type_context( 'https://schema.org/PostalAddress',
+					WpssoSchema::get_data_itemprop_from_assoc( $place_opts, array(
+						'name'                => 'place_name',
+						'streetAddress'       => 'place_street_address',
+						'postOfficeBoxNumber' => 'place_po_box_number',
+						'addressLocality'     => 'place_city',
+						'addressRegion'       => 'place_region',
+						'postalCode'          => 'place_postal_code',
+						'addressCountry'      => 'place_country',	// Alpha2 country code.
+					) )
+				);
 			}
 
 			/*
@@ -1803,17 +1758,6 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 					'paymentAccepted'    => 'place_payment_accepted',
 					'priceRange'         => 'place_price_range',
 				) );
-
-				if ( ! empty( $place_opts[ 'place_latitude' ] ) &&
-					! empty( $place_opts[ 'place_longitude' ] ) &&
-						! empty( $place_opts[ 'place_service_radius' ] ) ) {
-
-					$json_ret[ 'areaServed' ] = WpssoSchema::get_schema_type_context( 'https://schema.org/GeoShape', array(
-						'circle' => $place_opts[ 'place_latitude' ] . ' ' .
-							$place_opts[ 'place_longitude' ] . ' ' .
-							$place_opts[ 'place_service_radius' ]
-					) );
-				}
 			}
 
 			/*
@@ -1869,6 +1813,11 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 				WpssoSchema::add_images_data_mt( $json_ret[ 'image' ], $place_opts[ 'place_images' ] );
 			}
+
+			/*
+			 * SameAs property (ie. Knowledge Graph).
+			 */
+			WpssoSchema::add_type_data_sameas( $json_ret, $mod, $place_opts, $place_id, 'place' );
 
 			/*
 			 * Filter the single place data.
@@ -2668,11 +2617,6 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			}
 
 			/*
-			 * Combine multiple options with a common prefix to an array of values.
-			 */
-			SucomUtil::add_multi_values( $service_opts, 'service_award', 'service_awards' );
-
-			/*
 			 * If not adding a list element, get the existing schema type url (if one exists).
 			 */
 			list( $type_id, $type_url ) = self::get_data_types( $json_data, $service_opts, $opt_key = 'service_schema_type', $def_type_id = 'service', $list_el );
@@ -2683,11 +2627,9 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			$json_ret = WpssoSchema::get_schema_type_context( $type_url );
 
 			/*
-			 * Add schema properties from the organization options.
+			 * Add area served property.
 			 */
-			WpssoSchema::add_data_itemprop_from_assoc( $json_ret, $service_opts, array(
-				'award' => 'service_awards',	// Service Awards.
-			) );
+			WpssoSchema::add_type_data_areaserved( $json_ret, $mod, $service_opts, $service_id, 'service' );
 
 			/*
 			 * Add place, organization, and person data.
@@ -2699,41 +2641,29 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 				'service_prov_person_id' => 'provider',	// Provider Person.
 			) as $opt_pre => $prop_name ) {
 
-				foreach ( SucomUtil::preg_grep_keys( '/^' . $opt_pre . '(_[0-9]+)?$/', $service_opts ) as $opt_key => $id ) {
+				foreach ( SucomUtil::get_multi_values( $service_opts, $opt_pre ) as $id ) {	// Uses is_valid_option_value().
 
-					/*
-					 * Check that the option value is not true, false, null, empty string, or 'none'.
-					 */
-					if ( ! SucomUtil::is_valid_option_value( $id ) ) {
-
-						continue;
-
-					} elseif ( strpos( $opt_pre, '_org_id' ) ) {
+					if ( strpos( $opt_pre, '_org_id' ) ) {
 
 						$org_logo_key = 'org_logo_url';
 
-						WpssoSchemaSingle::add_organization_data( $json_ret[ $prop_name ], $mod, $id, $org_logo_key, $org_list_el = true );
+						self::add_organization_data( $json_ret[ $prop_name ], $mod, $id, $org_logo_key, $org_list_el = true );
 
 					} elseif ( strpos( $opt_pre, '_person_id' ) ) {
 
-						WpssoSchemaSingle::add_person_data( $json_ret[ $prop_name ], $mod, $id, $person_list_el = true );
+						self::add_person_data( $json_ret[ $prop_name ], $mod, $id, $person_list_el = true );
 					}
 				}
 			}
 
 			/*
-			 * See https://schema.org/areaServed as https://schema.org/GeoShape.
+			 * Add schema properties from the organization options.
 			 */
-			if ( ! empty( $service_opts[ 'service_latitude' ] ) &&
-				! empty( $service_opts[ 'service_longitude' ] ) &&
-					! empty( $service_opts[ 'service_radius' ] ) ) {
+			SucomUtil::add_multi_values( $service_opts, 'service_award', 'service_awards' );
 
-				$json_ret[ 'areaServed' ] = WpssoSchema::get_schema_type_context( 'https://schema.org/GeoShape', array(
-					'circle' => $service_opts[ 'service_latitude' ] . ' ' .
-						$service_opts[ 'service_longitude' ] . ' ' .
-						$service_opts[ 'service_radius' ]
-				) );
-			}
+			WpssoSchema::add_data_itemprop_from_assoc( $json_ret, $service_opts, array(
+				'award' => 'service_awards',	// Service Awards.
+			) );
 
 			/*
 			 * Add service offers.
@@ -2743,7 +2673,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/*
 			 * See https://schema.org/hasOfferCatalog.
 			 */
-			WpssoSchema::add_offer_catalogs_data( $json_ret, $mod, $service_opts, $opt_pre = 'service_offer_catalog', $prop_name = 'hasOfferCatalog' );
+			WpssoSchema::add_offer_catalogs_data( $json_ret, $mod, $service_opts, 'service_offer_catalog', 'hasOfferCatalog' );
 
 			/*
 			 * Filter the single service data.

@@ -159,11 +159,7 @@
 
 'wpsso_json_data_single_organization' ( $org_data, $mod, $org_id )
 
-'wpsso_json_data_single_organization_sameas' ( $org_sameas, $mod, $org_id )
-
 'wpsso_json_data_single_person' ( $person_data, $mod, $user_id )
-
-'wpsso_json_data_single_person_sameas' ( $person_sameas, $mod, $user_id )
 
 'wpsso_json_data_single_place' ( $place_data, $mod, $place_id )
 
