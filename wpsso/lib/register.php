@@ -101,9 +101,9 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 
 				global $wpdb;
 
-				$db_query = 'SELECT blog_id FROM ' . $wpdb->blogs;
+				$query = 'SELECT blog_id FROM ' . $wpdb->blogs;
 
-				$blog_ids = $wpdb->get_col( $db_query );
+				$blog_ids = $wpdb->get_col( $query );
 
 				foreach ( $blog_ids as $blog_id ) {
 
@@ -249,9 +249,9 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 			 */
 			global $wpdb;
 
-			$prefix   = '_transient_';
-			$db_query = 'SELECT option_name FROM ' . $wpdb->options . ' WHERE option_name LIKE \'' . $prefix . 'wpsso_%\';';
-			$result   = $wpdb->get_col( $db_query );
+			$prefix = '_transient_';
+			$query  = 'SELECT option_name FROM ' . $wpdb->options . ' WHERE option_name LIKE \'' . $prefix . 'wpsso_%\';';
+			$result = $wpdb->get_col( $query );
 
 			foreach( $result as $option_name ) {
 
