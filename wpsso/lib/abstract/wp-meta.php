@@ -124,8 +124,8 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 		 *
 		 * Register our comment, post, term, and user meta.
 		 *
-		 * Do not register a sanitation callback as the sanitation filter is executed much too frequently by WordPress, and
-		 * only provides $meta_value, $meta_key, and $object_type arguments.
+		 * Do not register a sanitation callback as the sanitation filter is executed too frequently by WordPress, and only
+		 * provides $meta_value, $meta_key, and $object_type arguments.
 		 *
 		 * See sanitize_meta() in wordpress/wp-includes/meta.php.
 		 * See WpssoComment->add_wp_callbacks().
@@ -1646,11 +1646,21 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 		 */
 		public function get_head_info( $mixed, $read_cache = true ) {
 
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->mark( 'getting head info' );	// Start timer.
+			}
+
 			static $local_fifo = array();
 
 			$mod = is_array( $mixed ) ? $mixed : $this->get_mod( $mixed );	// Uses a local cache.
 
 			unset( $mixed );
+
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->log( 'getting head info for ' . $mod[ 'name' ] . ' id ' . $mod[ 'id' ] );
+			}
 
 			/*
 			 * Maybe return the array from the local cache.
@@ -1659,18 +1669,36 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 
 				if ( isset( $local_fifo[ $mod[ 'id' ] ] ) ) {
 
+					if ( $this->p->debug->enabled ) {
+
+						$this->p->debug->log( 'exiting early: returning head info from cache' );
+					}
+
 					return $local_fifo[ $mod[ 'id' ] ];
 				}
 			}
 
-			/*
-			 * Maybe limit the number of array elements.
-			 */
-			$local_fifo = SucomUtil::array_slice_fifo( $local_fifo, WPSSO_CACHE_ARRAY_FIFO_MAX );
+			$local_fifo = SucomUtil::array_slice_fifo( $local_fifo, WPSSO_CACHE_ARRAY_FIFO_MAX );	// Maybe limit the number of array elements.
+			$use_post   = 'post' === $mod[ 'name' ] ? $mod[ 'id' ] : false;
 
-			$use_post  = 'post' === $mod[ 'name' ] ? $mod[ 'id' ] : false;
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->log( 'calling WpssoHead->get_head_array()' );
+			}
+
 			$head_tags = $this->p->head->get_head_array( $use_post, $mod, $read_cache );
+
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->log( 'calling WpssoHead->extract_head_info()' );
+			}
+
 			$head_info = $this->p->head->extract_head_info( $head_tags, $mod );
+
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->mark( 'getting head info' );	// End timer.
+			}
 
 			return $local_fifo[ $mod[ 'id' ] ] = $head_info;
 		}
@@ -2573,7 +2601,7 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 		}
 
 		/*
-		 * See WpssoAbstractWpMeta::check_sortable_meta().
+		 * See WpssoAbstractWpMeta->check_sortable_meta().
 		 */
 		public static function get_column_info_by_meta_key( $meta_key ) {
 
@@ -2686,16 +2714,45 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 		}
 
 		/*
-		 * Filters all post, term, and user metadata.
+		 * Check the post, term, or user '_wpsso_head_info_' meta key value is not an empty string.
+		 *
+		 * Hooked to the WordPress 'get_post_metadata', 'get_term_metadata', 'get_user_metadata' actions.
 		 */
 		public function check_sortable_meta( $value, $obj_id, $meta_key, $single ) {
 
+			/*
+			 * Only check the '_wpsso_head_info_' meta key values.
+			 */
 			if ( empty( $obj_id ) || 0 !== strpos( $meta_key, '_wpsso_head_info_' ) ) {
 
 				return $value;
 			}
 
-			$mod = $this->get_mod( $obj_id );
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->mark();
+			}
+
+			$mod = $this->get_mod( $obj_id );	// Get the post, term, or user $mod array.
+
+			if ( empty( $mod[ 'name' ] ) || empty( $mod[ 'id' ] ) ) {
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'exiting early: mod name or id is empty' );
+				}
+
+				return $value;
+
+			} elseif ( isset( $mod[ 'post_status' ] ) && 'auto-draft' === $mod[ 'post_status' ] ) {	// The post object may not yet exist.
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'exiting early: post status is ' . $mod[ 'post_status' ] );
+				}
+
+				return $value;
+			}
 
 			/*
 			 * Note that the sort order, page number, locale, amp and embed checks are provided by
@@ -2709,24 +2766,39 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 			 */
 			$cache_salt = SucomUtil::get_mod_salt( $mod );
 
-			static $local_recursion = array();
+			static $local_cache = array();	// Only check once per page load.
 
-			if ( ! empty( $local_recursion[ $cache_salt ][ $meta_key ] ) ) {
+			if ( ! empty( $local_cache[ $cache_salt ][ $meta_key ] ) ) {	// Meta key already checked.
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'exiting early: ' . $meta_key . ' meta key already checked' );
+				}
 
 				return $value;	// Return null.
 			}
+
+			$local_cache[ $cache_salt ][ $meta_key ] = true;	// Check once and also prevents recursion.
 
 			$col_info = self::get_column_info_by_meta_key( $meta_key );
 
 			if ( ! empty( $col_info ) ) {
 
-				$local_recursion[ $cache_salt ][ $meta_key ] = true;	// Prevent recursion.
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'checking ' . $meta_key . ' meta key value' );
+				}
 
 				$metadata = static::get_meta( $obj_id, $meta_key, $single = true );	// Use static method from child.
 
 				$do_head_info = false;
 
 				if ( '' === $metadata ) {
+
+					if ( $this->p->debug->enabled ) {
+
+						$this->p->debug->log( $meta_key . ' meta key value is an empty string' );
+					}
 
 					$do_head_info = true;
 
@@ -2736,16 +2808,24 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 
 					if ( empty( $metadata[ $locale ] ) ) {
 
+						if ( $this->p->debug->enabled ) {
+
+							$this->p->debug->log( $meta_key . ' meta key value for locale ' . $locale . ' is empty' );
+						}
+
 						$do_head_info = true;
 					}
 				}
 
 				if ( $do_head_info ) {
 
+					if ( $this->p->debug->enabled ) {
+
+						$this->p->debug->log( 'calling ' . get_class( $this ) . '->get_head_info()' );
+					}
+
 					$this->get_head_info( $mod, $read_cache = true );	// Uses a local cache.
 				}
-
-				unset( $local_recursion[ $cache_salt ][ $meta_key ] );
 			}
 
 			return $value;
@@ -2753,7 +2833,17 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 
 		public function update_sortable_meta( $obj_id, $col_key, $content ) {
 
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->mark();
+			}
+
 			if ( empty( $obj_id ) ) {	// Just in case.
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'exiting early: obj_id is empty' );
+				}
 
 				return;
 			}
@@ -2766,12 +2856,26 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 
 						$locale   = SucomUtilWP::get_locale();
 						$content  = array( $locale => $content );
-						$metadata = static::get_meta( $obj_id, $col_info[ 'meta_key' ], $single = true );
+						$metadata = static::get_meta( $obj_id, $col_info[ 'meta_key' ], $single = true );	// Use static method from child.
 
 						if ( is_array( $metadata ) ) {
 
 							$content = array_merge( $metadata, $content );
 						}
+					}
+
+					/*
+					 * The child methods call update_metadata().
+					 *
+					 * See WpssoAbstractWpMeta::update_meta() which must be extended.
+					 * See WpssoComment::update_meta()
+					 * See WpssoPost::update_meta()
+					 * See WpssoTerm::update_meta()
+					 * See WpssoUser::update_meta()
+					 */
+					if ( $this->p->debug->enabled ) {
+
+						$this->p->debug->log( 'calling ' . get_class( $this ) . '::update_meta()' );
 					}
 
 					static::update_meta( $obj_id, $col_info[ 'meta_key' ], $content );	// Use static method from child.
@@ -3504,8 +3608,16 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 		}
 
 		/*
+		 * The child methods call update_metadata().
+		 *
 		 * Always call this method as static::update_meta(), and not self::update_meta(), to execute the method via the
 		 * child class instead of the parent class. This method can also be called via $mod[ 'obj' ]::update_meta().
+		 *
+		 * See WpssoAbstractWpMeta::update_meta() which must be extended.
+		 * See WpssoComment::update_meta()
+		 * See WpssoPost::update_meta()
+		 * See WpssoTerm::update_meta()
+		 * See WpssoUser::update_meta()
 		 */
 		public static function update_meta( $obj_id, $meta_key, $value ) {
 
@@ -3523,8 +3635,6 @@ if ( ! class_exists( 'WpssoAbstractWpMeta' ) ) {
 		 * After changing the metadata options element, do not forget to refresh the cache for that object ID.
 		 *
 		 * Use $protect = true to prevent overwriting an existing value.
-		 *
-		 * Example: WpssoPost::update_meta_opts_key( 123, 'schema_review_rating', 1 );
 		 */
 		public static function update_meta_opts_key( $obj_id, $meta_key, $opts_key, $value, $protect = false ) {
 

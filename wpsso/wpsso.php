@@ -15,7 +15,7 @@
  * Requires At Least: 6.0
  * Tested Up To: 7.1
  * WC Tested Up To: 11.0.1
- * Version: 22.5.2
+ * Version: 22.5.3
  *
  * Version Numbering: {major}.{minor}.{bugfix}[-{stage}.{level}]
  *
@@ -809,7 +809,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 			$this->debug->log_arr( 'wpsso settings', $opts );
 
 			$this->debug->mark();
-			
+
 			$this->debug->show_html();
 		}
 

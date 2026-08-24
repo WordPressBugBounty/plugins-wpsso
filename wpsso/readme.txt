@@ -12,7 +12,7 @@ Requires PHP: 7.4.33
 Requires At Least: 6.0
 Tested Up To: 7.1
 WC Tested Up To: 11.0.1
-Stable Tag: 22.5.2
+Stable Tag: 22.5.3
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -272,6 +272,23 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 22.5.3 (2026/08/24)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Refactored the `WpssoAbstractWpMeta->check_sortable_meta()` method:
+		* Added a check to run only once per page load.
+		* Added a check to exclude 'auto-draft' posts.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v6.0.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
 **Version 22.5.2 (2026/08/14)**
 
 * **New Features**
@@ -482,6 +499,10 @@ WPSSO Core can reduce its use of the WordPress transients cache (used by plugins
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 22.5.3 =
+
+(2026/08/24) Refactored the `WpssoAbstractWpMeta->check_sortable_meta()` method.
 
 = 22.5.2 =
 
