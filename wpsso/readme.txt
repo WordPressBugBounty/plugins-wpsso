@@ -12,7 +12,7 @@ Requires PHP: 7.4.33
 Requires At Least: 6.0
 Tested Up To: 7.1
 WC Tested Up To: 11.0.1
-Stable Tag: 22.5.3
+Stable Tag: 22.6.0
 
 Present your content at its best for social sites and search results, no matter how URLs are shared, reshared, messaged, posted, embedded, or crawled.
 
@@ -272,6 +272,40 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 22.6.1-dev.1 (2026/08/28)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Added a new `WpssoAbstractWpMeta::add_duplicate_exclude_meta_keys()` method.
+	* Added a new `WpssoAbstractWpMeta::get_duplicate_exclude_meta_keys()` method.
+	* Refactored the `WpssoIntegEcomWooCommerce->duplicate_product_exclude_meta()` method.
+	* Refactored the `WpssoIntegUtilDuplicatePost->duplicate_post_excludelist_filter()` method.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v6.0.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
+**Version 22.6.0 (2026/08/31)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Added filters to prevent the WooCommerce and Yoast Duplicate Post plugins from creating duplicate metadata.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Added a new `WpssoIntegUtilDuplicatePost` integration module to prevent the Yoast Duplicate Post plugin from creating duplicate metadata.
+	* Added a new `WpssoIntegEcomWooCommerce->duplicate_product_exclude_meta()` filter to prevent WooCommerce from creating duplicate metadata.
+* **Requires At Least**
+	* PHP v7.4.33.
+	* WordPress v6.0.
+	* WPSSO Update Manager v7.2.0 (for Premium edition).
+
 **Version 22.5.3 (2026/08/24)**
 
 * **New Features**
@@ -499,6 +533,14 @@ WPSSO Core can reduce its use of the WordPress transients cache (used by plugins
 	* WPSSO Update Manager v7.2.0 (for Premium edition).
 
 == Upgrade Notice ==
+
+= 22.6.1-dev.1 =
+
+(2026/08/28) None.
+
+= 22.6.0 =
+
+(2026/08/28) Added filters to prevent the WooCommerce and Yoast Duplicate Post plugins from creating duplicate metadata.
 
 = 22.5.3 =
 
